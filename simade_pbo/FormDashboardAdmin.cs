@@ -15,7 +15,7 @@ namespace simade_pbo
     {
         Barang_service barangService = new Barang_service();
         Kategori_service kategoriService = new Kategori_service();
-        
+
         int idBarangAktif = 0;
 
         public FormDashboardAdmin()
@@ -122,7 +122,8 @@ namespace simade_pbo
                     MessageBox.Show("Gagal menyimpan data barang. Pastikan nama barang belum terdaftar.", "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtNamaBarang.Focus();
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show("Nama barang sudah terdaftar. Silakan gunakan nama lain.", "Duplikasi Nama", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -149,13 +150,15 @@ namespace simade_pbo
                         MessageBox.Show("Data berhasil diubah", "UBAH DATA", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         bersihkan();
                         tampilGrid();
-                    } else
+                    }
+                    else
                     {
                         MessageBox.Show("Gagal mengubah data barang. Pastikan nama barang belum terdaftar.", "UBAH DATA", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         txtNamaBarang.Focus();
                     }
                 }
-            } else
+            }
+            else
             {
                 MessageBox.Show("Silahkan pilih data pada tabel terlebih dahulu!", "PERINGATAN", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -299,20 +302,19 @@ namespace simade_pbo
             if (konfirmasi == DialogResult.Yes)
             {
                 FormLogin halamanLogin = new FormLogin();
-
                 halamanLogin.Show();
-
                 this.Hide();
             }
         }
 
         private void btnDashboard_Click(object sender, EventArgs e)
         {
-            FormRegister halamanRegister = new FormRegister();
+            // Dialihkan secara presisi untuk memanggil Form pendaftaran khusus Admin Desa
+            FormRegisterAdmin halamanRegisterAdmin = new FormRegisterAdmin();
 
-            halamanRegister.StartPosition = FormStartPosition.CenterParent;
+            halamanRegisterAdmin.StartPosition = FormStartPosition.CenterScreen;
 
-            halamanRegister.ShowDialog();
+            halamanRegisterAdmin.ShowDialog();
         }
 
         private void lblTotal_Click(object sender, EventArgs e)
