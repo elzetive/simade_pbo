@@ -151,8 +151,13 @@ namespace simade_pbo.Service
 
         public DataTable tampilRiwayat()
         {
-            Query = "SELECT p.id_peminjaman, u.nama, b.nama_barang, " +
-                    "p.tanggal_pinjam, p.tanggal_kembali, p.status " +
+            Query = "SELECT " +
+                    "p.id_pinjam AS colID, " +
+                    "b.nama_barang AS colNama, " +
+                    "u.nama_lengkap AS colPeminjam, " +
+                    "p.tgl_pinjam AS colTanggalPinjam, " +
+                    "p.tgl_kembali AS colTanggalKembali, " +
+                    "p.status_peminjaman AS colStatus " +
                     "FROM peminjaman p " +
                     "INNER JOIN user u ON p.id_user = u.id_user " +
                     "INNER JOIN barang b ON p.id_barang = b.id_barang";

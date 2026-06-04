@@ -66,5 +66,10 @@ namespace simade_pbo
         {
 
         }
+
+        private void lblTotal_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

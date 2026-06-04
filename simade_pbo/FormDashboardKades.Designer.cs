@@ -159,6 +159,7 @@
             this.lblTotal.Size = new System.Drawing.Size(74, 45);
             this.lblTotal.TabIndex = 1;
             this.lblTotal.Text = "150";
+            this.lblTotal.Click += new System.EventHandler(this.lblTotal_Click);
             // 
             // label2
             // 

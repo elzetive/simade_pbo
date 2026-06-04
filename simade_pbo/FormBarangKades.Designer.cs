@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.dgvBarang = new System.Windows.Forms.DataGridView();
-            this.coid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colJumlah = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colKondisi = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnRiwayat = new System.Windows.Forms.Button();
@@ -41,6 +37,9 @@
             this.panelHeader = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
+            this.coid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colKondisi = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBarang)).BeginInit();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -57,7 +56,6 @@
             this.dgvBarang.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.coid,
             this.colNama,
-            this.colJumlah,
             this.colKondisi});
             this.dgvBarang.Location = new System.Drawing.Point(273, 97);
             this.dgvBarang.Name = "dgvBarang";
@@ -66,34 +64,6 @@
             this.dgvBarang.Size = new System.Drawing.Size(724, 337);
             this.dgvBarang.TabIndex = 7;
             this.dgvBarang.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellContentClick);
-            // 
-            // coid
-            // 
-            this.coid.HeaderText = "ID";
-            this.coid.MinimumWidth = 6;
-            this.coid.Name = "coid";
-            this.coid.ReadOnly = true;
-            // 
-            // colNama
-            // 
-            this.colNama.HeaderText = "Nama Barang";
-            this.colNama.MinimumWidth = 6;
-            this.colNama.Name = "colNama";
-            this.colNama.ReadOnly = true;
-            // 
-            // colJumlah
-            // 
-            this.colJumlah.HeaderText = "Jumlah";
-            this.colJumlah.MinimumWidth = 6;
-            this.colJumlah.Name = "colJumlah";
-            this.colJumlah.ReadOnly = true;
-            // 
-            // colKondisi
-            // 
-            this.colKondisi.HeaderText = "Kondisi";
-            this.colKondisi.MinimumWidth = 6;
-            this.colKondisi.Name = "colKondisi";
-            this.colKondisi.ReadOnly = true;
             // 
             // panelSidebar
             // 
@@ -203,6 +173,27 @@
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // coid
+            // 
+            this.coid.HeaderText = "ID";
+            this.coid.MinimumWidth = 6;
+            this.coid.Name = "coid";
+            this.coid.ReadOnly = true;
+            // 
+            // colNama
+            // 
+            this.colNama.HeaderText = "Nama Barang";
+            this.colNama.MinimumWidth = 6;
+            this.colNama.Name = "colNama";
+            this.colNama.ReadOnly = true;
+            // 
+            // colKondisi
+            // 
+            this.colKondisi.HeaderText = "Kondisi";
+            this.colKondisi.MinimumWidth = 6;
+            this.colKondisi.Name = "colKondisi";
+            this.colKondisi.ReadOnly = true;
+            // 
             // FormBarangKades
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -226,10 +217,6 @@
 
         #endregion
         private System.Windows.Forms.DataGridView dgvBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNama;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colJumlah;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colKondisi;
         private System.Windows.Forms.Panel panelSidebar;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnRiwayat;
@@ -238,5 +225,8 @@
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.DataGridViewTextBoxColumn coid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNama;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colKondisi;
     }
 }

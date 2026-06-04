@@ -23,6 +23,15 @@ namespace simade_pbo
 
         void tampilRiwayat()
         {
+            dgvRiwayat.AutoGenerateColumns = false;
+
+            coid.DataPropertyName = "colID";
+            colNama.DataPropertyName = "colNama";
+            colPeminjam.DataPropertyName = "colPeminjam";
+            colTanggalPinjam.DataPropertyName = "colTanggalPinjam";
+            colTanggalKembali.DataPropertyName = "colTanggalKembali";
+            colStatus.DataPropertyName = "colStatus";
+
             dgvRiwayat.DataSource = barang.tampilRiwayat();
         }
 
