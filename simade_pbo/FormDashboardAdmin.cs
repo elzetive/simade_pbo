@@ -17,7 +17,6 @@ namespace simade_pbo
         Kategori_service kategoriService = new Kategori_service();
 
         int idBarangAktif = 0;
-
         bool isLoadingFilter = true;
 
         public FormDashboardAdmin()
@@ -165,6 +164,7 @@ namespace simade_pbo
                 bersihkan();
                 tampilGrid();
                 muatFilter();
+                jalankanFilter();
             }
             else
             {
@@ -195,6 +195,7 @@ namespace simade_pbo
                         bersihkan();
                         tampilGrid();
                         muatFilter();
+                        jalankanFilter();
                     }
                     else
                     {
@@ -213,7 +214,7 @@ namespace simade_pbo
         {
             if (idBarangAktif > 0)
             {
-                if (MessageBox.Show("Yakin data akan dihapus?", "KONFIRMASI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Yakin data akan dihapus?", "KONFIRFINMASI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     if (barangService.hapus(idBarangAktif) > 0)
                     {
@@ -221,6 +222,7 @@ namespace simade_pbo
                         bersihkan();
                         tampilGrid();
                         muatFilter();
+                        jalankanFilter();
                     }
                     else
                     {
@@ -330,7 +332,7 @@ namespace simade_pbo
             halamanRegister.ShowDialog();
         }
 
-        private void lblTotal_Click(object sender, EventArgs e)
+        private void btnData_pinjam_Click(object sender, EventArgs e)
         {
 
         }

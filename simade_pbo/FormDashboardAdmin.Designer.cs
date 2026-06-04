@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnDashboard = new System.Windows.Forms.Button();
             this.lblNamaWarga = new System.Windows.Forms.Label();
@@ -310,7 +310,6 @@
             this.lblTotal.Size = new System.Drawing.Size(38, 45);
             this.lblTotal.TabIndex = 1;
             this.lblTotal.Text = "0";
-            this.lblTotal.Click += new System.EventHandler(this.lblTotal_Click);
             // 
             // label2
             // 
@@ -537,11 +536,12 @@
             this.btnData_pinjam.TabIndex = 4;
             this.btnData_pinjam.Text = "Data Pinjam";
             this.btnData_pinjam.UseVisualStyleBackColor = false;
+            this.btnData_pinjam.Click += new System.EventHandler(this.btnData_pinjam_Click);
             // 
             // nama_barang
             // 
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle25;
             this.nama_barang.HeaderText = "Nama Barang";
             this.nama_barang.MinimumWidth = 6;
             this.nama_barang.Name = "nama_barang";
@@ -549,8 +549,8 @@
             // 
             // id_kategori
             // 
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle26;
             this.id_kategori.HeaderText = "Kategori Barang";
             this.id_kategori.MinimumWidth = 6;
             this.id_kategori.Name = "id_kategori";
@@ -558,8 +558,8 @@
             // 
             // kondisi_barang
             // 
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kondisi_barang.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle27.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.kondisi_barang.DefaultCellStyle = dataGridViewCellStyle27;
             this.kondisi_barang.HeaderText = "Kondisi Barang";
             this.kondisi_barang.MinimumWidth = 6;
             this.kondisi_barang.Name = "kondisi_barang";
@@ -567,8 +567,8 @@
             // 
             // status_ketersediaan
             // 
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.status_ketersediaan.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle28.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.status_ketersediaan.DefaultCellStyle = dataGridViewCellStyle28;
             this.status_ketersediaan.HeaderText = "Status";
             this.status_ketersediaan.Name = "status_ketersediaan";
             this.status_ketersediaan.ReadOnly = true;
