@@ -18,7 +18,6 @@ namespace simade_pbo
 
         int idBarangAktif = 0;
 
-        // Variabel penanda agar filter tidak otomatis jalan saat ComboBox baru diisi datanya
         bool isLoadingFilter = true;
 
         public FormDashboardAdmin()
@@ -69,17 +68,14 @@ namespace simade_pbo
 
             string kondisiTeks = cmbFilterKondisi.SelectedItem != null ? cmbFilterKondisi.SelectedItem.ToString() : "";
 
-            // Skenario 1: Nama DAN Kondisi dipilih
             if (namaTerpilih && kondisiTerpilih)
             {
                 queryFilter = $"nama_barang = '{cmbFilterNama.SelectedValue}' AND kondisi = '{kondisiTeks}'";
             }
-            // Skenario 2: Hanya Nama yang dipilih
             else if (namaTerpilih && !kondisiTerpilih)
             {
                 queryFilter = $"nama_barang = '{cmbFilterNama.SelectedValue}'";
             }
-            // Skenario 3: Hanya Kondisi yang dipilih
             else if (!namaTerpilih && kondisiTerpilih)
             {
                 queryFilter = $"kondisi = '{kondisiTeks}'";
