@@ -17,6 +17,7 @@ namespace simade_pbo
         Kategori_service kategoriService = new Kategori_service();
 
         int idBarangAktif = 0;
+        bool isLoadingFilter = true;
 
         public FormDashboardAdmin()
         {
@@ -35,14 +36,77 @@ namespace simade_pbo
             cmbKategoriBarang.SelectedIndex = -1;
         }
 
+        void muatFilter()
+        {
+            isLoadingFilter = true;
+
+            DataTable dtBarang = barangService.tampilSemua();
+            DataView view = new DataView(dtBarang);
+            DataTable dtNamaUnik = view.ToTable(true, "nama_barang");
+
+            cmbFilterNama.DataSource = dtNamaUnik;
+            cmbFilterNama.DisplayMember = "nama_barang";
+            cmbFilterNama.ValueMember = "nama_barang";
+            cmbFilterNama.SelectedIndex = -1;
+
+            cmbFilterKondisi.SelectedIndex = -1;
+
+            isLoadingFilter = false;
+        }
+
+        void jalankanFilter()
+        {
+            if (isLoadingFilter) return;
+
+            DataTable dt = barangService.tampilSemua();
+            DataView dv = new DataView(dt);
+            string queryFilter = "";
+
+            bool namaTerpilih = cmbFilterNama.SelectedIndex != -1;
+            bool kondisiTerpilih = cmbFilterKondisi.SelectedIndex != -1;
+
+            string kondisiTeks = cmbFilterKondisi.SelectedItem != null ? cmbFilterKondisi.SelectedItem.ToString() : "";
+
+            if (namaTerpilih && kondisiTerpilih)
+            {
+                queryFilter = $"nama_barang = '{cmbFilterNama.SelectedValue}' AND kondisi = '{kondisiTeks}'";
+            }
+            else if (namaTerpilih && !kondisiTerpilih)
+            {
+                queryFilter = $"nama_barang = '{cmbFilterNama.SelectedValue}'";
+            }
+            else if (!namaTerpilih && kondisiTerpilih)
+            {
+                queryFilter = $"kondisi = '{kondisiTeks}'";
+            }
+
+            if (!string.IsNullOrEmpty(queryFilter))
+            {
+                dv.RowFilter = queryFilter;
+                dgvBarang.DataSource = dv;
+                lblJumlahFilter.Text = dv.Count.ToString();
+            }
+            else
+            {
+                dgvBarang.DataSource = dt;
+                lblJumlahFilter.Text = lblTotal.Text;
+            }
+        }
+
         void bersihkan()
         {
             txtNamaBarang.Clear();
             cmbKategoriBarang.SelectedIndex = -1;
-            if (txtKondisiBarang != null) txtKondisiBarang.Clear();
+            cmbKondisiBarang.SelectedIndex = -1;
             txtCari.Clear();
             idBarangAktif = 0;
             if (txtKategoriBarang != null) txtKategoriBarang.Clear();
+
+            isLoadingFilter = true;
+            cmbFilterNama.SelectedIndex = -1;
+            cmbFilterKondisi.SelectedIndex = -1;
+            isLoadingFilter = false;
+            jalankanFilter();
         }
 
         void tampilGrid()
@@ -57,23 +121,6 @@ namespace simade_pbo
 
             dgvBarang.DataSource = dt;
 
-            for (int i = 0; i < dgvBarang.Rows.Count; i++)
-            {
-                if (dgvBarang.Rows[i].Cells[3].Value != null)
-                {
-                    string status = dgvBarang.Rows[i].Cells[3].Value.ToString().ToLower();
-
-                    if (status == "tersedia")
-                    {
-                        dgvBarang.Rows[i].Cells[4].Value = "Pinjam";
-                    }
-                    else if (status == "dipinjam")
-                    {
-                        dgvBarang.Rows[i].Cells[4].Value = "Kembali";
-                    }
-                }
-            }
-
             lblTotal.Text = barangService.hitungStatistik("TOTAL");
             lblDipinjam.Text = barangService.hitungStatistik("DIPINJAM");
             lblTersedia.Text = barangService.hitungStatistik("TERSEDIA");
@@ -84,6 +131,8 @@ namespace simade_pbo
         private void FormDashboardAdmin_Load_1(object sender, EventArgs e)
         {
             tampilGrid();
+            muatFilter();
+            lblJumlahFilter.Text = lblTotal.Text;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -98,34 +147,29 @@ namespace simade_pbo
 
         private void btnTambah_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNamaBarang.Text) || cmbKategoriBarang.SelectedIndex == -1 || string.IsNullOrWhiteSpace(txtKondisiBarang.Text))
+            if (string.IsNullOrWhiteSpace(txtNamaBarang.Text) || cmbKategoriBarang.SelectedIndex == -1 || cmbKondisiBarang.SelectedIndex == -1)
             {
                 MessageBox.Show("Mohon lengkapi semua data barang sebelum menambahkan.", "Data Tidak Lengkap", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!barangService.isExist(txtNamaBarang.Text))
-            {
-                barangService.Nama_barang = txtNamaBarang.Text;
-                barangService.Id_kategori = Convert.ToInt32(cmbKategoriBarang.SelectedValue);
-                barangService.Kondisi_barang = txtKondisiBarang.Text;
-                barangService.Status_ketersediaan = "tersedia";
+            barangService.Nama_barang = txtNamaBarang.Text;
+            barangService.Id_kategori = Convert.ToInt32(cmbKategoriBarang.SelectedValue);
+            barangService.Kondisi_barang = cmbKondisiBarang.Text;
+            barangService.Status_ketersediaan = "tersedia";
 
-                if (barangService.simpan() > 0)
-                {
-                    MessageBox.Show("Data berhasil disimpan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    bersihkan();
-                    tampilGrid();
-                }
-                else
-                {
-                    MessageBox.Show("Gagal menyimpan data barang. Pastikan nama barang belum terdaftar.", "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    txtNamaBarang.Focus();
-                }
+            if (barangService.simpan() > 0)
+            {
+                MessageBox.Show("Data berhasil disimpan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                bersihkan();
+                tampilGrid();
+                muatFilter();
+                jalankanFilter();
             }
             else
             {
-                MessageBox.Show("Nama barang sudah terdaftar. Silakan gunakan nama lain.", "Duplikasi Nama", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Gagal menyimpan data barang ke database.", "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtNamaBarang.Focus();
             }
         }
 
@@ -133,7 +177,7 @@ namespace simade_pbo
         {
             if (idBarangAktif > 0)
             {
-                if (cmbKategoriBarang.SelectedIndex == -1 || string.IsNullOrWhiteSpace(txtNamaBarang.Text) || string.IsNullOrWhiteSpace(txtKondisiBarang.Text))
+                if (cmbKategoriBarang.SelectedIndex == -1 || string.IsNullOrWhiteSpace(txtNamaBarang.Text) || cmbKondisiBarang.SelectedIndex == -1)
                 {
                     MessageBox.Show("Mohon lengkapi semua data barang sebelum mengubah.", "Data Tidak Lengkap", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
@@ -141,7 +185,7 @@ namespace simade_pbo
 
                 barangService.Nama_barang = txtNamaBarang.Text;
                 barangService.Id_kategori = Convert.ToInt32(cmbKategoriBarang.SelectedValue);
-                barangService.Kondisi_barang = txtKondisiBarang.Text;
+                barangService.Kondisi_barang = cmbKondisiBarang.Text;
 
                 if (MessageBox.Show("Yakin data akan diubah?", "KONFIRMASI", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
@@ -150,10 +194,12 @@ namespace simade_pbo
                         MessageBox.Show("Data berhasil diubah", "UBAH DATA", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         bersihkan();
                         tampilGrid();
+                        muatFilter();
+                        jalankanFilter();
                     }
                     else
                     {
-                        MessageBox.Show("Gagal mengubah data barang. Pastikan nama barang belum terdaftar.", "UBAH DATA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Gagal mengubah data barang.", "UBAH DATA", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         txtNamaBarang.Focus();
                     }
                 }
@@ -168,13 +214,15 @@ namespace simade_pbo
         {
             if (idBarangAktif > 0)
             {
-                if (MessageBox.Show("Yakin data akan dihapus?", "KONFIRMASI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Yakin data akan dihapus?", "KONFIRFINMASI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     if (barangService.hapus(idBarangAktif) > 0)
                     {
                         MessageBox.Show("Data berhasil dihapus", "HAPUS DATA", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         bersihkan();
                         tampilGrid();
+                        muatFilter();
+                        jalankanFilter();
                     }
                     else
                     {
@@ -238,13 +286,15 @@ namespace simade_pbo
             if (e.RowIndex >= 0)
             {
                 DataGridViewRow baris = this.dgvBarang.Rows[e.RowIndex];
-
                 DataTable dt = (DataTable)dgvBarang.DataSource;
-                idBarangAktif = Convert.ToInt32(dt.Rows[e.RowIndex]["id_barang"]);
 
+                idBarangAktif = Convert.ToInt32(dt.Rows[e.RowIndex]["id_barang"]);
                 txtNamaBarang.Text = baris.Cells[0].Value.ToString();
 
-                txtKondisiBarang.Text = baris.Cells[2].Value.ToString();
+                if (baris.Cells[2].Value != null)
+                {
+                    cmbKondisiBarang.Text = baris.Cells[2].Value.ToString();
+                }
 
                 if (dt.Rows[e.RowIndex]["id_kategori"] != DBNull.Value)
                 {
@@ -253,46 +303,14 @@ namespace simade_pbo
             }
         }
 
-        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void cmbFilterNama_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex == 4)
-            {
-                DataTable dt = (DataTable)dgvBarang.DataSource;
-                int idBarang = Convert.ToInt32(dt.Rows[e.RowIndex]["id_barang"]);
-                string statusSekarang = dt.Rows[e.RowIndex]["status_ketersediaan"].ToString().ToLower();
+            jalankanFilter();
+        }
 
-                string statusBaru = "";
-                string pesanKonfirmasi = "";
-
-                if (statusSekarang == "tersedia")
-                {
-                    statusBaru = "dipinjam";
-                    pesanKonfirmasi = "Apakah Anda yakin ingin meminjam barang ini?";
-                }
-                else if (statusSekarang == "dipinjam")
-                {
-                    statusBaru = "tersedia";
-                    pesanKonfirmasi = "Apakah Anda yakin barang ini sudah dikembalikan?";
-                }
-
-                if (MessageBox.Show(pesanKonfirmasi, "KONFIRMASI AKSI", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    barangService.Nama_barang = dt.Rows[e.RowIndex]["nama_barang"].ToString();
-                    barangService.Id_kategori = Convert.ToInt32(dt.Rows[e.RowIndex]["nama_kategori"]);
-                    barangService.Kondisi_barang = dt.Rows[e.RowIndex]["kondisi"].ToString();
-                    barangService.Status_ketersediaan = statusBaru;
-
-                    if (barangService.ubah(idBarang) > 0)
-                    {
-                        MessageBox.Show("Status barang berhasil diperbarui menjadi: " + statusBaru.ToUpper(), "SUKSES", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        tampilGrid();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Gagal memperbarui status barang.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
+        private void cmbFilterKondisi_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            jalankanFilter();
         }
 
         private void btnLogOut_Click(object sender, EventArgs e)
@@ -315,6 +333,16 @@ namespace simade_pbo
             halamanRegisterAdmin.StartPosition = FormStartPosition.CenterScreen;
 
             halamanRegisterAdmin.ShowDialog();
+        }
+
+        private void btnData_pinjam_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
         private void lblTotal_Click(object sender, EventArgs e)

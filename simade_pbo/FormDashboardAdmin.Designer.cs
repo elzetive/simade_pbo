@@ -28,11 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle25 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnDashboard = new System.Windows.Forms.Button();
             this.lblNamaWarga = new System.Windows.Forms.Label();
@@ -53,13 +52,7 @@
             this.lblTotal = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dgvBarang = new System.Windows.Forms.DataGridView();
-            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.kondisi_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status_ketersediaan = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Aksi = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.txtKondisiBarang = new System.Windows.Forms.TextBox();
             this.txtNamaBarang = new System.Windows.Forms.TextBox();
             this.btnBatal = new System.Windows.Forms.Button();
             this.btnHapus = new System.Windows.Forms.Button();
@@ -76,6 +69,19 @@
             this.btnTambahKategori = new System.Windows.Forms.Button();
             this.txtKategoriBarang = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnData_pinjam = new System.Windows.Forms.Button();
+            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.kondisi_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status_ketersediaan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmbKondisiBarang = new System.Windows.Forms.ComboBox();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.cmbFilterNama = new System.Windows.Forms.ComboBox();
+            this.cmbFilterKondisi = new System.Windows.Forms.ComboBox();
+            this.lblJumlahFilter = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -87,11 +93,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvBarang)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelSidebar
             // 
             this.panelSidebar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.panelSidebar.Controls.Add(this.btnData_pinjam);
             this.panelSidebar.Controls.Add(this.btnDashboard);
             this.panelSidebar.Controls.Add(this.lblNamaWarga);
             this.panelSidebar.Controls.Add(this.btnLogOut);
@@ -164,9 +172,9 @@
             this.lblTitle.Location = new System.Drawing.Point(19, 13);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(291, 30);
+            this.lblTitle.Size = new System.Drawing.Size(233, 30);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "SIMADE - Dashboard Admin";
+            this.lblTitle.Text = "SIMADE - Data Barang";
             // 
             // btnExit
             // 
@@ -302,7 +310,6 @@
             this.lblTotal.Size = new System.Drawing.Size(38, 45);
             this.lblTotal.TabIndex = 1;
             this.lblTotal.Text = "0";
-            this.lblTotal.Click += new System.EventHandler(this.lblTotal_Click);
             // 
             // label2
             // 
@@ -319,75 +326,26 @@
             this.dgvBarang.AllowUserToAddRows = false;
             this.dgvBarang.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvBarang.BackgroundColor = System.Drawing.Color.White;
-            this.dgvBarang.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvBarang.ColumnHeadersHeight = 35;
             this.dgvBarang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvBarang.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.nama_barang,
             this.id_kategori,
             this.kondisi_barang,
-            this.status_ketersediaan,
-            this.Aksi});
+            this.status_ketersediaan});
             this.dgvBarang.Location = new System.Drawing.Point(243, 373);
             this.dgvBarang.Name = "dgvBarang";
             this.dgvBarang.ReadOnly = true;
             this.dgvBarang.RowHeadersWidth = 51;
-            this.dgvBarang.Size = new System.Drawing.Size(728, 165);
+            this.dgvBarang.Size = new System.Drawing.Size(471, 165);
             this.dgvBarang.TabIndex = 12;
             this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
-            this.dgvBarang.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellContentClick);
-            // 
-            // nama_barang
-            // 
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle1;
-            this.nama_barang.HeaderText = "Nama Barang";
-            this.nama_barang.MinimumWidth = 6;
-            this.nama_barang.Name = "nama_barang";
-            this.nama_barang.ReadOnly = true;
-            // 
-            // id_kategori
-            // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle2;
-            this.id_kategori.HeaderText = "Kategori Barang";
-            this.id_kategori.MinimumWidth = 6;
-            this.id_kategori.Name = "id_kategori";
-            this.id_kategori.ReadOnly = true;
-            // 
-            // kondisi_barang
-            // 
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.kondisi_barang.DefaultCellStyle = dataGridViewCellStyle3;
-            this.kondisi_barang.HeaderText = "Kondisi Barang";
-            this.kondisi_barang.MinimumWidth = 6;
-            this.kondisi_barang.Name = "kondisi_barang";
-            this.kondisi_barang.ReadOnly = true;
-            // 
-            // status_ketersediaan
-            // 
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.status_ketersediaan.DefaultCellStyle = dataGridViewCellStyle4;
-            this.status_ketersediaan.HeaderText = "Status";
-            this.status_ketersediaan.Name = "status_ketersediaan";
-            this.status_ketersediaan.ReadOnly = true;
-            this.status_ketersediaan.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Aksi
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Lime;
-            this.Aksi.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Aksi.HeaderText = "Aksi";
-            this.Aksi.Name = "Aksi";
-            this.Aksi.ReadOnly = true;
             // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.White;
-            this.panel4.Controls.Add(this.txtKondisiBarang);
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.cmbKondisiBarang);
             this.panel4.Controls.Add(this.txtNamaBarang);
             this.panel4.Controls.Add(this.btnBatal);
             this.panel4.Controls.Add(this.btnHapus);
@@ -401,13 +359,6 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(471, 163);
             this.panel4.TabIndex = 13;
-            // 
-            // txtKondisiBarang
-            // 
-            this.txtKondisiBarang.Location = new System.Drawing.Point(22, 132);
-            this.txtKondisiBarang.Name = "txtKondisiBarang";
-            this.txtKondisiBarang.Size = new System.Drawing.Size(237, 20);
-            this.txtKondisiBarang.TabIndex = 14;
             // 
             // txtNamaBarang
             // 
@@ -465,6 +416,7 @@
             // 
             // cmbKategoriBarang
             // 
+            this.cmbKategoriBarang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbKategoriBarang.FormattingEnabled = true;
             this.cmbKategoriBarang.Location = new System.Drawing.Point(22, 84);
             this.cmbKategoriBarang.Name = "cmbKategoriBarang";
@@ -515,13 +467,14 @@
             // 
             this.txtCari.Location = new System.Drawing.Point(293, 347);
             this.txtCari.Name = "txtCari";
-            this.txtCari.Size = new System.Drawing.Size(678, 20);
+            this.txtCari.Size = new System.Drawing.Size(421, 20);
             this.txtCari.TabIndex = 15;
             this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             // 
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.White;
+            this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel5.Controls.Add(this.btnBatalKategori);
             this.panel5.Controls.Add(this.btnTambahKategori);
             this.panel5.Controls.Add(this.txtKategoriBarang);
@@ -571,12 +524,153 @@
             this.label7.TabIndex = 5;
             this.label7.Text = "Kategori Barang";
             // 
+            // btnData_pinjam
+            // 
+            this.btnData_pinjam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.btnData_pinjam.FlatAppearance.BorderSize = 0;
+            this.btnData_pinjam.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnData_pinjam.ForeColor = System.Drawing.Color.White;
+            this.btnData_pinjam.Location = new System.Drawing.Point(19, 120);
+            this.btnData_pinjam.Name = "btnData_pinjam";
+            this.btnData_pinjam.Size = new System.Drawing.Size(158, 37);
+            this.btnData_pinjam.TabIndex = 4;
+            this.btnData_pinjam.Text = "Data Pinjam";
+            this.btnData_pinjam.UseVisualStyleBackColor = false;
+            this.btnData_pinjam.Click += new System.EventHandler(this.btnData_pinjam_Click);
+            // 
+            // nama_barang
+            // 
+            dataGridViewCellStyle25.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle25;
+            this.nama_barang.HeaderText = "Nama Barang";
+            this.nama_barang.MinimumWidth = 6;
+            this.nama_barang.Name = "nama_barang";
+            this.nama_barang.ReadOnly = true;
+            // 
+            // id_kategori
+            // 
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle26;
+            this.id_kategori.HeaderText = "Kategori Barang";
+            this.id_kategori.MinimumWidth = 6;
+            this.id_kategori.Name = "id_kategori";
+            this.id_kategori.ReadOnly = true;
+            // 
+            // kondisi_barang
+            // 
+            dataGridViewCellStyle27.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.kondisi_barang.DefaultCellStyle = dataGridViewCellStyle27;
+            this.kondisi_barang.HeaderText = "Kondisi Barang";
+            this.kondisi_barang.MinimumWidth = 6;
+            this.kondisi_barang.Name = "kondisi_barang";
+            this.kondisi_barang.ReadOnly = true;
+            // 
+            // status_ketersediaan
+            // 
+            dataGridViewCellStyle28.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.status_ketersediaan.DefaultCellStyle = dataGridViewCellStyle28;
+            this.status_ketersediaan.HeaderText = "Status";
+            this.status_ketersediaan.Name = "status_ketersediaan";
+            this.status_ketersediaan.ReadOnly = true;
+            this.status_ketersediaan.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // cmbKondisiBarang
+            // 
+            this.cmbKondisiBarang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbKondisiBarang.FormattingEnabled = true;
+            this.cmbKondisiBarang.Items.AddRange(new object[] {
+            "Bagus",
+            "Rusak"});
+            this.cmbKondisiBarang.Location = new System.Drawing.Point(22, 132);
+            this.cmbKondisiBarang.Name = "cmbKondisiBarang";
+            this.cmbKondisiBarang.Size = new System.Drawing.Size(237, 21);
+            this.cmbKondisiBarang.TabIndex = 15;
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.White;
+            this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel6.Controls.Add(this.label11);
+            this.panel6.Controls.Add(this.lblJumlahFilter);
+            this.panel6.Controls.Add(this.cmbFilterKondisi);
+            this.panel6.Controls.Add(this.cmbFilterNama);
+            this.panel6.Controls.Add(this.label8);
+            this.panel6.Controls.Add(this.label9);
+            this.panel6.Location = new System.Drawing.Point(726, 347);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(245, 190);
+            this.panel6.TabIndex = 17;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(13, 37);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(107, 21);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Nama Barang";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(13, 85);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(119, 21);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "Kondisi Barang";
+            // 
+            // cmbFilterNama
+            // 
+            this.cmbFilterNama.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFilterNama.FormattingEnabled = true;
+            this.cmbFilterNama.Location = new System.Drawing.Point(17, 61);
+            this.cmbFilterNama.Name = "cmbFilterNama";
+            this.cmbFilterNama.Size = new System.Drawing.Size(210, 21);
+            this.cmbFilterNama.TabIndex = 8;
+            this.cmbFilterNama.SelectedIndexChanged += new System.EventHandler(this.cmbFilterNama_SelectedIndexChanged);
+            // 
+            // cmbFilterKondisi
+            // 
+            this.cmbFilterKondisi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFilterKondisi.FormattingEnabled = true;
+            this.cmbFilterKondisi.Items.AddRange(new object[] {
+            "Bagus",
+            "Rusak"});
+            this.cmbFilterKondisi.Location = new System.Drawing.Point(18, 109);
+            this.cmbFilterKondisi.Name = "cmbFilterKondisi";
+            this.cmbFilterKondisi.Size = new System.Drawing.Size(210, 21);
+            this.cmbFilterKondisi.TabIndex = 9;
+            this.cmbFilterKondisi.SelectedIndexChanged += new System.EventHandler(this.cmbFilterKondisi_SelectedIndexChanged);
+            // 
+            // lblJumlahFilter
+            // 
+            this.lblJumlahFilter.AutoSize = true;
+            this.lblJumlahFilter.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblJumlahFilter.Location = new System.Drawing.Point(104, 135);
+            this.lblJumlahFilter.Name = "lblJumlahFilter";
+            this.lblJumlahFilter.Size = new System.Drawing.Size(38, 45);
+            this.lblJumlahFilter.TabIndex = 10;
+            this.lblJumlahFilter.Text = "0";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(60, 2);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(126, 25);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "Filter Barang";
+            // 
             // FormDashboardAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(245)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1024, 549);
+            this.Controls.Add(this.panel6);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.txtCari);
             this.Controls.Add(this.lblCari);
@@ -609,6 +703,8 @@
             this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -645,7 +741,6 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnHapus;
         private System.Windows.Forms.Button btnBatal;
-        private System.Windows.Forms.TextBox txtKondisiBarang;
         private System.Windows.Forms.TextBox txtNamaBarang;
         private System.Windows.Forms.Label lblCari;
         private System.Windows.Forms.TextBox txtCari;
@@ -654,10 +749,18 @@
         private System.Windows.Forms.Button btnTambahKategori;
         private System.Windows.Forms.TextBox txtKategoriBarang;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnData_pinjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn nama_barang;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_kategori;
         private System.Windows.Forms.DataGridViewTextBoxColumn kondisi_barang;
         private System.Windows.Forms.DataGridViewTextBoxColumn status_ketersediaan;
-        private System.Windows.Forms.DataGridViewButtonColumn Aksi;
+        private System.Windows.Forms.ComboBox cmbKondisiBarang;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label lblJumlahFilter;
+        private System.Windows.Forms.ComboBox cmbFilterKondisi;
+        private System.Windows.Forms.ComboBox cmbFilterNama;
+        private System.Windows.Forms.Label label11;
     }
 }
