@@ -30,19 +30,18 @@ namespace simade_pbo
             // 2. Kunci agar tidak membuat kolom baru otomatis di kanan desainer
             dgvRiwayat.AutoGenerateColumns = false;
 
-            // 3. Petakan langsung data menggunakan urutan kolom DataTable asli database.
-            // Cara ini 100% aman dari masalah huruf besar-kecil atau typo nama field database.
+            // 3. Petakan langsung data menggunakan urutan kolom DataTable asli database
             if (dgvRiwayat.Columns.Count >= 6 && dt != null && dt.Columns.Count >= 6)
             {
-                this.coid.DataPropertyName = dt.Columns[0].ColumnName; // Kolom ke-1: ID Peminjaman
-                this.colNama.DataPropertyName = dt.Columns[1].ColumnName; // Kolom ke-2: Nama Barang
-                this.colPeminjam.DataPropertyName = dt.Columns[2].ColumnName; // Kolom ke-3: Peminjam
-                this.colTanggalPinjam.DataPropertyName = dt.Columns[3].ColumnName; // Kolom ke-4: Tanggal Pinjam
-                this.colTanggalKembali.DataPropertyName = dt.Columns[4].ColumnName; // Kolom ke-5: Tanggal Kembali
-                this.colStatus.DataPropertyName = dt.Columns[5].ColumnName; // Kolom ke-6: Status Peminjaman
+                this.coid.DataPropertyName = dt.Columns[0].ColumnName;
+                this.colNama.DataPropertyName = dt.Columns[1].ColumnName;
+                this.colPeminjam.DataPropertyName = dt.Columns[2].ColumnName;
+                this.colTanggalPinjam.DataPropertyName = dt.Columns[3].ColumnName;
+                this.colTanggalKembali.DataPropertyName = dt.Columns[4].ColumnName;
+                this.colStatus.DataPropertyName = dt.Columns[5].ColumnName;
             }
 
-            // 4. Ikat datanya ke komponen DataGridView desainer
+            // 4. Ikat datanya ke DataGridView
             dgvRiwayat.DataSource = dt;
         }
 
@@ -72,7 +71,12 @@ namespace simade_pbo
 
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
-            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult konfirmasi = MessageBox.Show(
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi Log Out",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
 
             if (konfirmasi == DialogResult.Yes)
             {
@@ -85,6 +89,30 @@ namespace simade_pbo
         private void dgvRiwayat_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void dgvRiwayat_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvRiwayat.Columns[e.ColumnIndex].Name == "colStatus")
+            {
+                if (e.Value != null)
+                {
+                    string status = e.Value.ToString().ToLower();
+
+                    if (status == "pending")
+                    {
+                        e.CellStyle.BackColor = Color.Khaki;
+                    }
+                    else if (status == "dipinjam")
+                    {
+                        e.CellStyle.BackColor = Color.LightSalmon;
+                    }
+                    else if (status == "dikembalikan")
+                    {
+                        e.CellStyle.BackColor = Color.LightGreen;
+                    }
+                }
+            }
         }
     }
 }

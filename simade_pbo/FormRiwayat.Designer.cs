@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             this.dgvRiwayat = new System.Windows.Forms.DataGridView();
+            this.coid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPeminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTanggalPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTanggalKembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnRiwayat = new System.Windows.Forms.Button();
@@ -37,12 +43,6 @@
             this.panelHeader = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
-            this.coid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPeminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTanggalPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTanggalKembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRiwayat)).BeginInit();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -69,6 +69,43 @@
             this.dgvRiwayat.Size = new System.Drawing.Size(724, 337);
             this.dgvRiwayat.TabIndex = 8;
             this.dgvRiwayat.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRiwayat_CellContentClick);
+            this.dgvRiwayat.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvRiwayat_CellFormatting);
+            // 
+            // coid
+            // 
+            this.coid.HeaderText = "ID";
+            this.coid.Name = "coid";
+            this.coid.ReadOnly = true;
+            // 
+            // colNama
+            // 
+            this.colNama.HeaderText = "Nama Barang";
+            this.colNama.Name = "colNama";
+            this.colNama.ReadOnly = true;
+            // 
+            // colPeminjam
+            // 
+            this.colPeminjam.HeaderText = "Peminjam";
+            this.colPeminjam.Name = "colPeminjam";
+            this.colPeminjam.ReadOnly = true;
+            // 
+            // colTanggalPinjam
+            // 
+            this.colTanggalPinjam.HeaderText = "Tanggal Pinjam";
+            this.colTanggalPinjam.Name = "colTanggalPinjam";
+            this.colTanggalPinjam.ReadOnly = true;
+            // 
+            // colTanggalKembali
+            // 
+            this.colTanggalKembali.HeaderText = "Tanggal kembali";
+            this.colTanggalKembali.Name = "colTanggalKembali";
+            this.colTanggalKembali.ReadOnly = true;
+            // 
+            // colStatus
+            // 
+            this.colStatus.HeaderText = "Status";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.ReadOnly = true;
             // 
             // panelSidebar
             // 
@@ -177,42 +214,6 @@
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
-            // coid
-            // 
-            this.coid.HeaderText = "ID";
-            this.coid.Name = "coid";
-            this.coid.ReadOnly = true;
-            // 
-            // colNama
-            // 
-            this.colNama.HeaderText = "Nama Barang";
-            this.colNama.Name = "colNama";
-            this.colNama.ReadOnly = true;
-            // 
-            // colPeminjam
-            // 
-            this.colPeminjam.HeaderText = "Peminjam";
-            this.colPeminjam.Name = "colPeminjam";
-            this.colPeminjam.ReadOnly = true;
-            // 
-            // colTanggalPinjam
-            // 
-            this.colTanggalPinjam.HeaderText = "Tanggal Pinjam";
-            this.colTanggalPinjam.Name = "colTanggalPinjam";
-            this.colTanggalPinjam.ReadOnly = true;
-            // 
-            // colTanggalKembali
-            // 
-            this.colTanggalKembali.HeaderText = "Tanggal kembali";
-            this.colTanggalKembali.Name = "colTanggalKembali";
-            this.colTanggalKembali.ReadOnly = true;
-            // 
-            // colStatus
-            // 
-            this.colStatus.HeaderText = "Status";
-            this.colStatus.Name = "colStatus";
-            this.colStatus.ReadOnly = true;
             // 
             // FormRiwayat
             // 
