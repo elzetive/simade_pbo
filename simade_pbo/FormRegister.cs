@@ -92,5 +92,10 @@ namespace simade_pbo
         {
             Application.Exit();
         }
+
+        private void txtEmail_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

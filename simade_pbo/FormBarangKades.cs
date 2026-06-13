@@ -18,15 +18,25 @@ namespace simade_pbo
         public FormBarangKades()
         {
             InitializeComponent();
+
+            // Textbox detail hanya untuk dilihat
+            txtId.ReadOnly = true;
+            txtNama.ReadOnly = true;
+            txtKategori.ReadOnly = true;
+            txtKondisi.ReadOnly = true;
+            txtStatus.ReadOnly = true;
+
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Kunci auto generate agar kolom tidak duplikat ke kanan
+            // Supaya kolom tidak double
             dgvBarang.AutoGenerateColumns = false;
 
-            // Petakan langsung menggunakan nama variabel komponen desainer kalian
+            // Mapping kolom DataGrid
             this.coid.DataPropertyName = "id_barang";
             this.colNama.DataPropertyName = "nama_barang";
             this.colKondisi.DataPropertyName = "kondisi";
+            this.colKategori.DataPropertyName = "nama_kategori";
+            this.colStatus.DataPropertyName = "status_ketersediaan";
 
             tampilData();
         }
@@ -38,7 +48,7 @@ namespace simade_pbo
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.Close(); // Menggunakan Close agar siklus aplikasi tetap terjaga aman
+            this.Close();
         }
 
         private void btnDashboard_Click_1(object sender, EventArgs e)
@@ -50,7 +60,7 @@ namespace simade_pbo
 
         private void btnBarang_Click(object sender, EventArgs e)
         {
-            // Diabaikan karena user sudah berada di halaman ini
+            // Sudah di halaman ini
         }
 
         private void btnRiwayat_Click_1(object sender, EventArgs e)
@@ -62,7 +72,12 @@ namespace simade_pbo
 
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
-            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult konfirmasi = MessageBox.Show(
+                "Apakah Anda yakin ingin Log Out?",
+                "Konfirmasi Log Out",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
 
             if (konfirmasi == DialogResult.Yes)
             {
@@ -72,7 +87,25 @@ namespace simade_pbo
             }
         }
 
-        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                txtId.Text = dgvBarang.Rows[e.RowIndex].Cells["coid"].Value.ToString();
+                txtNama.Text = dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
+                txtKondisi.Text = dgvBarang.Rows[e.RowIndex].Cells["colKondisi"].Value.ToString();
+                txtKategori.Text = dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
+                txtStatus.Text = dgvBarang.Rows[e.RowIndex].Cells["colStatus"].Value.ToString();
+
+                // Warna status
+                if (txtStatus.Text.ToLower() == "tersedia")
+                    txtStatus.BackColor = Color.LightGreen;
+                else
+                    txtStatus.BackColor = Color.LightCoral;
+            }
+        }
+
+        private void txtId_TextChanged(object sender, EventArgs e)
         {
 
         }
