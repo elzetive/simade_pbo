@@ -54,7 +54,9 @@
     <Reference Include="MySql.Data, Version=9.7.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.9.7.0\lib\net462\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
@@ -95,6 +97,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormDataPinjam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDataPinjam.Designer.cs">
+      <DependentUpon>FormDataPinjam.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormBarangKades.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormDashboardWarga.resx">
       <DependentUpon>FormDashboardWarga.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDataPinjam.resx">
+      <DependentUpon>FormDataPinjam.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRegisterAdmin.resx">
       <DependentUpon>FormRegisterAdmin.cs</DependentUpon>
