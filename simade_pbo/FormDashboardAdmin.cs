@@ -22,7 +22,6 @@ namespace simade_pbo
         public FormDashboardAdmin()
         {
             InitializeComponent();
-
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
@@ -325,29 +324,49 @@ namespace simade_pbo
             }
         }
 
-        private void btnDashboard_Click(object sender, EventArgs e)
+        private void btnData_Barang_Click(object sender, EventArgs e)
         {
-            // Dialihkan secara presisi untuk memanggil Form pendaftaran khusus Admin Desa
+            FormDashboardAdmin halamanDashboardAdmin = new FormDashboardAdmin();
+
+            halamanDashboardAdmin.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDashboardAdmin.ShowDialog();
+        }
+
+        private void btnData_Pinjam_Click_1(object sender, EventArgs e)
+        {
+            FormDataPinjam halamanDataPinjam = new FormDataPinjam();
+
+            halamanDataPinjam.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDataPinjam.ShowDialog();
+        }
+
+        private void btnData_Ambil_Click(object sender, EventArgs e)
+        {
+            FormDataPengambilan halamanDataPengambilan = new FormDataPengambilan();
+
+            halamanDataPengambilan.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDataPengambilan.ShowDialog();
+        }
+
+        private void btnData_Kembali_Click(object sender, EventArgs e)
+        {
+            FormDataPengembalian halamanDataPengembalian = new FormDataPengembalian();
+
+            halamanDataPengembalian.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDataPengembalian.ShowDialog();
+        }
+
+        private void btnTambah_Admin_Click(object sender, EventArgs e)
+        {
             FormRegisterAdmin halamanRegisterAdmin = new FormRegisterAdmin();
 
             halamanRegisterAdmin.StartPosition = FormStartPosition.CenterScreen;
 
             halamanRegisterAdmin.ShowDialog();
-        }
-
-        private void btnData_pinjam_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void lblTotal_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
