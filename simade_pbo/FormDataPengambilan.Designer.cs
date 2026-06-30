@@ -55,6 +55,10 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+
+            // Perbaikan Penambahan Instansiasi Komponen DataGridView
+            this.dgvTabelList = new System.Windows.Forms.DataGridView();
+
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -65,6 +69,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
             this.SuspendLayout();
             // 
             // btnTambah_Admin
@@ -195,7 +200,7 @@
             this.lblHeaderDataPinjam.Location = new System.Drawing.Point(19, 13);
             this.lblHeaderDataPinjam.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHeaderDataPinjam.Name = "lblHeaderDataPinjam";
-            this.lblHeaderDataPinjam.Size = new System.Drawing.Size(292, 30);
+            this.lblHeaderDataPinjam.Size = new System.Drawing.Size(342, 30);
             this.lblHeaderDataPinjam.TabIndex = 0;
             this.lblHeaderDataPinjam.Text = "SIMADE - Data Pengambilan";
             // 
@@ -340,7 +345,7 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(67, 37);
+            this.lblTotal.Location = new System.Drawing.Point(86, 37);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(38, 45);
             this.lblTotal.TabIndex = 1;
@@ -399,11 +404,27 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Hangus";
             // 
+            // dgvTabelList
+            // 
+            this.dgvTabelList.AllowUserToAddRows = false;
+            this.dgvTabelList.AllowUserToDeleteRows = false;
+            this.dgvTabelList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvTabelList.BackgroundColor = System.Drawing.Color.White;
+            this.dgvTabelList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvTabelList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTabelList.Location = new System.Drawing.Point(253, 190);
+            this.dgvTabelList.Name = "dgvTabelList";
+            this.dgvTabelList.ReadOnly = true;
+            this.dgvTabelList.Size = new System.Drawing.Size(724, 360);
+            this.dgvTabelList.TabIndex = 31;
+            this.dgvTabelList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTabelList_CellContentClick);
+            // 
             // FormDataPengambilan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1046, 589);
+            this.Controls.Add(this.dgvTabelList);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -412,7 +433,8 @@
             this.Controls.Add(this.panelSidebar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormDataPengambilan";
-            this.Text = "FormDataPengembalian";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "SIMADE - Data Pengambilan";
             this.panelSidebar.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
@@ -428,8 +450,9 @@
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
             this.ResumeLayout(false);
-
+            this.PerformLayout();
         }
 
         #endregion
@@ -461,5 +484,8 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
+
+        // Deklarasi Komponen DataGridView yang Diperbaiki
+        private System.Windows.Forms.DataGridView dgvTabelList;
     }
 }
