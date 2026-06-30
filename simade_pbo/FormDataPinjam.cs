@@ -1,179 +1,190 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient; // Menggunakan library MySQL
+using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
     public partial class FormDataPinjam : Form
     {
-        // Alamat koneksi ke database MySQL XAMPP kamu
-        private string connectionString = "server=localhost;database=simade_pbo;uid=root;pwd=;";
-
         public FormDataPinjam()
         {
             InitializeComponent();
+            this.Load += new System.EventHandler(this.FormDataPinjam_Load);
+            this.dgvTabelList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTabelList_CellClick);
         }
 
-        // 1. EVENT UTAMA: Otomatis berjalan saat Form dibuka (HANYA ADA SATU SEKARANG)
         private void FormDataPinjam_Load(object sender, EventArgs e)
         {
-            // Coba ambil data dari database MySQL terlebih dahulu
-            bool suksesLoadDatabase = TampilkanListPeminjam();
+            dgvTabelList.ReadOnly = true;
+            dgvTabelList.AutoGenerateColumns = false;
 
-            // JIKA database gagal terhubung (XAMPP mati), otomatis pakai Data Simulasi/Mock Data agar tidak kosongan
-            if (!suksesLoadDatabase)
-            {
-                LoadDataSimulasi();
-            }
+            // Pemetaan nama kolom DataGridView (sesuai nama objek di desainer) ke nama kolom kueri SQL
+            Peminjam.DataPropertyName = "nama_peminjam";
+            Barang.DataPropertyName = "nama_barang";
+            jumlah_pinjam.DataPropertyName = "jumlah_pinjam";
+            Waktu_Pinjam.DataPropertyName = "tgl_pinjam";
+            Waktu_Kembali.DataPropertyName = "tgl_kembali";
+            status.DataPropertyName = "status_peminjaman";
+
+            TampilkanListPeminjam();
+            HitungRingkasanStatistik();
         }
 
-        // 2. Fungsi Ambil Data Asli dari MySQL Database
-        public bool TampilkanListPeminjam()
+        public void TampilkanListPeminjam()
         {
-            string query = @"SELECT p.id_peminjaman AS 'No',
-                                    u.nama_lengkap AS 'Nama Peminjam', 
-                                    b.nama_barang AS 'Nama Barang', 
-                                    p.tgl_pinjam AS 'Tanggal Pinjam', 
-                                    p.tgl_kembali AS 'Tanggal Kembali',
-                                    'Kembalikan' AS 'Aksi'
+            // Kueri join table untuk mengambil data peminjaman beserta detail profil user warga dan sub_kategori barang
+            string query = @"SELECT p.kode_peminjaman,
+                                    u.nama_lengkap AS nama_peminjam, u.alamat, u.no_hp,
+                                    b.nama_barang, sk.nama_sub AS nama_kategori, 1 AS jumlah_pinjam,
+                                    DATE_FORMAT(p.tgl_pinjam, '%d/%m/%Y') AS tgl_pinjam, 
+                                    IFNULL(DATE_FORMAT(p.tgl_kembali, '%d/%m/%Y'), '-') AS tgl_kembali,
+                                    p.status_peminjaman
                              FROM peminjaman p
                              INNER JOIN user u ON p.id_user = u.id_user
-                             INNER JOIN barang b ON p.id_barang = b.id_barang";
+                             INNER JOIN barang b ON p.id_barang = b.id_barang
+                             INNER JOIN sub_kategori sk ON b.id_sub = sk.id_sub
+                             ORDER BY p.id_pinjam DESC";
 
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = Koneksi.GetConn())
                 {
-                    conn.Open(); // Buka jalur koneksi
-
+                    conn.Open();
                     using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn))
                     {
                         DataTable dt = new DataTable();
-                        adapter.Fill(dt); // Mengisi data hasil query ke dalam DataTable
-
-                        // Bersihkan kolom desain manual agar tidak double
-                        dgvTabelList.Columns.Clear();
-
-                        // Masukkan data MySQL ke tabel
-                        this.dgvTabelList.DataSource = dt;
-
-                        // Rapikan ukuran kolom
-                        dgvTabelList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                        return true; // Berhasil terhubung ke database
+                        adapter.Fill(dt);
+                        dgvTabelList.DataSource = dt;
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Jika database mati/error, kembalikan nilai false tanpa memunculkan pop-up error yang mengganggu
-                return false;
+                MessageBox.Show("Gagal memuat data log peminjaman: " + ex.Message, "Database Error");
             }
         }
 
-        // 3. Fungsi Ambil Data Cadangan/Simulasi (Jika MySQL XAMPP belum dinyalakan)
-        private void LoadDataSimulasi()
+        private void HitungRingkasanStatistik()
         {
-            // 1. Membersihkan kolom bawaan jika ada agar tidak bentrok
-            dgvTabelList.DataSource = null;
-            dgvTabelList.Columns.Clear();
-
-            // 2. Membuat Header Kolom Tabel (Sesuai dengan gambar desainmu)
-            dgvTabelList.Columns.Add("No", "No");
-            dgvTabelList.Columns.Add("NamaPeminjam", "Nama Peminjam");
-            dgvTabelList.Columns.Add("NamaBarang", "Nama Barang");
-            dgvTabelList.Columns.Add("TanggalPinjam", "Tanggal Pinjam");
-            dgvTabelList.Columns.Add("TanggalKembali", "Tanggal Kembali");
-            dgvTabelList.Columns.Add("Aksi", "Aksi");
-
-            // 3. Mengatur Ukuran Lebar Kolom secara Otomatis agar Rapi
-            dgvTabelList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            // 4. Memasukkan Isian Data Pinjam (Mock Data / Simulasi)
-            dgvTabelList.Rows.Add("1", "Devinta Yolanda", "Proyektor Epson", "22 Juni 2026", "25 Juni 2026", "Kembalikan");
-            dgvTabelList.Rows.Add("2", "Andi Pratama", "Kabel HDMI 5m", "23 Juni 2026", "24 Juni 2026", "Kembalikan");
-            dgvTabelList.Rows.Add("3", "Siti Aminah", "Pointer Logi", "25 Juni 2026", "26 Juni 2026", "Kembalikan");
-            dgvTabelList.Rows.Add("4", "Budi Santoso", "Speaker Portable", "25 Juni 2026", "27 Juni 2026", "Kembalikan");
-
-            dgvTabelList.AllowUserToAddRows = false;
-            dgvTabelList.ReadOnly = true;
+            using (MySqlConnection conn = Koneksi.GetConn())
+            {
+                try
+                {
+                    conn.Open();
+                    // Menghitung jumlah total pengajuan masuk
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM peminjaman", conn))
+                    {
+                        lblTotal.Text = cmd.ExecuteScalar().ToString();
+                    }
+                    // Menghitung jumlah berkas yang sudah disetujui (diterima/dipinjam)
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM peminjaman WHERE status_peminjaman = 'dipinjam'", conn))
+                    {
+                        lblDipinjam.Text = cmd.ExecuteScalar().ToString();
+                    }
+                    // Menghitung jumlah berkas yang ditolak / selesai
+                    using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM peminjaman WHERE status_peminjaman = 'dikembalikan'", conn))
+                    {
+                        lblTersedia.Text = cmd.ExecuteScalar().ToString();
+                    }
+                }
+                catch (Exception) { }
+            }
         }
 
-        private void lblPeminjam_Click(object sender, EventArgs e) { }
-        private void dgvNamaPeminjam_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
-        private void lblHeaderDataPinjam_Click(object sender, EventArgs e) { }
+        // EVENT CELL CLICK: Saat baris di tabel diklik, data profil lengkap langsung mengisi TextBox Detail di bawah
+        private void dgvTabelList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                try
+                {
+                    BindingSource bs = new BindingSource();
+                    bs.DataSource = dgvTabelList.DataSource;
+                    DataRowView drv = (DataRowView)bs[e.RowIndex];
 
+                    if (drv != null)
+                    {
+                        txtNama_Lengkap.Text = drv["nama_peminjam"].ToString();
+                        txtAlamat.Text = drv["alamat"].ToString();
+                        txtNo_Hp.Text = drv["no_hp"].ToString();
+                        txtNama_Barang.Text = drv["nama_barang"].ToString();
+                        txtKategori_Barang.Text = drv["nama_kategori"].ToString();
+                        txtJumlah_Pinjam.Text = drv["jumlah_pinjam"].ToString();
+                        txtTgl_Pinjam.Text = drv["tgl_pinjam"].ToString();
+                        txtTgl_Kembali.Text = drv["tgl_kembali"].ToString();
+                        txtStatus_Pinjam.Text = drv["status_peminjaman"].ToString().ToUpper();
+                    }
+                }
+                catch (Exception) { }
+            }
+        }
 
+        // PERBAIKAN UTAMA: Menyediakan fungsi Batal/Clear Form yang diminta oleh file Designer
+        private void btnBatalKategori_Click(object sender, EventArgs e)
+        {
+            txtNama_Lengkap.Clear();
+            txtAlamat.Clear();
+            txtNo_Hp.Clear();
+            txtNama_Barang.Clear();
+            txtKategori_Barang.Clear();
+            txtJumlah_Pinjam.Clear();
+            txtTgl_Pinjam.Clear();
+            txtTgl_Kembali.Clear();
+            txtStatus_Pinjam.Clear();
+            txtCari.Clear();
+            TampilkanListPeminjam();
+        }
+
+        // --- Sistem Navigasi Aliran Sidebar Admin ---
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
-            FormDashboardAdmin halamanDashboardAdmin = new FormDashboardAdmin();
-
-            halamanDashboardAdmin.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDashboardAdmin.ShowDialog();
+            FormDashboardAdmin frm = new FormDashboardAdmin();
+            frm.Show();
+            this.Close();
         }
 
         private void btnData_Pinjam_Click(object sender, EventArgs e)
         {
-            FormDataPinjam halamanDataPinjam = new FormDataPinjam();
-
-            halamanDataPinjam.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDataPinjam.ShowDialog();
+            TampilkanListPeminjam();
+            HitungRingkasanStatistik();
         }
 
         private void btnData_Ambil_Click(object sender, EventArgs e)
         {
-            FormDataPengambilan halamanDataPengambilan = new FormDataPengambilan();
-
-            halamanDataPengambilan.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDataPengambilan.ShowDialog();
+            FormDataPengambilan frm = new FormDataPengambilan();
+            frm.Show();
+            this.Close();
         }
 
         private void btnData_Kembali_Click(object sender, EventArgs e)
         {
-            FormDataPengembalian halamanDataPengembalian = new FormDataPengembalian();
-
-            halamanDataPengembalian.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDataPengembalian.ShowDialog();
+            FormDataPengembalian frm = new FormDataPengembalian();
+            frm.Show();
+            this.Close();
         }
 
         private void btnTambah_Admin_Click(object sender, EventArgs e)
         {
             FormRegisterAdmin halamanRegisterAdmin = new FormRegisterAdmin();
-
-            halamanRegisterAdmin.StartPosition = FormStartPosition.CenterScreen;
-
             halamanRegisterAdmin.ShowDialog();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
             DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (konfirmasi == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+            if (konfirmasi == DialogResult.Yes) Application.Exit();
         }
 
         private void btnLogOut_Click(object sender, EventArgs e)
         {
             DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
             if (konfirmasi == DialogResult.Yes)
             {
                 FormLogin halamanLogin = new FormLogin();
                 halamanLogin.Show();
-                this.Hide();
+                this.Close();
             }
-        }
-
-        private void btnBatalKategori_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

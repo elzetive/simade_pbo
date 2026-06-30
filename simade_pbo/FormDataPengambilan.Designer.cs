@@ -203,7 +203,7 @@
             this.lblHeaderDataPinjam.Location = new System.Drawing.Point(19, 13);
             this.lblHeaderDataPinjam.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHeaderDataPinjam.Name = "lblHeaderDataPinjam";
-            this.lblHeaderDataPinjam.Size = new System.Drawing.Size(292, 30);
+            this.lblHeaderDataPinjam.Size = new System.Drawing.Size(342, 30);
             this.lblHeaderDataPinjam.TabIndex = 0;
             this.lblHeaderDataPinjam.Text = "SIMADE - Data Pengambilan";
             // 
@@ -348,7 +348,7 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(67, 37);
+            this.lblTotal.Location = new System.Drawing.Point(86, 37);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(38, 45);
             this.lblTotal.TabIndex = 1;
@@ -484,7 +484,8 @@
             this.Controls.Add(this.panelSidebar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormDataPengambilan";
-            this.Text = "FormDataPengembalian";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "SIMADE - Data Pengambilan";
             this.panelSidebar.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
@@ -502,7 +503,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
             this.ResumeLayout(false);
-
+            this.PerformLayout();
         }
 
         #endregion

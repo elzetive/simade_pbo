@@ -31,7 +31,7 @@ namespace simade_pbo.Service
                         retVal = cmd.ExecuteNonQuery();
                     }
                 }
-                catch (Exception ex) { }
+                catch (Exception ) { }
             }
             return retVal;
         }
@@ -52,7 +52,7 @@ namespace simade_pbo.Service
                         }
                     }
                 }
-                catch (Exception ex) { }
+                catch (Exception ) { }
             }
             return dt;
         }

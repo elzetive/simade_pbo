@@ -29,9 +29,10 @@ namespace simade_pbo
         {
             DataTable dt = kategoriService.tampilSemuaKategori();
 
-            cmbKategoriBarang.DataSource = dt;
+            // URUTAN AMAN: Atur properti kolom sebelum memasukkan DataSource
             cmbKategoriBarang.DisplayMember = "nama_kategori";
             cmbKategoriBarang.ValueMember = "id_kategori";
+            cmbKategoriBarang.DataSource = dt;
             cmbKategoriBarang.SelectedIndex = -1;
         }
 
@@ -43,9 +44,9 @@ namespace simade_pbo
             DataView view = new DataView(dtBarang);
             DataTable dtNamaUnik = view.ToTable(true, "nama_barang");
 
-            cmbFilterNama.DataSource = dtNamaUnik;
             cmbFilterNama.DisplayMember = "nama_barang";
             cmbFilterNama.ValueMember = "nama_barang";
+            cmbFilterNama.DataSource = dtNamaUnik;
             cmbFilterNama.SelectedIndex = -1;
 
             cmbFilterKondisi.SelectedIndex = -1;
@@ -137,7 +138,6 @@ namespace simade_pbo
         private void btnExit_Click(object sender, EventArgs e)
         {
             DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
             if (konfirmasi == DialogResult.Yes)
             {
                 Application.Exit();
@@ -155,7 +155,7 @@ namespace simade_pbo
             barangService.Nama_barang = txtNamaBarang.Text;
             barangService.Id_kategori = Convert.ToInt32(cmbKategoriBarang.SelectedValue);
             barangService.Kondisi_barang = cmbKondisiBarang.Text;
-            barangService.Status_ketersediaan = "tersedia";
+            barangService.Status_ketersediaan = "disabled";
 
             if (barangService.simpan() > 0)
             {
@@ -235,15 +235,8 @@ namespace simade_pbo
             }
         }
 
-        private void btnBatal_Click(object sender, EventArgs e)
-        {
-            bersihkan();
-        }
-
-        private void txtCari_TextChanged(object sender, EventArgs e)
-        {
-            tampilGrid();
-        }
+        private void btnBatal_Click(object sender, EventArgs e) { bersihkan(); }
+        private void txtCari_TextChanged(object sender, EventArgs e) { tampilGrid(); }
 
         private void btnTambahKategori_Click(object sender, EventArgs e)
         {
@@ -275,10 +268,7 @@ namespace simade_pbo
             }
         }
 
-        private void btnBatalKategori_Click(object sender, EventArgs e)
-        {
-            txtKategoriBarang.Clear();
-        }
+        private void btnBatalKategori_Click(object sender, EventArgs e) { txtKategoriBarang.Clear(); }
 
         private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -302,71 +292,48 @@ namespace simade_pbo
             }
         }
 
-        private void cmbFilterNama_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            jalankanFilter();
-        }
-
-        private void cmbFilterKondisi_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            jalankanFilter();
-        }
+        private void cmbFilterNama_SelectedIndexChanged(object sender, EventArgs e) { jalankanFilter(); }
+        private void cmbFilterKondisi_SelectedIndexChanged(object sender, EventArgs e) { jalankanFilter(); }
 
         private void btnLogOut_Click(object sender, EventArgs e)
         {
             DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
             if (konfirmasi == DialogResult.Yes)
             {
                 FormLogin halamanLogin = new FormLogin();
                 halamanLogin.Show();
-                this.Hide();
+                this.Close();
             }
         }
 
-        private void btnData_Barang_Click(object sender, EventArgs e)
-        {
-            FormDashboardAdmin halamanDashboardAdmin = new FormDashboardAdmin();
-
-            halamanDashboardAdmin.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDashboardAdmin.ShowDialog();
-        }
+        // REVISI NAVIGASI SIDEBAR: Menggunakan Sistem Aliran Switch Dinamis (Bukan Dialog Menumpuk)
+        private void btnData_Barang_Click(object sender, EventArgs e) { tampilGrid(); }
 
         private void btnData_Pinjam_Click_1(object sender, EventArgs e)
         {
-            FormDataPinjam halamanDataPinjam = new FormDataPinjam();
-
-            halamanDataPinjam.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDataPinjam.ShowDialog();
+            FormDataPinjam frm = new FormDataPinjam();
+            frm.Show();
+            this.Close();
         }
 
         private void btnData_Ambil_Click(object sender, EventArgs e)
         {
-            FormDataPengambilan halamanDataPengambilan = new FormDataPengambilan();
-
-            halamanDataPengambilan.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDataPengambilan.ShowDialog();
+            FormDataPengambilan frm = new FormDataPengambilan();
+            frm.Show();
+            this.Close();
         }
 
         private void btnData_Kembali_Click(object sender, EventArgs e)
         {
-            FormDataPengembalian halamanDataPengembalian = new FormDataPengembalian();
-
-            halamanDataPengembalian.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanDataPengembalian.ShowDialog();
+            FormDataPengembalian frm = new FormDataPengembalian();
+            frm.Show();
+            this.Close();
         }
 
         private void btnTambah_Admin_Click(object sender, EventArgs e)
         {
             FormRegisterAdmin halamanRegisterAdmin = new FormRegisterAdmin();
-
-            halamanRegisterAdmin.StartPosition = FormStartPosition.CenterScreen;
-
-            halamanRegisterAdmin.ShowDialog();
+            halamanRegisterAdmin.ShowDialog(); // Register tetap modal popup
         }
     }
 }
