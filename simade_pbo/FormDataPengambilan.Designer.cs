@@ -62,6 +62,10 @@
             this.Waktu_Kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.aksi = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.txtCari = new System.Windows.Forms.TextBox();
+            this.lblCari = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -73,6 +77,7 @@
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnTambah_Admin
@@ -203,7 +208,7 @@
             this.lblHeaderDataPinjam.Location = new System.Drawing.Point(19, 13);
             this.lblHeaderDataPinjam.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblHeaderDataPinjam.Name = "lblHeaderDataPinjam";
-            this.lblHeaderDataPinjam.Size = new System.Drawing.Size(342, 30);
+            this.lblHeaderDataPinjam.Size = new System.Drawing.Size(292, 30);
             this.lblHeaderDataPinjam.TabIndex = 0;
             this.lblHeaderDataPinjam.Text = "SIMADE - Data Pengambilan";
             // 
@@ -470,11 +475,51 @@
             this.aksi.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.aksi.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
+            // txtCari
+            // 
+            this.txtCari.Location = new System.Drawing.Point(303, 172);
+            this.txtCari.Name = "txtCari";
+            this.txtCari.Size = new System.Drawing.Size(421, 20);
+            this.txtCari.TabIndex = 40;
+            // 
+            // lblCari
+            // 
+            this.lblCari.AutoSize = true;
+            this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCari.Location = new System.Drawing.Point(249, 169);
+            this.lblCari.Name = "lblCari";
+            this.lblCari.Size = new System.Drawing.Size(40, 21);
+            this.lblCari.TabIndex = 39;
+            this.lblCari.Text = "Cari";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.White;
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.label1);
+            this.panel4.Location = new System.Drawing.Point(735, 172);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(242, 366);
+            this.panel4.TabIndex = 38;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 2);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(184, 25);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Detail Pengambilan";
+            // 
             // FormDataPengambilan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1046, 589);
+            this.Controls.Add(this.txtCari);
+            this.Controls.Add(this.lblCari);
+            this.Controls.Add(this.panel4);
             this.Controls.Add(this.dgvTabelList);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
@@ -502,8 +547,11 @@
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
@@ -535,6 +583,7 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
+<<<<<<< HEAD
         private System.Windows.Forms.DataGridView dgvTabelList;
         private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
         private System.Windows.Forms.DataGridViewTextBoxColumn Peminjam;
@@ -542,5 +591,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Kembali;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridViewButtonColumn aksi;
+        private System.Windows.Forms.TextBox txtCari;
+        private System.Windows.Forms.Label lblCari;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label1;
+=======
+        // Deklarasi Komponen DataGridView yang Diperbaiki
+        private System.Windows.Forms.DataGridView dgvTabelList;
+>>>>>>> c850dfdf1896bd1718ce6e32dfc19285c97549fe
     }
 }
