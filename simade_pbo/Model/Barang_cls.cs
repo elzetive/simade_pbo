@@ -29,7 +29,7 @@ namespace simade_pbo.Model
             set { _id_barang = value; }
         }
 
-        public string Nama_barang 
+        public string Nama_barang
         {
             get { return _nama_barang; }
             set { _nama_barang = value; }

@@ -219,6 +219,7 @@
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.panelSidebar);
             this.Name = "FormDataPinjam";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.panelSidebar.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);

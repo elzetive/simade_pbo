@@ -151,6 +151,18 @@
     <Compile Include="FormRiwayat.Designer.cs">
       <DependentUpon>FormRiwayat.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormRiwayatWarga.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRiwayatWarga.Designer.cs">
+      <DependentUpon>FormRiwayatWarga.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormStatusPengajuan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStatusPengajuan.Designer.cs">
+      <DependentUpon>FormStatusPengajuan.cs</DependentUpon>
+    </Compile>
     <Compile Include="Konfigruasi\Koneksi.cs" />
     <Compile Include="Model\Barang_cls.cs" />
     <Compile Include="Model\Kategori_cls.cs" />

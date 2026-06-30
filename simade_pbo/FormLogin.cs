@@ -68,10 +68,9 @@ namespace simade_pbo
                     }
                     else if (idRole == 3)
                     {
-                        FormDashboardWarga.IdUserLogin = idUser;
-                        FormDashboardWarga.NamaUserLogin = namaLengkap;
-
                         FormDashboardWarga warga = new FormDashboardWarga();
+                        warga.IdUserLogin = idUser.ToString();
+                        warga.NamaUserLogin = namaLengkap;
                         warga.Show();
                     }
                 }
@@ -82,7 +81,7 @@ namespace simade_pbo
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Koneksi ke Laragon Gagal: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Koneksi Gagal: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {

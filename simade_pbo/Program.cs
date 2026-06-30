@@ -16,7 +16,8 @@ namespace simade_pbo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormDataPinjam());
+
+            Application.Run(new FormLogin());
         }
     }
 }
