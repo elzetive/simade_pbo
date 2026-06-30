@@ -280,7 +280,10 @@
             // 
             // btnBatalKategori
             // 
-            this.btnBatalKategori.BackColor = System.Drawing.Color.Silver;
+            this.btnBatalKategori.BackColor = System.Drawing.Color.DimGray;
+            this.btnBatalKategori.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBatalKategori.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBatalKategori.ForeColor = System.Drawing.Color.White;
             this.btnBatalKategori.Location = new System.Drawing.Point(619, 152);
             this.btnBatalKategori.Name = "btnBatalKategori";
             this.btnBatalKategori.Size = new System.Drawing.Size(99, 28);
