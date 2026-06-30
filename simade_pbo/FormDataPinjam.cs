@@ -95,28 +95,85 @@ namespace simade_pbo
             dgvTabelList.Rows.Add("3", "Siti Aminah", "Pointer Logi", "25 Juni 2026", "26 Juni 2026", "Kembalikan");
             dgvTabelList.Rows.Add("4", "Budi Santoso", "Speaker Portable", "25 Juni 2026", "27 Juni 2026", "Kembalikan");
 
-            // 5. Membuat tabel menjadi Read-Only (Hanya Baca)
             dgvTabelList.AllowUserToAddRows = false;
             dgvTabelList.ReadOnly = true;
         }
 
-        // Tombol Kembali menuju Dashboard Admin
-        private void btnKembali_Click(object sender, EventArgs e)
-        {
-            FormDashboardAdmin dashboard = new FormDashboardAdmin();
-            dashboard.Show();
-            this.Hide();
-        }
-
-        // Tombol Log Out untuk menutup aplikasi keseluruhan
-        private void btnLogOut_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        // == JANGAN DIHAPUS: Kode penyelamat biar desainer tidak crash ==
         private void lblPeminjam_Click(object sender, EventArgs e) { }
         private void dgvNamaPeminjam_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
         private void lblHeaderDataPinjam_Click(object sender, EventArgs e) { }
+
+
+        private void btnData_Barang_Click(object sender, EventArgs e)
+        {
+            FormDashboardAdmin halamanDashboardAdmin = new FormDashboardAdmin();
+
+            halamanDashboardAdmin.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDashboardAdmin.ShowDialog();
+        }
+
+        private void btnData_Pinjam_Click(object sender, EventArgs e)
+        {
+            FormDataPinjam halamanDataPinjam = new FormDataPinjam();
+
+            halamanDataPinjam.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDataPinjam.ShowDialog();
+        }
+
+        private void btnData_Ambil_Click(object sender, EventArgs e)
+        {
+            FormDataPengambilan halamanDataPengambilan = new FormDataPengambilan();
+
+            halamanDataPengambilan.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDataPengambilan.ShowDialog();
+        }
+
+        private void btnData_Kembali_Click(object sender, EventArgs e)
+        {
+            FormDataPengembalian halamanDataPengembalian = new FormDataPengembalian();
+
+            halamanDataPengembalian.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanDataPengembalian.ShowDialog();
+        }
+
+        private void btnTambah_Admin_Click(object sender, EventArgs e)
+        {
+            FormRegisterAdmin halamanRegisterAdmin = new FormRegisterAdmin();
+
+            halamanRegisterAdmin.StartPosition = FormStartPosition.CenterScreen;
+
+            halamanRegisterAdmin.ShowDialog();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (konfirmasi == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void btnLogOut_Click(object sender, EventArgs e)
+        {
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (konfirmasi == DialogResult.Yes)
+            {
+                FormLogin halamanLogin = new FormLogin();
+                halamanLogin.Show();
+                this.Hide();
+            }
+        }
+
+        private void btnBatalKategori_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
