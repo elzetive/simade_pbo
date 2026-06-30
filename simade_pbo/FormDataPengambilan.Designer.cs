@@ -55,6 +55,13 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.dgvTabelList = new System.Windows.Forms.DataGridView();
+            this.kode_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Peminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Waktu_Kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.aksi = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -65,6 +72,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
             this.SuspendLayout();
             // 
             // btnTambah_Admin
@@ -399,11 +407,75 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Hangus";
             // 
+            // dgvTabelList
+            // 
+            this.dgvTabelList.AllowUserToAddRows = false;
+            this.dgvTabelList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvTabelList.BackgroundColor = System.Drawing.Color.White;
+            this.dgvTabelList.ColumnHeadersHeight = 35;
+            this.dgvTabelList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvTabelList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.kode_peminjaman,
+            this.Peminjam,
+            this.Barang,
+            this.Waktu_Kembali,
+            this.status,
+            this.aksi});
+            this.dgvTabelList.Location = new System.Drawing.Point(253, 202);
+            this.dgvTabelList.Name = "dgvTabelList";
+            this.dgvTabelList.ReadOnly = true;
+            this.dgvTabelList.RowHeadersWidth = 51;
+            this.dgvTabelList.Size = new System.Drawing.Size(471, 336);
+            this.dgvTabelList.TabIndex = 35;
+            // 
+            // kode_peminjaman
+            // 
+            this.kode_peminjaman.HeaderText = "Kode";
+            this.kode_peminjaman.Name = "kode_peminjaman";
+            this.kode_peminjaman.ReadOnly = true;
+            // 
+            // Peminjam
+            // 
+            this.Peminjam.HeaderText = "Nama Peminjam";
+            this.Peminjam.MinimumWidth = 6;
+            this.Peminjam.Name = "Peminjam";
+            this.Peminjam.ReadOnly = true;
+            // 
+            // Barang
+            // 
+            this.Barang.HeaderText = "Nama Barang";
+            this.Barang.MinimumWidth = 6;
+            this.Barang.Name = "Barang";
+            this.Barang.ReadOnly = true;
+            // 
+            // Waktu_Kembali
+            // 
+            this.Waktu_Kembali.HeaderText = "Tanggal Kembali";
+            this.Waktu_Kembali.MinimumWidth = 6;
+            this.Waktu_Kembali.Name = "Waktu_Kembali";
+            this.Waktu_Kembali.ReadOnly = true;
+            // 
+            // status
+            // 
+            this.status.HeaderText = "Status";
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            // 
+            // aksi
+            // 
+            this.aksi.HeaderText = "Aksi";
+            this.aksi.MinimumWidth = 6;
+            this.aksi.Name = "aksi";
+            this.aksi.ReadOnly = true;
+            this.aksi.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.aksi.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
             // FormDataPengambilan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1046, 589);
+            this.Controls.Add(this.dgvTabelList);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
@@ -428,6 +500,7 @@
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -461,5 +534,12 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DataGridView dgvTabelList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Peminjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Barang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Kembali;
+        private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private System.Windows.Forms.DataGridViewButtonColumn aksi;
     }
 }
