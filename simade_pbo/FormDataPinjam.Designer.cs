@@ -44,21 +44,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.btnBatalKategori = new System.Windows.Forms.Button();
-            this.txtStatus_Pinjam = new System.Windows.Forms.TextBox();
-            this.txtTgl_Kembali = new System.Windows.Forms.TextBox();
-            this.txtTgl_Pinjam = new System.Windows.Forms.TextBox();
-            this.txtJumlah_Pinjam = new System.Windows.Forms.TextBox();
-            this.txtKategori_Barang = new System.Windows.Forms.TextBox();
-            this.txtNama_Barang = new System.Windows.Forms.TextBox();
             this.txtNo_Hp = new System.Windows.Forms.TextBox();
             this.txtAlamat = new System.Windows.Forms.TextBox();
             this.txtNama_Lengkap = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -78,12 +66,16 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.kode_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Peminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Waktu_Pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Waktu_Kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.aksi = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.kategori_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status_pengajuan = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.keterangan_pengajuan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnTambah = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -94,6 +86,7 @@
             this.panel4.SuspendLayout();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // dgvTabelList
@@ -106,12 +99,9 @@
             this.dgvTabelList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.kode_peminjaman,
             this.Peminjam,
-            this.Barang,
-            this.jumlah_pinjam,
             this.Waktu_Pinjam,
             this.Waktu_Kembali,
-            this.status,
-            this.aksi});
+            this.status});
             this.dgvTabelList.Location = new System.Drawing.Point(253, 203);
             this.dgvTabelList.Name = "dgvTabelList";
             this.dgvTabelList.ReadOnly = true;
@@ -253,22 +243,12 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.btnTambah);
+            this.panel4.Controls.Add(this.dataGridView1);
             this.panel4.Controls.Add(this.btnBatalKategori);
-            this.panel4.Controls.Add(this.txtStatus_Pinjam);
-            this.panel4.Controls.Add(this.txtTgl_Kembali);
-            this.panel4.Controls.Add(this.txtTgl_Pinjam);
-            this.panel4.Controls.Add(this.txtJumlah_Pinjam);
-            this.panel4.Controls.Add(this.txtKategori_Barang);
-            this.panel4.Controls.Add(this.txtNama_Barang);
             this.panel4.Controls.Add(this.txtNo_Hp);
             this.panel4.Controls.Add(this.txtAlamat);
             this.panel4.Controls.Add(this.txtNama_Lengkap);
-            this.panel4.Controls.Add(this.label13);
-            this.panel4.Controls.Add(this.label12);
-            this.panel4.Controls.Add(this.label11);
-            this.panel4.Controls.Add(this.label10);
-            this.panel4.Controls.Add(this.label9);
-            this.panel4.Controls.Add(this.label8);
             this.panel4.Controls.Add(this.label5);
             this.panel4.Controls.Add(this.label3);
             this.panel4.Controls.Add(this.label1);
@@ -284,7 +264,7 @@
             this.btnBatalKategori.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBatalKategori.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnBatalKategori.ForeColor = System.Drawing.Color.White;
-            this.btnBatalKategori.Location = new System.Drawing.Point(619, 152);
+            this.btnBatalKategori.Location = new System.Drawing.Point(513, 152);
             this.btnBatalKategori.Name = "btnBatalKategori";
             this.btnBatalKategori.Size = new System.Drawing.Size(99, 28);
             this.btnBatalKategori.TabIndex = 25;
@@ -292,127 +272,31 @@
             this.btnBatalKategori.UseVisualStyleBackColor = false;
             this.btnBatalKategori.Click += new System.EventHandler(this.btnBatalKategori_Click);
             // 
-            // txtStatus_Pinjam
-            // 
-            this.txtStatus_Pinjam.Location = new System.Drawing.Point(574, 120);
-            this.txtStatus_Pinjam.Name = "txtStatus_Pinjam";
-            this.txtStatus_Pinjam.Size = new System.Drawing.Size(144, 20);
-            this.txtStatus_Pinjam.TabIndex = 24;
-            // 
-            // txtTgl_Kembali
-            // 
-            this.txtTgl_Kembali.Location = new System.Drawing.Point(574, 84);
-            this.txtTgl_Kembali.Name = "txtTgl_Kembali";
-            this.txtTgl_Kembali.Size = new System.Drawing.Size(144, 20);
-            this.txtTgl_Kembali.TabIndex = 23;
-            // 
-            // txtTgl_Pinjam
-            // 
-            this.txtTgl_Pinjam.Location = new System.Drawing.Point(574, 48);
-            this.txtTgl_Pinjam.Name = "txtTgl_Pinjam";
-            this.txtTgl_Pinjam.Size = new System.Drawing.Size(144, 20);
-            this.txtTgl_Pinjam.TabIndex = 22;
-            // 
-            // txtJumlah_Pinjam
-            // 
-            this.txtJumlah_Pinjam.Location = new System.Drawing.Point(338, 120);
-            this.txtJumlah_Pinjam.Name = "txtJumlah_Pinjam";
-            this.txtJumlah_Pinjam.Size = new System.Drawing.Size(144, 20);
-            this.txtJumlah_Pinjam.TabIndex = 21;
-            // 
-            // txtKategori_Barang
-            // 
-            this.txtKategori_Barang.Location = new System.Drawing.Point(338, 84);
-            this.txtKategori_Barang.Name = "txtKategori_Barang";
-            this.txtKategori_Barang.Size = new System.Drawing.Size(144, 20);
-            this.txtKategori_Barang.TabIndex = 20;
-            // 
-            // txtNama_Barang
-            // 
-            this.txtNama_Barang.Location = new System.Drawing.Point(338, 48);
-            this.txtNama_Barang.Name = "txtNama_Barang";
-            this.txtNama_Barang.Size = new System.Drawing.Size(144, 20);
-            this.txtNama_Barang.TabIndex = 19;
-            // 
             // txtNo_Hp
             // 
-            this.txtNo_Hp.Location = new System.Drawing.Point(97, 120);
+            this.txtNo_Hp.Location = new System.Drawing.Point(574, 31);
             this.txtNo_Hp.Name = "txtNo_Hp";
             this.txtNo_Hp.Size = new System.Drawing.Size(144, 20);
             this.txtNo_Hp.TabIndex = 18;
             // 
             // txtAlamat
             // 
-            this.txtAlamat.Location = new System.Drawing.Point(97, 84);
+            this.txtAlamat.Location = new System.Drawing.Point(332, 31);
             this.txtAlamat.Name = "txtAlamat";
             this.txtAlamat.Size = new System.Drawing.Size(144, 20);
             this.txtAlamat.TabIndex = 17;
             // 
             // txtNama_Lengkap
             // 
-            this.txtNama_Lengkap.Location = new System.Drawing.Point(97, 48);
+            this.txtNama_Lengkap.Location = new System.Drawing.Point(97, 31);
             this.txtNama_Lengkap.Name = "txtNama_Lengkap";
             this.txtNama_Lengkap.Size = new System.Drawing.Size(144, 20);
             this.txtNama_Lengkap.TabIndex = 16;
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(488, 121);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(37, 13);
-            this.label13.TabIndex = 15;
-            this.label13.Text = "Status";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(488, 87);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(86, 13);
-            this.label12.TabIndex = 14;
-            this.label12.Text = "Tanggal Kembali";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(488, 51);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(80, 13);
-            this.label11.TabIndex = 13;
-            this.label11.Text = "Tanggal Pinjam";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(247, 123);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(74, 13);
-            this.label10.TabIndex = 12;
-            this.label10.Text = "Jumlah Pinjam";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(247, 87);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(83, 13);
-            this.label9.TabIndex = 11;
-            this.label9.Text = "Kategori Barang";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(247, 51);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(72, 13);
-            this.label8.TabIndex = 10;
-            this.label8.Text = "Nama Barang";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(5, 123);
+            this.label5.Location = new System.Drawing.Point(482, 34);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 13);
             this.label5.TabIndex = 9;
@@ -421,7 +305,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 87);
+            this.label3.Location = new System.Drawing.Point(247, 34);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 8;
@@ -430,17 +314,17 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 51);
+            this.label1.Location = new System.Drawing.Point(5, 34);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 13);
+            this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 7;
-            this.label1.Text = "Nama Lengkap";
+            this.label1.Text = "Nama Peminjam";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(3, 11);
+            this.label7.Location = new System.Drawing.Point(2, 2);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(177, 25);
             this.label7.TabIndex = 6;
@@ -624,7 +508,7 @@
             // 
             // kode_peminjaman
             // 
-            this.kode_peminjaman.HeaderText = "Kode";
+            this.kode_peminjaman.HeaderText = "Kode Peminjaman";
             this.kode_peminjaman.Name = "kode_peminjaman";
             this.kode_peminjaman.ReadOnly = true;
             // 
@@ -634,19 +518,6 @@
             this.Peminjam.MinimumWidth = 6;
             this.Peminjam.Name = "Peminjam";
             this.Peminjam.ReadOnly = true;
-            // 
-            // Barang
-            // 
-            this.Barang.HeaderText = "Nama Barang";
-            this.Barang.MinimumWidth = 6;
-            this.Barang.Name = "Barang";
-            this.Barang.ReadOnly = true;
-            // 
-            // jumlah_pinjam
-            // 
-            this.jumlah_pinjam.HeaderText = "Jumlah Pinjam";
-            this.jumlah_pinjam.Name = "jumlah_pinjam";
-            this.jumlah_pinjam.ReadOnly = true;
             // 
             // Waktu_Pinjam
             // 
@@ -668,14 +539,72 @@
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
-            // aksi
+            // dataGridView1
             // 
-            this.aksi.HeaderText = "Aksi";
-            this.aksi.MinimumWidth = 6;
-            this.aksi.Name = "aksi";
-            this.aksi.ReadOnly = true;
-            this.aksi.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.aksi.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nama_barang,
+            this.kategori_barang,
+            this.jumlah_barang,
+            this.status_pengajuan,
+            this.keterangan_pengajuan});
+            this.dataGridView1.Location = new System.Drawing.Point(8, 61);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(709, 81);
+            this.dataGridView1.TabIndex = 26;
+            // 
+            // nama_barang
+            // 
+            this.nama_barang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nama_barang.HeaderText = "Nama Barang";
+            this.nama_barang.Name = "nama_barang";
+            this.nama_barang.ReadOnly = true;
+            this.nama_barang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // kategori_barang
+            // 
+            this.kategori_barang.HeaderText = "Kategori Barang";
+            this.kategori_barang.Name = "kategori_barang";
+            this.kategori_barang.ReadOnly = true;
+            // 
+            // jumlah_barang
+            // 
+            this.jumlah_barang.HeaderText = "Jumlah Barang";
+            this.jumlah_barang.Name = "jumlah_barang";
+            this.jumlah_barang.ReadOnly = true;
+            // 
+            // status_pengajuan
+            // 
+            this.status_pengajuan.HeaderText = "Status";
+            this.status_pengajuan.Items.AddRange(new object[] {
+            "Disetujui",
+            "Ditolak"});
+            this.status_pengajuan.Name = "status_pengajuan";
+            this.status_pengajuan.ReadOnly = true;
+            this.status_pengajuan.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.status_pengajuan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // keterangan_pengajuan
+            // 
+            this.keterangan_pengajuan.HeaderText = "Keterangan";
+            this.keterangan_pengajuan.Name = "keterangan_pengajuan";
+            this.keterangan_pengajuan.ReadOnly = true;
+            // 
+            // btnTambah
+            // 
+            this.btnTambah.BackColor = System.Drawing.Color.SeaGreen;
+            this.btnTambah.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTambah.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTambah.ForeColor = System.Drawing.Color.White;
+            this.btnTambah.Location = new System.Drawing.Point(618, 151);
+            this.btnTambah.Name = "btnTambah";
+            this.btnTambah.Size = new System.Drawing.Size(99, 29);
+            this.btnTambah.TabIndex = 47;
+            this.btnTambah.Text = "SIMPAN";
+            this.btnTambah.UseVisualStyleBackColor = false;
             // 
             // FormDataPinjam
             // 
@@ -711,6 +640,7 @@
             this.panelSidebar.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -748,29 +678,21 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox txtStatus_Pinjam;
-        private System.Windows.Forms.TextBox txtTgl_Kembali;
-        private System.Windows.Forms.TextBox txtTgl_Pinjam;
-        private System.Windows.Forms.TextBox txtJumlah_Pinjam;
-        private System.Windows.Forms.TextBox txtKategori_Barang;
-        private System.Windows.Forms.TextBox txtNama_Barang;
         private System.Windows.Forms.TextBox txtNo_Hp;
         private System.Windows.Forms.TextBox txtAlamat;
         private System.Windows.Forms.TextBox txtNama_Lengkap;
         private System.Windows.Forms.Button btnBatalKategori;
         private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
         private System.Windows.Forms.DataGridViewTextBoxColumn Peminjam;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Barang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_pinjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Pinjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Kembali;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.DataGridViewButtonColumn aksi;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nama_barang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn kategori_barang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_barang;
+        private System.Windows.Forms.DataGridViewComboBoxColumn status_pengajuan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn keterangan_pengajuan;
+        private System.Windows.Forms.Button btnTambah;
     }
 }
