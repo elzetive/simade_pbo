@@ -55,43 +55,34 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.dgvTabelList = new System.Windows.Forms.DataGridView();
             this.txtCari = new System.Windows.Forms.TextBox();
             this.lblCari = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.btnTambah = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnBatalKategori = new System.Windows.Forms.Button();
+            this.txtNo_Hp = new System.Windows.Forms.TextBox();
+            this.txtAlamat = new System.Windows.Forms.TextBox();
+            this.txtNama_Lengkap = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.dgvTabelList = new System.Windows.Forms.DataGridView();
             this.kode_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Peminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Waktu_Pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Waktu_Kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.aksi = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.btnBatal = new System.Windows.Forms.Button();
-            this.btnTambah = new System.Windows.Forms.Button();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtNama_Lengkap = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.dgv_NamaBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_KategoriBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_DeskripsiBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_JumlahPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_KeteranganBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -102,8 +93,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
             this.SuspendLayout();
             // 
             // btnTambah_Admin
@@ -272,7 +264,7 @@
             this.panel3.Controls.Add(this.pictureBox3);
             this.panel3.Controls.Add(this.lblTersedia);
             this.panel3.Controls.Add(this.label6);
-            this.panel3.Location = new System.Drawing.Point(626, 69);
+            this.panel3.Location = new System.Drawing.Point(628, 69);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(165, 92);
             this.panel3.TabIndex = 30;
@@ -316,7 +308,7 @@
             this.panel2.Controls.Add(this.pictureBox2);
             this.panel2.Controls.Add(this.lblDipinjam);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(439, 69);
+            this.panel2.Location = new System.Drawing.Point(440, 69);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(165, 92);
             this.panel2.TabIndex = 29;
@@ -379,7 +371,7 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(86, 37);
+            this.lblTotal.Location = new System.Drawing.Point(63, 37);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(38, 45);
             this.lblTotal.TabIndex = 1;
@@ -402,7 +394,7 @@
             this.panel5.Controls.Add(this.pictureBox5);
             this.panel5.Controls.Add(this.label5);
             this.panel5.Controls.Add(this.label7);
-            this.panel5.Location = new System.Drawing.Point(812, 69);
+            this.panel5.Location = new System.Drawing.Point(816, 69);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(165, 92);
             this.panel5.TabIndex = 29;
@@ -438,6 +430,147 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Hangus";
             // 
+            // txtCari
+            // 
+            this.txtCari.Location = new System.Drawing.Point(303, 173);
+            this.txtCari.Name = "txtCari";
+            this.txtCari.Size = new System.Drawing.Size(678, 20);
+            this.txtCari.TabIndex = 34;
+            // 
+            // lblCari
+            // 
+            this.lblCari.AutoSize = true;
+            this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCari.Location = new System.Drawing.Point(249, 170);
+            this.lblCari.Name = "lblCari";
+            this.lblCari.Size = new System.Drawing.Size(40, 21);
+            this.lblCari.TabIndex = 33;
+            this.lblCari.Text = "Cari";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.White;
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.textBox1);
+            this.panel4.Controls.Add(this.textBox2);
+            this.panel4.Controls.Add(this.label10);
+            this.panel4.Controls.Add(this.label11);
+            this.panel4.Controls.Add(this.btnTambah);
+            this.panel4.Controls.Add(this.dataGridView1);
+            this.panel4.Controls.Add(this.btnBatalKategori);
+            this.panel4.Controls.Add(this.txtNo_Hp);
+            this.panel4.Controls.Add(this.txtAlamat);
+            this.panel4.Controls.Add(this.txtNama_Lengkap);
+            this.panel4.Controls.Add(this.label1);
+            this.panel4.Controls.Add(this.label3);
+            this.panel4.Controls.Add(this.label8);
+            this.panel4.Controls.Add(this.label9);
+            this.panel4.Location = new System.Drawing.Point(253, 346);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(728, 192);
+            this.panel4.TabIndex = 32;
+            // 
+            // btnTambah
+            // 
+            this.btnTambah.BackColor = System.Drawing.Color.SeaGreen;
+            this.btnTambah.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTambah.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTambah.ForeColor = System.Drawing.Color.White;
+            this.btnTambah.Location = new System.Drawing.Point(618, 151);
+            this.btnTambah.Name = "btnTambah";
+            this.btnTambah.Size = new System.Drawing.Size(99, 29);
+            this.btnTambah.TabIndex = 47;
+            this.btnTambah.Text = "SIMPAN";
+            this.btnTambah.UseVisualStyleBackColor = false;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgv_NamaBarang,
+            this.dgv_KategoriBarang,
+            this.dgv_DeskripsiBarang,
+            this.dgv_JumlahPinjam,
+            this.dgv_KeteranganBarang});
+            this.dataGridView1.Location = new System.Drawing.Point(-1, 63);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(728, 81);
+            this.dataGridView1.TabIndex = 26;
+            // 
+            // btnBatalKategori
+            // 
+            this.btnBatalKategori.BackColor = System.Drawing.Color.DimGray;
+            this.btnBatalKategori.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBatalKategori.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBatalKategori.ForeColor = System.Drawing.Color.White;
+            this.btnBatalKategori.Location = new System.Drawing.Point(513, 152);
+            this.btnBatalKategori.Name = "btnBatalKategori";
+            this.btnBatalKategori.Size = new System.Drawing.Size(99, 28);
+            this.btnBatalKategori.TabIndex = 25;
+            this.btnBatalKategori.Text = "BATAL";
+            this.btnBatalKategori.UseVisualStyleBackColor = false;
+            // 
+            // txtNo_Hp
+            // 
+            this.txtNo_Hp.Location = new System.Drawing.Point(574, 33);
+            this.txtNo_Hp.Name = "txtNo_Hp";
+            this.txtNo_Hp.Size = new System.Drawing.Size(144, 20);
+            this.txtNo_Hp.TabIndex = 18;
+            // 
+            // txtAlamat
+            // 
+            this.txtAlamat.Location = new System.Drawing.Point(332, 33);
+            this.txtAlamat.Name = "txtAlamat";
+            this.txtAlamat.Size = new System.Drawing.Size(144, 20);
+            this.txtAlamat.TabIndex = 17;
+            // 
+            // txtNama_Lengkap
+            // 
+            this.txtNama_Lengkap.Location = new System.Drawing.Point(97, 33);
+            this.txtNama_Lengkap.Name = "txtNama_Lengkap";
+            this.txtNama_Lengkap.Size = new System.Drawing.Size(144, 20);
+            this.txtNama_Lengkap.TabIndex = 16;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(482, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Diambil oleh";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(247, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(80, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Nomor Telepon";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(5, 36);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(83, 13);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Nama Peminjam";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(2, 2);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(184, 25);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "Detail Pengambilan";
+            // 
             // dgvTabelList
             // 
             this.dgvTabelList.AllowUserToAddRows = false;
@@ -448,37 +581,19 @@
             this.dgvTabelList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.kode_peminjaman,
             this.Peminjam,
-            this.Barang,
             this.Waktu_Pinjam,
-            this.status,
-            this.aksi});
-            this.dgvTabelList.Location = new System.Drawing.Point(253, 202);
+            this.Waktu_Kembali,
+            this.status});
+            this.dgvTabelList.Location = new System.Drawing.Point(253, 203);
             this.dgvTabelList.Name = "dgvTabelList";
             this.dgvTabelList.ReadOnly = true;
             this.dgvTabelList.RowHeadersWidth = 51;
-            this.dgvTabelList.Size = new System.Drawing.Size(471, 336);
-            this.dgvTabelList.TabIndex = 35;
-            // 
-            // txtCari
-            // 
-            this.txtCari.Location = new System.Drawing.Point(303, 172);
-            this.txtCari.Name = "txtCari";
-            this.txtCari.Size = new System.Drawing.Size(421, 20);
-            this.txtCari.TabIndex = 40;
-            // 
-            // lblCari
-            // 
-            this.lblCari.AutoSize = true;
-            this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCari.Location = new System.Drawing.Point(249, 169);
-            this.lblCari.Name = "lblCari";
-            this.lblCari.Size = new System.Drawing.Size(40, 21);
-            this.lblCari.TabIndex = 39;
-            this.lblCari.Text = "Cari";
+            this.dgvTabelList.Size = new System.Drawing.Size(728, 132);
+            this.dgvTabelList.TabIndex = 31;
             // 
             // kode_peminjaman
             // 
-            this.kode_peminjaman.HeaderText = "Kode";
+            this.kode_peminjaman.HeaderText = "Kode Peminjaman";
             this.kode_peminjaman.Name = "kode_peminjaman";
             this.kode_peminjaman.ReadOnly = true;
             // 
@@ -489,13 +604,6 @@
             this.Peminjam.Name = "Peminjam";
             this.Peminjam.ReadOnly = true;
             // 
-            // Barang
-            // 
-            this.Barang.HeaderText = "Nama Barang";
-            this.Barang.MinimumWidth = 6;
-            this.Barang.Name = "Barang";
-            this.Barang.ReadOnly = true;
-            // 
             // Waktu_Pinjam
             // 
             this.Waktu_Pinjam.HeaderText = "Tanggal Pinjam";
@@ -503,294 +611,92 @@
             this.Waktu_Pinjam.Name = "Waktu_Pinjam";
             this.Waktu_Pinjam.ReadOnly = true;
             // 
+            // Waktu_Kembali
+            // 
+            this.Waktu_Kembali.HeaderText = "Tanggal Kembali";
+            this.Waktu_Kembali.MinimumWidth = 6;
+            this.Waktu_Kembali.Name = "Waktu_Kembali";
+            this.Waktu_Kembali.ReadOnly = true;
+            // 
             // status
             // 
             this.status.HeaderText = "Status";
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
-            // aksi
+            // textBox1
             // 
-            this.aksi.HeaderText = "Aksi";
-            this.aksi.MinimumWidth = 6;
-            this.aksi.Name = "aksi";
-            this.aksi.ReadOnly = true;
-            this.aksi.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.aksi.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // panel4
-            // 
-            this.panel4.BackColor = System.Drawing.Color.White;
-            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.textBox11);
-            this.panel4.Controls.Add(this.label13);
-            this.panel4.Controls.Add(this.textBox5);
-            this.panel4.Controls.Add(this.label10);
-            this.panel4.Controls.Add(this.textBox6);
-            this.panel4.Controls.Add(this.label19);
-            this.panel4.Controls.Add(this.textBox7);
-            this.panel4.Controls.Add(this.label20);
-            this.panel4.Controls.Add(this.btnBatal);
-            this.panel4.Controls.Add(this.btnTambah);
-            this.panel4.Controls.Add(this.textBox9);
-            this.panel4.Controls.Add(this.label16);
-            this.panel4.Controls.Add(this.textBox3);
-            this.panel4.Controls.Add(this.label8);
-            this.panel4.Controls.Add(this.label14);
-            this.panel4.Controls.Add(this.textBox10);
-            this.panel4.Controls.Add(this.label15);
-            this.panel4.Controls.Add(this.label11);
-            this.panel4.Controls.Add(this.textBox4);
-            this.panel4.Controls.Add(this.label9);
-            this.panel4.Controls.Add(this.textBox2);
-            this.panel4.Controls.Add(this.label1);
-            this.panel4.Controls.Add(this.textBox1);
-            this.panel4.Controls.Add(this.label3);
-            this.panel4.Controls.Add(this.txtNama_Lengkap);
-            this.panel4.Controls.Add(this.label21);
-            this.panel4.Controls.Add(this.label22);
-            this.panel4.Location = new System.Drawing.Point(730, 172);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(247, 366);
-            this.panel4.TabIndex = 41;
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(95, 169);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(144, 20);
-            this.textBox6.TabIndex = 51;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(3, 172);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(87, 13);
-            this.label19.TabIndex = 50;
-            this.label19.Text = "Deskripsi Barang";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(95, 116);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(144, 20);
-            this.textBox7.TabIndex = 49;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(3, 119);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(72, 13);
-            this.label20.TabIndex = 48;
-            this.label20.Text = "Nama Barang";
-            // 
-            // btnBatal
-            // 
-            this.btnBatal.BackColor = System.Drawing.Color.DimGray;
-            this.btnBatal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBatal.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBatal.ForeColor = System.Drawing.Color.White;
-            this.btnBatal.Location = new System.Drawing.Point(18, 329);
-            this.btnBatal.Name = "btnBatal";
-            this.btnBatal.Size = new System.Drawing.Size(99, 28);
-            this.btnBatal.TabIndex = 47;
-            this.btnBatal.Text = "BATAL";
-            this.btnBatal.UseVisualStyleBackColor = false;
-            // 
-            // btnTambah
-            // 
-            this.btnTambah.BackColor = System.Drawing.Color.SeaGreen;
-            this.btnTambah.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTambah.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTambah.ForeColor = System.Drawing.Color.White;
-            this.btnTambah.Location = new System.Drawing.Point(131, 328);
-            this.btnTambah.Name = "btnTambah";
-            this.btnTambah.Size = new System.Drawing.Size(99, 29);
-            this.btnTambah.TabIndex = 46;
-            this.btnTambah.Text = "SIMPAN";
-            this.btnTambah.UseVisualStyleBackColor = false;
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(132, 279);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(29, 20);
-            this.textBox9.TabIndex = 41;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(91, 282);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(37, 13);
-            this.label16.TabIndex = 40;
-            this.label16.Text = "Bagus";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(210, 279);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(29, 20);
-            this.textBox3.TabIndex = 39;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(167, 282);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(38, 13);
-            this.label8.TabIndex = 38;
-            this.label8.Text = "Rusak";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(3, 170);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(0, 13);
-            this.label14.TabIndex = 37;
-            // 
-            // textBox10
-            // 
-            this.textBox10.Location = new System.Drawing.Point(95, 221);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(144, 20);
-            this.textBox10.TabIndex = 36;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(3, 224);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(86, 13);
-            this.label15.TabIndex = 35;
-            this.label15.Text = "Tanggal Kembali";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(4, 282);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(75, 13);
-            this.label11.TabIndex = 29;
-            this.label11.Text = "Kondisi Pinjam";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(95, 250);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(144, 20);
-            this.textBox4.TabIndex = 26;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 253);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(74, 13);
-            this.label9.TabIndex = 25;
-            this.label9.Text = "Jumlah Pinjam";
+            this.textBox1.Location = new System.Drawing.Point(334, 154);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(144, 20);
+            this.textBox1.TabIndex = 51;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(95, 195);
+            this.textBox2.Location = new System.Drawing.Point(97, 154);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(144, 20);
-            this.textBox2.TabIndex = 22;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 198);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 13);
-            this.label1.TabIndex = 21;
-            this.label1.Text = "Tanggal Pinjam";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(95, 90);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(144, 20);
-            this.textBox1.TabIndex = 20;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 93);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 13);
-            this.label3.TabIndex = 19;
-            this.label3.Text = "Diambil oleh";
-            // 
-            // txtNama_Lengkap
-            // 
-            this.txtNama_Lengkap.Location = new System.Drawing.Point(95, 34);
-            this.txtNama_Lengkap.Name = "txtNama_Lengkap";
-            this.txtNama_Lengkap.Size = new System.Drawing.Size(144, 20);
-            this.txtNama_Lengkap.TabIndex = 18;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(3, 37);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(83, 13);
-            this.label21.TabIndex = 17;
-            this.label21.Text = "Nama Peminjam";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(3, 2);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(184, 25);
-            this.label22.TabIndex = 1;
-            this.label22.Text = "Detail Pengambilan";
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(95, 143);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(144, 20);
-            this.textBox5.TabIndex = 53;
+            this.textBox2.TabIndex = 50;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 146);
+            this.label10.Location = new System.Drawing.Point(247, 157);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(78, 13);
-            this.label10.TabIndex = 52;
-            this.label10.Text = "Kondisi Barang";
+            this.label10.Size = new System.Drawing.Size(86, 13);
+            this.label10.TabIndex = 49;
+            this.label10.Text = "Tanggal Kembali";
             // 
-            // textBox11
+            // label11
             // 
-            this.textBox11.Location = new System.Drawing.Point(94, 63);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(144, 20);
-            this.textBox11.TabIndex = 57;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(11, 157);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(80, 13);
+            this.label11.TabIndex = 48;
+            this.label11.Text = "Tanggal Pinjam";
             // 
-            // label13
+            // dgv_NamaBarang
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(2, 66);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(80, 13);
-            this.label13.TabIndex = 56;
-            this.label13.Text = "Nomor Telepon";
+            this.dgv_NamaBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgv_NamaBarang.HeaderText = "Nama Barang";
+            this.dgv_NamaBarang.Name = "dgv_NamaBarang";
+            this.dgv_NamaBarang.ReadOnly = true;
+            this.dgv_NamaBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_KategoriBarang
+            // 
+            this.dgv_KategoriBarang.HeaderText = "Kategori Barang";
+            this.dgv_KategoriBarang.Name = "dgv_KategoriBarang";
+            this.dgv_KategoriBarang.ReadOnly = true;
+            // 
+            // dgv_DeskripsiBarang
+            // 
+            this.dgv_DeskripsiBarang.HeaderText = "Deskripsi Barang";
+            this.dgv_DeskripsiBarang.Name = "dgv_DeskripsiBarang";
+            this.dgv_DeskripsiBarang.ReadOnly = true;
+            // 
+            // dgv_JumlahPinjam
+            // 
+            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
+            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
+            this.dgv_JumlahPinjam.ReadOnly = true;
+            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_KeteranganBarang
+            // 
+            this.dgv_KeteranganBarang.HeaderText = "Keterangan Barang";
+            this.dgv_KeteranganBarang.Name = "dgv_KeteranganBarang";
+            this.dgv_KeteranganBarang.ReadOnly = true;
             // 
             // FormDataPengambilan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1046, 589);
-            this.Controls.Add(this.panel4);
             this.Controls.Add(this.txtCari);
             this.Controls.Add(this.lblCari);
+            this.Controls.Add(this.panel4);
             this.Controls.Add(this.dgvTabelList);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
@@ -817,9 +723,10 @@
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -854,44 +761,34 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label7;
-<<<<<<< HEAD
-        private System.Windows.Forms.DataGridView dgvTabelList;
         private System.Windows.Forms.TextBox txtCari;
         private System.Windows.Forms.Label lblCari;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnTambah;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button btnBatalKategori;
+        private System.Windows.Forms.TextBox txtNo_Hp;
+        private System.Windows.Forms.TextBox txtAlamat;
+        private System.Windows.Forms.TextBox txtNama_Lengkap;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.DataGridView dgvTabelList;
         private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
         private System.Windows.Forms.DataGridViewTextBoxColumn Peminjam;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Barang;
         private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Pinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Kembali;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.DataGridViewButtonColumn aksi;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Button btnBatal;
-        private System.Windows.Forms.Button btnTambah;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtNama_Lengkap;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_NamaBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KategoriBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_DeskripsiBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KeteranganBarang;
 =======
         // Deklarasi Komponen DataGridView yang Diperbaiki
         private System.Windows.Forms.DataGridView dgvTabelList;

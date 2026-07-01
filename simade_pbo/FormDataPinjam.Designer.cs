@@ -70,12 +70,16 @@
             this.Waktu_Kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnTambah = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.kategori_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_JumlahPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status_pengajuan = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.keterangan_pengajuan = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnTambah = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -243,6 +247,10 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.textBox1);
+            this.panel4.Controls.Add(this.textBox2);
+            this.panel4.Controls.Add(this.label10);
+            this.panel4.Controls.Add(this.label11);
             this.panel4.Controls.Add(this.btnTambah);
             this.panel4.Controls.Add(this.dataGridView1);
             this.panel4.Controls.Add(this.btnBatalKategori);
@@ -547,14 +555,59 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.nama_barang,
             this.kategori_barang,
-            this.jumlah_barang,
+            this.dgv_JumlahPinjam,
             this.status_pengajuan,
             this.keterangan_pengajuan});
-            this.dataGridView1.Location = new System.Drawing.Point(8, 63);
+            this.dataGridView1.Location = new System.Drawing.Point(-1, 63);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(709, 81);
+            this.dataGridView1.Size = new System.Drawing.Size(719, 81);
             this.dataGridView1.TabIndex = 26;
+            // 
+            // btnTambah
+            // 
+            this.btnTambah.BackColor = System.Drawing.Color.SeaGreen;
+            this.btnTambah.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTambah.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTambah.ForeColor = System.Drawing.Color.White;
+            this.btnTambah.Location = new System.Drawing.Point(618, 151);
+            this.btnTambah.Name = "btnTambah";
+            this.btnTambah.Size = new System.Drawing.Size(99, 29);
+            this.btnTambah.TabIndex = 47;
+            this.btnTambah.Text = "SIMPAN";
+            this.btnTambah.UseVisualStyleBackColor = false;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(334, 154);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(144, 20);
+            this.textBox1.TabIndex = 55;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(97, 154);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(144, 20);
+            this.textBox2.TabIndex = 54;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(247, 157);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(86, 13);
+            this.label10.TabIndex = 53;
+            this.label10.Text = "Tanggal Kembali";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(11, 157);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(80, 13);
+            this.label11.TabIndex = 52;
+            this.label11.Text = "Tanggal Pinjam";
             // 
             // nama_barang
             // 
@@ -570,11 +623,12 @@
             this.kategori_barang.Name = "kategori_barang";
             this.kategori_barang.ReadOnly = true;
             // 
-            // jumlah_barang
+            // dgv_JumlahPinjam
             // 
-            this.jumlah_barang.HeaderText = "Jumlah Barang";
-            this.jumlah_barang.Name = "jumlah_barang";
-            this.jumlah_barang.ReadOnly = true;
+            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
+            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
+            this.dgv_JumlahPinjam.ReadOnly = true;
+            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // status_pengajuan
             // 
@@ -592,19 +646,6 @@
             this.keterangan_pengajuan.HeaderText = "Keterangan";
             this.keterangan_pengajuan.Name = "keterangan_pengajuan";
             this.keterangan_pengajuan.ReadOnly = true;
-            // 
-            // btnTambah
-            // 
-            this.btnTambah.BackColor = System.Drawing.Color.SeaGreen;
-            this.btnTambah.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTambah.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTambah.ForeColor = System.Drawing.Color.White;
-            this.btnTambah.Location = new System.Drawing.Point(618, 151);
-            this.btnTambah.Name = "btnTambah";
-            this.btnTambah.Size = new System.Drawing.Size(99, 29);
-            this.btnTambah.TabIndex = 47;
-            this.btnTambah.Text = "SIMPAN";
-            this.btnTambah.UseVisualStyleBackColor = false;
             // 
             // FormDataPinjam
             // 
@@ -688,11 +729,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Kembali;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button btnTambah;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.DataGridViewTextBoxColumn nama_barang;
         private System.Windows.Forms.DataGridViewTextBoxColumn kategori_barang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_barang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
         private System.Windows.Forms.DataGridViewComboBoxColumn status_pengajuan;
         private System.Windows.Forms.DataGridViewTextBoxColumn keterangan_pengajuan;
-        private System.Windows.Forms.Button btnTambah;
     }
 }
