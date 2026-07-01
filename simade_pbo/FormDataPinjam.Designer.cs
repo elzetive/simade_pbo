@@ -274,21 +274,21 @@
             // 
             // txtNo_Hp
             // 
-            this.txtNo_Hp.Location = new System.Drawing.Point(574, 31);
+            this.txtNo_Hp.Location = new System.Drawing.Point(574, 33);
             this.txtNo_Hp.Name = "txtNo_Hp";
             this.txtNo_Hp.Size = new System.Drawing.Size(144, 20);
             this.txtNo_Hp.TabIndex = 18;
             // 
             // txtAlamat
             // 
-            this.txtAlamat.Location = new System.Drawing.Point(332, 31);
+            this.txtAlamat.Location = new System.Drawing.Point(332, 33);
             this.txtAlamat.Name = "txtAlamat";
             this.txtAlamat.Size = new System.Drawing.Size(144, 20);
             this.txtAlamat.TabIndex = 17;
             // 
             // txtNama_Lengkap
             // 
-            this.txtNama_Lengkap.Location = new System.Drawing.Point(97, 31);
+            this.txtNama_Lengkap.Location = new System.Drawing.Point(97, 33);
             this.txtNama_Lengkap.Name = "txtNama_Lengkap";
             this.txtNama_Lengkap.Size = new System.Drawing.Size(144, 20);
             this.txtNama_Lengkap.TabIndex = 16;
@@ -296,7 +296,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(482, 34);
+            this.label5.Location = new System.Drawing.Point(482, 36);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 13);
             this.label5.TabIndex = 9;
@@ -305,7 +305,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(247, 34);
+            this.label3.Location = new System.Drawing.Point(247, 36);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 8;
@@ -314,7 +314,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 34);
+            this.label1.Location = new System.Drawing.Point(5, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 7;
@@ -550,7 +550,7 @@
             this.jumlah_barang,
             this.status_pengajuan,
             this.keterangan_pengajuan});
-            this.dataGridView1.Location = new System.Drawing.Point(8, 61);
+            this.dataGridView1.Location = new System.Drawing.Point(8, 63);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(709, 81);
