@@ -11,16 +11,20 @@ namespace simade_pbo.Model
         private int _id_barang;
         private string _nama_barang;
         private int _id_kategori;
-        private string _kondisi;
-        private string _status_ketersediaan;
+        private int _jumlah_barang;
+        private int _kondisi_bagus;
+        private int _kondisi_rusak;
+        private string _status;
 
         public Barang_cls()
         {
             _id_barang = 0;
             _nama_barang = "";
             _id_kategori = 0;
-            _kondisi = "";
-            _status_ketersediaan = "";
+            _jumlah_barang = 0;
+            _kondisi_bagus = 0;
+            _kondisi_rusak = 0;
+            _status= "";
         }
 
         public int Id_barang
@@ -41,16 +45,28 @@ namespace simade_pbo.Model
             set { _id_kategori = value; }
         }
 
-        public string Kondisi_barang
+        public int Jumlah_barang
         {
-            get { return _kondisi; }
-            set { _kondisi = value; }
+            get { return _jumlah_barang; }
+            set { _jumlah_barang = value; }
         }
 
-        public string Status_ketersediaan
+        public int Kondisi_bagus
         {
-            get { return _status_ketersediaan; }
-            set { _status_ketersediaan = value; }
+            get { return _kondisi_bagus; }
+            set { _kondisi_bagus = value; }
+        }
+
+        public int Kondisi_rusak
+        {
+            get { return _kondisi_rusak; }
+            set { _kondisi_rusak = value; }
+        }
+
+        public string Status
+        {
+            get { return _status; }
+            set { _status = value; }
         }
     }
 }

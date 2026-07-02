@@ -1,6 +1,12 @@
-﻿using System;
+﻿using simade_pbo.Service;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -8,261 +14,245 @@ namespace simade_pbo
 {
     public partial class FormDashboardWarga : Form
     {
+        // Deklarasi Service dan Variabel Global
+        Barang_service barangService = new Barang_service();
+        DataTable dtAntrean = new DataTable();
+
+        int idBarangTerpilih = 0;
+        int stokTersediaTerpilih = 0;
+
+        // Properti publik penampung data kiriman dari FormLogin
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
-        private int idSubTerpilih = 0;
-        private string namaBarangTerpilih = "";
-        private int stokTersediaMaksimal = 0;
-        private DataTable dtKeranjangPeminjaman;
+        // Variabel penampung ID User berwujud angka int untuk query database
+        int idUserLoginAngka = 1;
 
         public FormDashboardWarga()
         {
             InitializeComponent();
-
-            this.Load += new System.EventHandler(this.FormDashboardWarga_Load);
-            this.btnMenuDashboard.Click += new System.EventHandler(this.btnMenuDashboard_Click);
-            this.btnMenuStatus.Click += new System.EventHandler(this.btnMenuStatus_Click);
-            this.btnMenuRiwayat.Click += new System.EventHandler(this.btnMenuRiwayat_Click);
-            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            this.btnPinjam.Click += new System.EventHandler(this.btnPinjam_Click);
-            this.btnAjukanFinal.Click += new System.EventHandler(this.btnAjukanFinal_Click);
-
-            this.dgvBarang.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvBarang_RowPostPaint);
-            this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
+            this.StartPosition = FormStartPosition.CenterScreen;
+            tampilDaftarAset();
+            inisialisasiTabelAntrean();
         }
 
         private void FormDashboardWarga_Load(object sender, EventArgs e)
         {
-            tampilDataWarga();
+            // Amankan konversi ID User dari Login ke tipe data integer
+            if (!string.IsNullOrEmpty(IdUserLogin))
+            {
+                int.TryParse(IdUserLogin, out idUserLoginAngka);
+            }
+
+            // Mengunci Textbox Nama Barang agar tidak bisa diketik manual oleh warga
+            txtNamaBarang.ReadOnly = true;
         }
 
-        public void tampilDataWarga()
+        // 🔄 MENYAMAKAN CARA DENGAN DASHBOARD ADMIN (MENGGUNAKAN INDEKS ANGKA GRID)
+        void tampilDaftarAset()
         {
-            try
-            {
-                txtNamaBarang.ReadOnly = true;
-                txtJumlah.ReadOnly = true;
-                dtpPinjam.Enabled = false;
-                dtpPinjam.Value = DateTime.Now;
+            // Ambil data langsung dari service
+            DataTable dt = barangService.tampilSemua();
+            dgvBarang.AutoGenerateColumns = false;
 
-                if (!string.IsNullOrEmpty(NamaUserLogin))
-                {
-                    lblNamaWarga.Text = "Halo, " + NamaUserLogin + "!";
-                }
-
-                dgvBarang.AutoGenerateColumns = false;
-                colId.DataPropertyName = "";
-                colNamaAset.DataPropertyName = "nama_barang";
-                colKategori.DataPropertyName = "nama_sub";
-                colStokTersedia.DataPropertyName = "jumlah_prediksi_tersedia";
-
-                dtKeranjangPeminjaman = new DataTable();
-                dtKeranjangPeminjaman.Columns.Add("id_sub", typeof(int));
-                dtKeranjangPeminjaman.Columns.Add("nama_barang", typeof(string));
-                dtKeranjangPeminjaman.Columns.Add("jumlah_pinjam", typeof(int));
-
-                dgvKeranjang.AutoGenerateColumns = false;
-                colCartNama.DataPropertyName = "nama_barang";
-                colCartQty.DataPropertyName = "jumlah_pinjam";
-                dgvKeranjang.DataSource = dtKeranjangPeminjaman;
-
-                LoadDataBarang();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Gagal inisialisasi: " + ex.Message, "Error");
-            }
+            // Masukkan datanya ke Grid
+            dgvBarang.DataSource = dt;
         }
 
-        private void LoadDataBarang()
+        void inisialisasiTabelAntrean()
         {
-            using (MySqlConnection conn = Koneksi.GetConn())
-            {
-                try
-                {
-                    conn.Open();
-                    string query = @"SELECT 
-                                        sk.id_sub,
-                                        sk.nama_sub,
-                                        b.nama_barang,
-                                        COUNT(CASE WHEN b.status = 'tersedia' THEN 1 END) AS jumlah_prediksi_tersedia
-                                    FROM barang b
-                                    INNER JOIN sub_kategori sk ON b.id_sub = sk.id_sub
-                                    GROUP BY sk.id_sub, b.nama_barang, sk.nama_sub";
+            // Hapus total kolom lama agar tidak bentrok atau sisa dari desainer
+            dtAntrean.Reset();
+            dtAntrean.Columns.Clear();
 
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(query, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-                        dgvBarang.DataSource = dt;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Gagal memuat data master: " + ex.Message, "Database Error");
-                }
+            // Buat 3 kolom secara tegas sesuai urutan inputan saat tombol diklik
+            dtAntrean.Columns.Add("id_barang", typeof(int));
+            dtAntrean.Columns.Add("nama_barang", typeof(string));
+            dtAntrean.Columns.Add("jumlah_pinjam", typeof(int));
+
+            // Cegah dgv membuat kolom baru secara otomatis
+            dgvAntrean.AutoGenerateColumns = false;
+
+            // Hubungkan kolom visual DataGridView ke data tabel (sesuaikan indeks kolom dgvAntrean kamu)
+            if (dgvAntrean.Columns.Count >= 2)
+            {
+                dgvAntrean.Columns[0].DataPropertyName = "nama_barang";
+                dgvAntrean.Columns[1].DataPropertyName = "jumlah_pinjam";
             }
+
+            // Sambungkan data source-nya
+            dgvAntrean.DataSource = dtAntrean;
         }
 
-        private void dgvBarang_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        void bersihkanInputanBarang()
         {
-            try { dgvBarang.Rows[e.RowIndex].Cells[0].Value = (e.RowIndex + 1).ToString(); } catch { }
+            txtNamaBarang.Clear();
+            txtJumlahPinjam.Clear();
+            idBarangTerpilih = 0;
+            stokTersediaTerpilih = 0;
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin menutup aplikasi?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (konfirmasi == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
         }
 
         private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                try
+                DataGridViewRow baris = this.dgvBarang.Rows[e.RowIndex];
+                DataRowView rowView = (DataRowView)baris.DataBoundItem;
+                if (rowView != null)
                 {
-                    DataGridViewRow row = dgvBarang.Rows[e.RowIndex];
-                    DataRowView drv = row.DataBoundItem as DataRowView;
+                    DataRow dr = rowView.Row;
 
-                    if (drv != null)
-                    {
-                        idSubTerpilih = Convert.ToInt32(drv["id_sub"]);
-                        namaBarangTerpilih = drv["nama_barang"].ToString();
-                        stokTersediaMaksimal = Convert.ToInt32(drv["jumlah_prediksi_tersedia"]);
+                    idBarangTerpilih = Convert.ToInt32(dr["id_barang"]);
+                    stokTersediaTerpilih = Convert.ToInt32(dr["jumlah_tersedia"]);
 
-                        txtNamaBarang.Text = namaBarangTerpilih;
-                        txtJumlah.Text = stokTersediaMaksimal > 0 ? "1" : "0";
-                    }
+                    idBarangTerpilih = Convert.ToInt32(dr["id_barang"]);
+                    stokTersediaTerpilih = Convert.ToInt32(dr["jumlah_tersedia"]);
+
+                    txtNamaBarang.Text = dr["nama_barang"].ToString();
+                    txtJumlahPinjam.Text = stokTersediaTerpilih.ToString();
                 }
-                catch (Exception) { }
             }
         }
 
-        private void btnPinjam_Click(object sender, EventArgs e)
+        private void btnTambahKeList_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(txtNamaBarang.Text) || idSubTerpilih == 0)
+            if (idBarangTerpilih == 0 || string.IsNullOrEmpty(txtNamaBarang.Text))
             {
-                MessageBox.Show("Silakan pilih barang terlebih dahulu!", "Peringatan");
+                MessageBox.Show("Silakan pilih barang dari daftar aset desa terlebih dahulu!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int qty = Convert.ToInt32(txtJumlah.Text);
-            if (qty <= 0 || qty > stokTersediaMaksimal)
+            if (!int.TryParse(txtJumlahPinjam.Text, out int jumlahInput) || jumlahInput <= 0)
             {
-                MessageBox.Show("Stok unit tidak mencukupi!", "Informasi Stok");
+                MessageBox.Show("Masukkan jumlah pinjam yang valid (angka harus di atas 0)!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            foreach (DataRow row in dtKeranjangPeminjaman.Rows)
+            if (jumlahInput > stokTersediaTerpilih)
             {
-                if (Convert.ToInt32(row["id_sub"]) == idSubTerpilih && row["nama_barang"].ToString() == namaBarangTerpilih)
+                MessageBox.Show($"Gagal menambahkan! Jumlah pinjam ({jumlahInput} unit) melebihi jumlah tersedia ({stokTersediaTerpilih} unit).",
+                                "Stok Tidak Mencukupi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtJumlahPinjam.Focus();
+                return;
+            }
+
+            foreach (DataRow row in dtAntrean.Rows)
+            {
+                if (Convert.ToInt32(row["id_barang"]) == idBarangTerpilih)
                 {
-                    MessageBox.Show("Item ini sudah masuk ke list antrean!", "Peringatan");
+                    MessageBox.Show("Barang ini sudah ada di dalam list antrean!", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
             }
 
-            dtKeranjangPeminjaman.Rows.Add(idSubTerpilih, namaBarangTerpilih, qty);
-            txtNamaBarang.Clear();
-            txtJumlah.Clear();
-            idSubTerpilih = 0;
-            namaBarangTerpilih = "";
-            stokTersediaMaksimal = 0;
+            dtAntrean.Rows.Add(idBarangTerpilih, txtNamaBarang.Text, jumlahInput);
+            bersihkanInputanBarang();
         }
 
-        private void btnAjukanFinal_Click(object sender, EventArgs e)
+        private void btnKirimPengajuan_Click(object sender, EventArgs e)
         {
-            if (dtKeranjangPeminjaman.Rows.Count == 0)
+            if (dtAntrean.Rows.Count == 0)
             {
-                MessageBox.Show("List antrean masih kosong!", "Peringatan");
+                MessageBox.Show("List antrean peminjaman masih kosong! Silakan tambahkan barang terlebih dahulu.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DialogResult konfirmasi = MessageBox.Show("Kirim seluruh pengajuan berkas?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (konfirmasi != DialogResult.Yes) return;
+            string kodePeminjamanOtomatis = "AD_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            string tglPinjam = dtpTanggalPinjam.Value.ToString("yyyy-MM-dd");
+            string tglKembali = dtpTanggalKembali.Value.ToString("yyyy-MM-dd");
 
-            using (MySqlConnection conn = Koneksi.GetConn())
+            try
             {
-                MySqlTransaction tr = null;
-                try
+                using (MySqlConnection conn = new MySqlConnection("server=localhost;user=root;database=simade_pbo;password="))
                 {
                     conn.Open();
-                    tr = conn.BeginTransaction();
 
-                    // LOGIKA OPSI B: Membuat satu Nomor Resi Unik berbasis kombinasi waktu untuk seluruh isi keranjang
-                    string generatorNota = "TRX-" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                    // Menggunakan idUserLoginAngka yang sudah valid didapat dari FormLogin
+                    string queryMaster = $@"INSERT INTO peminjaman (kode_peminjaman, id_user, tgl_pinjam, tgl_kembali, status_peminjaman)
+                                           VALUES ('{kodePeminjamanOtomatis}', {idUserLoginAngka}, '{tglPinjam}', '{tglKembali}', 'Pending')";
 
-                    foreach (DataRow cartRow in dtKeranjangPeminjaman.Rows)
+                    MySqlCommand cmdMaster = new MySqlCommand(queryMaster, conn);
+                    int hasilMaster = cmdMaster.ExecuteNonQuery();
+
+                    if (hasilMaster > 0)
                     {
-                        int idSub = Convert.ToInt32(cartRow["id_sub"]);
-                        string namaBarang = cartRow["nama_barang"].ToString();
-                        int qty = Convert.ToInt32(cartRow["jumlah_pinjam"]);
+                        long idPeminjamanTerbuat = cmdMaster.LastInsertedId;
+                        int suksesDetailCount = 0;
 
-                        string searchBase = "SELECT id_barang FROM barang WHERE id_sub = @idSub AND nama_barang = @namaBarang AND status = 'tersedia' LIMIT @qty";
-                        DataTable dtFisik = new DataTable();
-
-                        using (MySqlCommand cmdCari = new MySqlCommand(searchBase, conn, tr))
+                        foreach (DataRow barisAntrean in dtAntrean.Rows)
                         {
-                            cmdCari.Parameters.AddWithValue("@idSub", idSub);
-                            cmdCari.Parameters.AddWithValue("@namaBarang", namaBarang);
-                            cmdCari.Parameters.AddWithValue("@qty", qty);
-                            using (MySqlDataAdapter da = new MySqlDataAdapter(cmdCari)) { da.Fill(dtFisik); }
+                            int idBarang = Convert.ToInt32(barisAntrean["id_barang"]);
+                            int qtyPinjam = Convert.ToInt32(barisAntrean["jumlah_pinjam"]);
+
+                            string queryDetail = $@"INSERT INTO detail_peminjaman (id_peminjaman, id_barang, jumlah_pinjam, status, keterangan) 
+                                                   VALUES ({idPeminjamanTerbuat}, {idBarang}, {qtyPinjam}, 'Pending', '-')";
+
+                            MySqlCommand cmdDetail = new MySqlCommand(queryDetail, conn);
+                            suksesDetailCount += cmdDetail.ExecuteNonQuery();
                         }
 
-                        foreach (DataRow fisikRow in dtFisik.Rows)
+                        if (suksesDetailCount > 0)
                         {
-                            int idBarangFisik = Convert.ToInt32(fisikRow["id_barang"]);
+                            MessageBox.Show($"Pengajuan peminjaman berhasil dikirim ke Admin!\nKode Nota Anda: {kodePeminjamanOtomatis}",
+                                            "Sukses Pengajuan", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            // Simpan kode_peminjaman ke dalam database
-                            string insQuery = "INSERT INTO peminjaman (kode_peminjaman, id_user, id_barang, tgl_pinjam, status_peminjaman) VALUES (@kode, @uid, @bid, CURDATE(), 'pending')";
-                            using (MySqlCommand cmdIns = new MySqlCommand(insQuery, conn, tr))
-                            {
-                                int fixUser = string.IsNullOrEmpty(IdUserLogin) ? 3 : Convert.ToInt32(IdUserLogin);
-                                cmdIns.Parameters.AddWithValue("@kode", generatorNota);
-                                cmdIns.Parameters.AddWithValue("@uid", fixUser);
-                                cmdIns.Parameters.AddWithValue("@bid", idBarangFisik);
-                                cmdIns.ExecuteNonQuery();
-                            }
-
-                            string updQuery = "UPDATE barang SET status = 'dipinjam' WHERE id_barang = @bid";
-                            using (MySqlCommand cmdUpd = new MySqlCommand(updQuery, conn, tr))
-                            {
-                                cmdUpd.Parameters.AddWithValue("@bid", idBarangFisik);
-                                cmdUpd.ExecuteNonQuery();
-                            }
+                            dtAntrean.Rows.Clear();
+                            bersihkanInputanBarang();
+                            tampilDaftarAset();
                         }
                     }
-
-                    tr.Commit();
-                    MessageBox.Show("Pengajuan sukses dibundel dinamis dengan Nomor Nota: " + generatorNota, "Sukses");
-                    dtKeranjangPeminjaman.Clear();
-                    LoadDataBarang();
                 }
-                catch (Exception ex)
-                {
-                    if (tr != null) tr.Rollback();
-                    MessageBox.Show("Gagal memproses transaksi: " + ex.Message, "Error");
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Terjadi kendala saat menyimpan data ke database: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnMenuDashboard_Click(object sender, EventArgs e) { LoadDataBarang(); }
+        private void btnBatal_Click(object sender, EventArgs e)
+        {
+            bersihkanInputanBarang();
+        }
+
+        private void btnLogOut_Click(object sender, EventArgs e)
+        {
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (konfirmasi == DialogResult.Yes)
+            {
+                FormLogin login = new FormLogin();
+                login.Show();
+                this.Close();
+            }
+        }
+
+        private void btnMenuDashboard_Click(object sender, EventArgs e)
+        {
+            FormDashboardWarga dashboard = new FormDashboardWarga();
+            dashboard.Show();
+            this.Hide();
+        }
 
         private void btnMenuStatus_Click(object sender, EventArgs e)
         {
-            FormStatusPengajuan frm = new FormStatusPengajuan();
-            frm.IdUserLogin = this.IdUserLogin;
-            frm.NamaUserLogin = this.NamaUserLogin;
-            frm.Show();
-            this.Close();
+            FormStatusPengajuan status = new FormStatusPengajuan();
+            status.Show();
+            this.Hide();
         }
 
         private void btnMenuRiwayat_Click(object sender, EventArgs e)
         {
-            FormRiwayatWarga frm = new FormRiwayatWarga();
-            frm.IdUserLogin = this.IdUserLogin;
-            frm.NamaUserLogin = this.NamaUserLogin;
-            frm.Show();
-            this.Close();
+            FormRiwayatWarga riwayat = new FormRiwayatWarga();
+            riwayat.Show();
+            this.Hide();
         }
-
-        private void btnLogOut_Click(object sender, EventArgs e) { FormLogin login = new FormLogin(); login.Show(); this.Close(); }
-        private void btnExit_Click(object sender, EventArgs e) { Application.Exit(); }
     }
 }

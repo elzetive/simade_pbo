@@ -29,24 +29,35 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDataPinjam));
-            this.dgvTabelList = new System.Windows.Forms.DataGridView();
+            this.dgvUtama = new System.Windows.Forms.DataGridView();
+            this.kode_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nama_lengkap = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tgl_pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tgl_kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel3 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.lblTersedia = new System.Windows.Forms.Label();
+            this.lblTotalDitolak = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.lblDipinjam = new System.Windows.Forms.Label();
+            this.lblTotalDisetujui = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lblTotal = new System.Windows.Forms.Label();
+            this.lblTotalPengajuan = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.btnBatalKategori = new System.Windows.Forms.Button();
-            this.txtNo_Hp = new System.Windows.Forms.TextBox();
+            this.txtTglKembali = new System.Windows.Forms.TextBox();
+            this.txtTglPinjam = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.btnSimpan = new System.Windows.Forms.Button();
+            this.dgvDetail = new System.Windows.Forms.DataGridView();
+            this.btnBatalDetail = new System.Windows.Forms.Button();
+            this.txtNoHp = new System.Windows.Forms.TextBox();
             this.txtAlamat = new System.Windows.Forms.TextBox();
-            this.txtNama_Lengkap = new System.Windows.Forms.TextBox();
+            this.txtNamaLengkap = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,23 +75,13 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.kode_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Peminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Waktu_Pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Waktu_Kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnTambah = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.kategori_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgv_JumlahPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status_pengajuan = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.keterangan_pengajuan = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).BeginInit();
+            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_tersedia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.keterangan = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUtama)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel2.SuspendLayout();
@@ -88,37 +89,71 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDetail)).BeginInit();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // dgvTabelList
+            // dgvUtama
             // 
-            this.dgvTabelList.AllowUserToAddRows = false;
-            this.dgvTabelList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvTabelList.BackgroundColor = System.Drawing.Color.White;
-            this.dgvTabelList.ColumnHeadersHeight = 35;
-            this.dgvTabelList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvTabelList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvUtama.AllowUserToAddRows = false;
+            this.dgvUtama.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvUtama.BackgroundColor = System.Drawing.Color.White;
+            this.dgvUtama.ColumnHeadersHeight = 35;
+            this.dgvUtama.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvUtama.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.kode_peminjaman,
-            this.Peminjam,
-            this.Waktu_Pinjam,
-            this.Waktu_Kembali,
-            this.status});
-            this.dgvTabelList.Location = new System.Drawing.Point(253, 203);
-            this.dgvTabelList.Name = "dgvTabelList";
-            this.dgvTabelList.ReadOnly = true;
-            this.dgvTabelList.RowHeadersWidth = 51;
-            this.dgvTabelList.Size = new System.Drawing.Size(728, 132);
-            this.dgvTabelList.TabIndex = 18;
+            this.nama_lengkap,
+            this.tgl_pinjam,
+            this.tgl_kembali,
+            this.status_peminjaman});
+            this.dgvUtama.Location = new System.Drawing.Point(253, 203);
+            this.dgvUtama.Name = "dgvUtama";
+            this.dgvUtama.ReadOnly = true;
+            this.dgvUtama.RowHeadersWidth = 51;
+            this.dgvUtama.Size = new System.Drawing.Size(728, 132);
+            this.dgvUtama.TabIndex = 18;
+            this.dgvUtama.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellContentClick);
+            // 
+            // kode_peminjaman
+            // 
+            this.kode_peminjaman.HeaderText = "Kode Peminjaman";
+            this.kode_peminjaman.Name = "kode_peminjaman";
+            this.kode_peminjaman.ReadOnly = true;
+            // 
+            // nama_lengkap
+            // 
+            this.nama_lengkap.HeaderText = "Nama Peminjam";
+            this.nama_lengkap.MinimumWidth = 6;
+            this.nama_lengkap.Name = "nama_lengkap";
+            this.nama_lengkap.ReadOnly = true;
+            // 
+            // tgl_pinjam
+            // 
+            this.tgl_pinjam.HeaderText = "Tanggal Pinjam";
+            this.tgl_pinjam.MinimumWidth = 6;
+            this.tgl_pinjam.Name = "tgl_pinjam";
+            this.tgl_pinjam.ReadOnly = true;
+            // 
+            // tgl_kembali
+            // 
+            this.tgl_kembali.HeaderText = "Tanggal Kembali";
+            this.tgl_kembali.MinimumWidth = 6;
+            this.tgl_kembali.Name = "tgl_kembali";
+            this.tgl_kembali.ReadOnly = true;
+            // 
+            // status_peminjaman
+            // 
+            this.status_peminjaman.HeaderText = "Status";
+            this.status_peminjaman.Name = "status_peminjaman";
+            this.status_peminjaman.ReadOnly = true;
             // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.pictureBox3);
-            this.panel3.Controls.Add(this.lblTersedia);
+            this.panel3.Controls.Add(this.lblTotalDitolak);
             this.panel3.Controls.Add(this.label6);
             this.panel3.Location = new System.Drawing.Point(767, 69);
             this.panel3.Name = "panel3";
@@ -136,16 +171,16 @@
             this.pictureBox3.TabIndex = 11;
             this.pictureBox3.TabStop = false;
             // 
-            // lblTersedia
+            // lblTotalDitolak
             // 
-            this.lblTersedia.AutoSize = true;
-            this.lblTersedia.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTersedia.Location = new System.Drawing.Point(89, 37);
-            this.lblTersedia.Name = "lblTersedia";
-            this.lblTersedia.Size = new System.Drawing.Size(38, 45);
-            this.lblTersedia.TabIndex = 3;
-            this.lblTersedia.Text = "0";
-            this.lblTersedia.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTotalDitolak.AutoSize = true;
+            this.lblTotalDitolak.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalDitolak.Location = new System.Drawing.Point(89, 37);
+            this.lblTotalDitolak.Name = "lblTotalDitolak";
+            this.lblTotalDitolak.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalDitolak.TabIndex = 3;
+            this.lblTotalDitolak.Text = "0";
+            this.lblTotalDitolak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label6
             // 
@@ -162,7 +197,7 @@
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.lblDipinjam);
+            this.panel2.Controls.Add(this.lblTotalDisetujui);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Location = new System.Drawing.Point(510, 69);
             this.panel2.Name = "panel2";
@@ -180,15 +215,15 @@
             this.pictureBox2.TabIndex = 10;
             this.pictureBox2.TabStop = false;
             // 
-            // lblDipinjam
+            // lblTotalDisetujui
             // 
-            this.lblDipinjam.AutoSize = true;
-            this.lblDipinjam.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDipinjam.Location = new System.Drawing.Point(88, 37);
-            this.lblDipinjam.Name = "lblDipinjam";
-            this.lblDipinjam.Size = new System.Drawing.Size(38, 45);
-            this.lblDipinjam.TabIndex = 2;
-            this.lblDipinjam.Text = "0";
+            this.lblTotalDisetujui.AutoSize = true;
+            this.lblTotalDisetujui.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalDisetujui.Location = new System.Drawing.Point(88, 37);
+            this.lblTotalDisetujui.Name = "lblTotalDisetujui";
+            this.lblTotalDisetujui.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalDisetujui.TabIndex = 2;
+            this.lblTotalDisetujui.Text = "0";
             // 
             // label4
             // 
@@ -205,7 +240,7 @@
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.pictureBox1);
-            this.panel1.Controls.Add(this.lblTotal);
+            this.panel1.Controls.Add(this.lblTotalPengajuan);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Location = new System.Drawing.Point(253, 69);
             this.panel1.Name = "panel1";
@@ -223,15 +258,15 @@
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
             // 
-            // lblTotal
+            // lblTotalPengajuan
             // 
-            this.lblTotal.AutoSize = true;
-            this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(86, 37);
-            this.lblTotal.Name = "lblTotal";
-            this.lblTotal.Size = new System.Drawing.Size(38, 45);
-            this.lblTotal.TabIndex = 1;
-            this.lblTotal.Text = "0";
+            this.lblTotalPengajuan.AutoSize = true;
+            this.lblTotalPengajuan.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalPengajuan.Location = new System.Drawing.Point(86, 37);
+            this.lblTotalPengajuan.Name = "lblTotalPengajuan";
+            this.lblTotalPengajuan.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalPengajuan.TabIndex = 1;
+            this.lblTotalPengajuan.Text = "0";
             // 
             // label2
             // 
@@ -247,16 +282,16 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel4.Controls.Add(this.textBox1);
-            this.panel4.Controls.Add(this.textBox2);
+            this.panel4.Controls.Add(this.txtTglKembali);
+            this.panel4.Controls.Add(this.txtTglPinjam);
             this.panel4.Controls.Add(this.label10);
             this.panel4.Controls.Add(this.label11);
-            this.panel4.Controls.Add(this.btnTambah);
-            this.panel4.Controls.Add(this.dataGridView1);
-            this.panel4.Controls.Add(this.btnBatalKategori);
-            this.panel4.Controls.Add(this.txtNo_Hp);
+            this.panel4.Controls.Add(this.btnSimpan);
+            this.panel4.Controls.Add(this.dgvDetail);
+            this.panel4.Controls.Add(this.btnBatalDetail);
+            this.panel4.Controls.Add(this.txtNoHp);
             this.panel4.Controls.Add(this.txtAlamat);
-            this.panel4.Controls.Add(this.txtNama_Lengkap);
+            this.panel4.Controls.Add(this.txtNamaLengkap);
             this.panel4.Controls.Add(this.label5);
             this.panel4.Controls.Add(this.label3);
             this.panel4.Controls.Add(this.label1);
@@ -266,26 +301,90 @@
             this.panel4.Size = new System.Drawing.Size(728, 192);
             this.panel4.TabIndex = 22;
             // 
-            // btnBatalKategori
+            // txtTglKembali
             // 
-            this.btnBatalKategori.BackColor = System.Drawing.Color.DimGray;
-            this.btnBatalKategori.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBatalKategori.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBatalKategori.ForeColor = System.Drawing.Color.White;
-            this.btnBatalKategori.Location = new System.Drawing.Point(513, 152);
-            this.btnBatalKategori.Name = "btnBatalKategori";
-            this.btnBatalKategori.Size = new System.Drawing.Size(99, 28);
-            this.btnBatalKategori.TabIndex = 25;
-            this.btnBatalKategori.Text = "BATAL";
-            this.btnBatalKategori.UseVisualStyleBackColor = false;
-            this.btnBatalKategori.Click += new System.EventHandler(this.btnBatalKategori_Click);
+            this.txtTglKembali.Location = new System.Drawing.Point(334, 154);
+            this.txtTglKembali.Name = "txtTglKembali";
+            this.txtTglKembali.Size = new System.Drawing.Size(144, 20);
+            this.txtTglKembali.TabIndex = 55;
             // 
-            // txtNo_Hp
+            // txtTglPinjam
             // 
-            this.txtNo_Hp.Location = new System.Drawing.Point(574, 33);
-            this.txtNo_Hp.Name = "txtNo_Hp";
-            this.txtNo_Hp.Size = new System.Drawing.Size(144, 20);
-            this.txtNo_Hp.TabIndex = 18;
+            this.txtTglPinjam.Location = new System.Drawing.Point(97, 154);
+            this.txtTglPinjam.Name = "txtTglPinjam";
+            this.txtTglPinjam.Size = new System.Drawing.Size(144, 20);
+            this.txtTglPinjam.TabIndex = 54;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(247, 157);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(86, 13);
+            this.label10.TabIndex = 53;
+            this.label10.Text = "Tanggal Kembali";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(11, 157);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(80, 13);
+            this.label11.TabIndex = 52;
+            this.label11.Text = "Tanggal Pinjam";
+            // 
+            // btnSimpan
+            // 
+            this.btnSimpan.BackColor = System.Drawing.Color.SeaGreen;
+            this.btnSimpan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSimpan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSimpan.ForeColor = System.Drawing.Color.White;
+            this.btnSimpan.Location = new System.Drawing.Point(618, 151);
+            this.btnSimpan.Name = "btnSimpan";
+            this.btnSimpan.Size = new System.Drawing.Size(99, 29);
+            this.btnSimpan.TabIndex = 47;
+            this.btnSimpan.Text = "SIMPAN";
+            this.btnSimpan.UseVisualStyleBackColor = false;
+            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
+            // 
+            // dgvDetail
+            // 
+            this.dgvDetail.AllowUserToAddRows = false;
+            this.dgvDetail.BackgroundColor = System.Drawing.Color.White;
+            this.dgvDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDetail.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nama_barang,
+            this.id_kategori,
+            this.jumlah_pinjam,
+            this.jumlah_tersedia,
+            this.status,
+            this.keterangan});
+            this.dgvDetail.Location = new System.Drawing.Point(-1, 63);
+            this.dgvDetail.Name = "dgvDetail";
+            this.dgvDetail.ReadOnly = true;
+            this.dgvDetail.Size = new System.Drawing.Size(728, 81);
+            this.dgvDetail.TabIndex = 26;
+            // 
+            // btnBatalDetail
+            // 
+            this.btnBatalDetail.BackColor = System.Drawing.Color.DimGray;
+            this.btnBatalDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBatalDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBatalDetail.ForeColor = System.Drawing.Color.White;
+            this.btnBatalDetail.Location = new System.Drawing.Point(513, 152);
+            this.btnBatalDetail.Name = "btnBatalDetail";
+            this.btnBatalDetail.Size = new System.Drawing.Size(99, 28);
+            this.btnBatalDetail.TabIndex = 25;
+            this.btnBatalDetail.Text = "BATAL";
+            this.btnBatalDetail.UseVisualStyleBackColor = false;
+            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
+            // 
+            // txtNoHp
+            // 
+            this.txtNoHp.Location = new System.Drawing.Point(574, 33);
+            this.txtNoHp.Name = "txtNoHp";
+            this.txtNoHp.Size = new System.Drawing.Size(144, 20);
+            this.txtNoHp.TabIndex = 18;
             // 
             // txtAlamat
             // 
@@ -294,12 +393,12 @@
             this.txtAlamat.Size = new System.Drawing.Size(144, 20);
             this.txtAlamat.TabIndex = 17;
             // 
-            // txtNama_Lengkap
+            // txtNamaLengkap
             // 
-            this.txtNama_Lengkap.Location = new System.Drawing.Point(97, 33);
-            this.txtNama_Lengkap.Name = "txtNama_Lengkap";
-            this.txtNama_Lengkap.Size = new System.Drawing.Size(144, 20);
-            this.txtNama_Lengkap.TabIndex = 16;
+            this.txtNamaLengkap.Location = new System.Drawing.Point(97, 33);
+            this.txtNamaLengkap.Name = "txtNamaLengkap";
+            this.txtNamaLengkap.Size = new System.Drawing.Size(144, 20);
+            this.txtNamaLengkap.TabIndex = 16;
             // 
             // label5
             // 
@@ -514,101 +613,6 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "SIMADE - Data Pinjam";
             // 
-            // kode_peminjaman
-            // 
-            this.kode_peminjaman.HeaderText = "Kode Peminjaman";
-            this.kode_peminjaman.Name = "kode_peminjaman";
-            this.kode_peminjaman.ReadOnly = true;
-            // 
-            // Peminjam
-            // 
-            this.Peminjam.HeaderText = "Nama Peminjam";
-            this.Peminjam.MinimumWidth = 6;
-            this.Peminjam.Name = "Peminjam";
-            this.Peminjam.ReadOnly = true;
-            // 
-            // Waktu_Pinjam
-            // 
-            this.Waktu_Pinjam.HeaderText = "Tanggal Pinjam";
-            this.Waktu_Pinjam.MinimumWidth = 6;
-            this.Waktu_Pinjam.Name = "Waktu_Pinjam";
-            this.Waktu_Pinjam.ReadOnly = true;
-            // 
-            // Waktu_Kembali
-            // 
-            this.Waktu_Kembali.HeaderText = "Tanggal Kembali";
-            this.Waktu_Kembali.MinimumWidth = 6;
-            this.Waktu_Kembali.Name = "Waktu_Kembali";
-            this.Waktu_Kembali.ReadOnly = true;
-            // 
-            // status
-            // 
-            this.status.HeaderText = "Status";
-            this.status.Name = "status";
-            this.status.ReadOnly = true;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nama_barang,
-            this.kategori_barang,
-            this.dgv_JumlahPinjam,
-            this.status_pengajuan,
-            this.keterangan_pengajuan});
-            this.dataGridView1.Location = new System.Drawing.Point(-1, 63);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(719, 81);
-            this.dataGridView1.TabIndex = 26;
-            // 
-            // btnTambah
-            // 
-            this.btnTambah.BackColor = System.Drawing.Color.SeaGreen;
-            this.btnTambah.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTambah.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTambah.ForeColor = System.Drawing.Color.White;
-            this.btnTambah.Location = new System.Drawing.Point(618, 151);
-            this.btnTambah.Name = "btnTambah";
-            this.btnTambah.Size = new System.Drawing.Size(99, 29);
-            this.btnTambah.TabIndex = 47;
-            this.btnTambah.Text = "SIMPAN";
-            this.btnTambah.UseVisualStyleBackColor = false;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(334, 154);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(144, 20);
-            this.textBox1.TabIndex = 55;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(97, 154);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(144, 20);
-            this.textBox2.TabIndex = 54;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(247, 157);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(86, 13);
-            this.label10.TabIndex = 53;
-            this.label10.Text = "Tanggal Kembali";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(11, 157);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(80, 13);
-            this.label11.TabIndex = 52;
-            this.label11.Text = "Tanggal Pinjam";
-            // 
             // nama_barang
             // 
             this.nama_barang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -617,35 +621,46 @@
             this.nama_barang.ReadOnly = true;
             this.nama_barang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
-            // kategori_barang
+            // id_kategori
             // 
-            this.kategori_barang.HeaderText = "Kategori Barang";
-            this.kategori_barang.Name = "kategori_barang";
-            this.kategori_barang.ReadOnly = true;
+            this.id_kategori.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.id_kategori.HeaderText = "Kategori Barang";
+            this.id_kategori.Name = "id_kategori";
+            this.id_kategori.ReadOnly = true;
             // 
-            // dgv_JumlahPinjam
+            // jumlah_pinjam
             // 
-            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
-            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
-            this.dgv_JumlahPinjam.ReadOnly = true;
-            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.jumlah_pinjam.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.jumlah_pinjam.HeaderText = "Jumlah Pinjam";
+            this.jumlah_pinjam.Name = "jumlah_pinjam";
+            this.jumlah_pinjam.ReadOnly = true;
+            this.jumlah_pinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
-            // status_pengajuan
+            // jumlah_tersedia
             // 
-            this.status_pengajuan.HeaderText = "Status";
-            this.status_pengajuan.Items.AddRange(new object[] {
+            this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
+            this.jumlah_tersedia.Name = "jumlah_tersedia";
+            this.jumlah_tersedia.ReadOnly = true;
+            // 
+            // status
+            // 
+            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.status.HeaderText = "Status";
+            this.status.Items.AddRange(new object[] {
+            "Pending",
             "Disetujui",
             "Ditolak"});
-            this.status_pengajuan.Name = "status_pengajuan";
-            this.status_pengajuan.ReadOnly = true;
-            this.status_pengajuan.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.status_pengajuan.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            this.status.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.status.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // keterangan_pengajuan
+            // keterangan
             // 
-            this.keterangan_pengajuan.HeaderText = "Keterangan";
-            this.keterangan_pengajuan.Name = "keterangan_pengajuan";
-            this.keterangan_pengajuan.ReadOnly = true;
+            this.keterangan.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.keterangan.HeaderText = "Keterangan";
+            this.keterangan.Name = "keterangan";
+            this.keterangan.ReadOnly = true;
             // 
             // FormDataPinjam
             // 
@@ -660,13 +675,13 @@
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.dgvTabelList);
+            this.Controls.Add(this.dgvUtama);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormDataPinjam";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = resources.GetString("$this.Text");
-            ((System.ComponentModel.ISupportInitialize)(this.dgvTabelList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUtama)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
@@ -678,28 +693,28 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDetail)).EndInit();
             this.panelSidebar.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.DataGridView dgvTabelList;
+        private System.Windows.Forms.DataGridView dgvUtama;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.Label lblTersedia;
+        private System.Windows.Forms.Label lblTotalDitolak;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label lblDipinjam;
+        private System.Windows.Forms.Label lblTotalDisetujui;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblTotal;
+        private System.Windows.Forms.Label lblTotalPengajuan;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.TextBox txtCari;
@@ -719,25 +734,26 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtNo_Hp;
+        private System.Windows.Forms.TextBox txtNoHp;
         private System.Windows.Forms.TextBox txtAlamat;
-        private System.Windows.Forms.TextBox txtNama_Lengkap;
-        private System.Windows.Forms.Button btnBatalKategori;
-        private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Peminjam;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Pinjam;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Waktu_Kembali;
-        private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button btnTambah;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtNamaLengkap;
+        private System.Windows.Forms.Button btnBatalDetail;
+        private System.Windows.Forms.DataGridView dgvDetail;
+        private System.Windows.Forms.Button btnSimpan;
+        private System.Windows.Forms.TextBox txtTglKembali;
+        private System.Windows.Forms.TextBox txtTglPinjam;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nama_lengkap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tgl_pinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tgl_kembali;
+        private System.Windows.Forms.DataGridViewTextBoxColumn status_peminjaman;
         private System.Windows.Forms.DataGridViewTextBoxColumn nama_barang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn kategori_barang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
-        private System.Windows.Forms.DataGridViewComboBoxColumn status_pengajuan;
-        private System.Windows.Forms.DataGridViewTextBoxColumn keterangan_pengajuan;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_kategori;
+        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_pinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_tersedia;
+        private System.Windows.Forms.DataGridViewComboBoxColumn status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn keterangan;
     }
 }

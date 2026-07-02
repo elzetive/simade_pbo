@@ -137,8 +137,8 @@ namespace simade_pbo
         private void btnMenuDashboard_Click(object sender, EventArgs e)
         {
             FormDashboardWarga frm = new FormDashboardWarga();
-            frm.IdUserLogin = this.IdUserLogin;
-            frm.NamaUserLogin = this.NamaUserLogin;
+            //frm.IdUserLogin = this.IdUserLogin;
+            //frm.NamaUserLogin = this.NamaUserLogin;
             frm.Show();
             this.Close();
         }
@@ -162,5 +162,10 @@ namespace simade_pbo
         }
 
         private void btnExit_Click(object sender, EventArgs e) { Application.Exit(); }
+
+        private void btnMenuDashboard_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -30,7 +30,6 @@
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnTambah_Admin = new System.Windows.Forms.Button();
             this.btnData_Kembali = new System.Windows.Forms.Button();
@@ -56,6 +55,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dgvBarang = new System.Windows.Forms.DataGridView();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.txtJumlahBarang = new System.Windows.Forms.TextBox();
             this.txtNamaBarang = new System.Windows.Forms.TextBox();
             this.btnBatal = new System.Windows.Forms.Button();
             this.btnHapus = new System.Windows.Forms.Button();
@@ -73,21 +73,21 @@
             this.txtKategoriBarang = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.btnEditDetail = new System.Windows.Forms.Button();
+            this.txtKondisiBagus = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtKondisiRusak = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnBatalDetail = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
-            this.cmbFilterNama = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.jumlah_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status_ketersediaan = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
-            this.txtJumlahBarang = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.jumlah_tersedia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_dipinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtNamaDetail = new System.Windows.Forms.TextBox();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -402,7 +402,8 @@
             this.nama_barang,
             this.id_kategori,
             this.jumlah_barang,
-            this.status_ketersediaan});
+            this.jumlah_tersedia,
+            this.jumlah_dipinjam});
             this.dgvBarang.Location = new System.Drawing.Point(253, 373);
             this.dgvBarang.Name = "dgvBarang";
             this.dgvBarang.ReadOnly = true;
@@ -429,6 +430,13 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(471, 163);
             this.panel4.TabIndex = 13;
+            // 
+            // txtJumlahBarang
+            // 
+            this.txtJumlahBarang.Location = new System.Drawing.Point(28, 128);
+            this.txtJumlahBarang.Name = "txtJumlahBarang";
+            this.txtJumlahBarang.Size = new System.Drawing.Size(237, 20);
+            this.txtJumlahBarang.TabIndex = 14;
             // 
             // txtNamaBarang
             // 
@@ -536,7 +544,7 @@
             // 
             this.lblCari.AutoSize = true;
             this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCari.Location = new System.Drawing.Point(249, 344);
+            this.lblCari.Location = new System.Drawing.Point(249, 341);
             this.lblCari.Name = "lblCari";
             this.lblCari.Size = new System.Drawing.Size(40, 21);
             this.lblCari.TabIndex = 14;
@@ -544,7 +552,7 @@
             // 
             // txtCari
             // 
-            this.txtCari.Location = new System.Drawing.Point(303, 347);
+            this.txtCari.Location = new System.Drawing.Point(303, 344);
             this.txtCari.Name = "txtCari";
             this.txtCari.Size = new System.Drawing.Size(421, 20);
             this.txtCari.TabIndex = 15;
@@ -612,20 +620,82 @@
             // 
             this.panel6.BackColor = System.Drawing.Color.White;
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel6.Controls.Add(this.button2);
-            this.panel6.Controls.Add(this.textBox9);
+            this.panel6.Controls.Add(this.txtNamaDetail);
+            this.panel6.Controls.Add(this.btnEditDetail);
+            this.panel6.Controls.Add(this.txtKondisiBagus);
             this.panel6.Controls.Add(this.label16);
-            this.panel6.Controls.Add(this.textBox3);
+            this.panel6.Controls.Add(this.txtKondisiRusak);
             this.panel6.Controls.Add(this.label10);
-            this.panel6.Controls.Add(this.button1);
+            this.panel6.Controls.Add(this.btnBatalDetail);
             this.panel6.Controls.Add(this.label11);
-            this.panel6.Controls.Add(this.cmbFilterNama);
             this.panel6.Controls.Add(this.label8);
             this.panel6.Controls.Add(this.label9);
             this.panel6.Location = new System.Drawing.Point(736, 307);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(245, 231);
             this.panel6.TabIndex = 17;
+            // 
+            // btnEditDetail
+            // 
+            this.btnEditDetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.btnEditDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEditDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEditDetail.ForeColor = System.Drawing.Color.White;
+            this.btnEditDetail.Location = new System.Drawing.Point(130, 184);
+            this.btnEditDetail.Name = "btnEditDetail";
+            this.btnEditDetail.Size = new System.Drawing.Size(99, 29);
+            this.btnEditDetail.TabIndex = 15;
+            this.btnEditDetail.Text = "EDIT";
+            this.btnEditDetail.UseVisualStyleBackColor = false;
+            this.btnEditDetail.Click += new System.EventHandler(this.btnEditDetail_Click);
+            // 
+            // txtKondisiBagus
+            // 
+            this.txtKondisiBagus.Location = new System.Drawing.Point(79, 113);
+            this.txtKondisiBagus.Name = "txtKondisiBagus";
+            this.txtKondisiBagus.Size = new System.Drawing.Size(148, 20);
+            this.txtKondisiBagus.TabIndex = 45;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(14, 116);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(45, 17);
+            this.label16.TabIndex = 44;
+            this.label16.Text = "Bagus";
+            // 
+            // txtKondisiRusak
+            // 
+            this.txtKondisiRusak.Location = new System.Drawing.Point(79, 143);
+            this.txtKondisiRusak.Name = "txtKondisiRusak";
+            this.txtKondisiRusak.Size = new System.Drawing.Size(148, 20);
+            this.txtKondisiRusak.TabIndex = 43;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(14, 146);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(44, 17);
+            this.label10.TabIndex = 42;
+            this.label10.Text = "Rusak";
+            // 
+            // btnBatalDetail
+            // 
+            this.btnBatalDetail.BackColor = System.Drawing.Color.DimGray;
+            this.btnBatalDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBatalDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBatalDetail.ForeColor = System.Drawing.Color.White;
+            this.btnBatalDetail.Location = new System.Drawing.Point(15, 185);
+            this.btnBatalDetail.Name = "btnBatalDetail";
+            this.btnBatalDetail.Size = new System.Drawing.Size(99, 28);
+            this.btnBatalDetail.TabIndex = 18;
+            this.btnBatalDetail.Text = "BATAL";
+            this.btnBatalDetail.UseVisualStyleBackColor = false;
+            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click_1);
             // 
             // label11
             // 
@@ -636,15 +706,6 @@
             this.label11.Size = new System.Drawing.Size(132, 25);
             this.label11.TabIndex = 11;
             this.label11.Text = "Detail Barang";
-            // 
-            // cmbFilterNama
-            // 
-            this.cmbFilterNama.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFilterNama.FormattingEnabled = true;
-            this.cmbFilterNama.Location = new System.Drawing.Point(17, 61);
-            this.cmbFilterNama.Name = "cmbFilterNama";
-            this.cmbFilterNama.Size = new System.Drawing.Size(212, 21);
-            this.cmbFilterNama.TabIndex = 8;
             // 
             // label8
             // 
@@ -690,81 +751,24 @@
             this.jumlah_barang.Name = "jumlah_barang";
             this.jumlah_barang.ReadOnly = true;
             // 
-            // status_ketersediaan
+            // jumlah_tersedia
             // 
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.status_ketersediaan.DefaultCellStyle = dataGridViewCellStyle3;
-            this.status_ketersediaan.HeaderText = "Status";
-            this.status_ketersediaan.Name = "status_ketersediaan";
-            this.status_ketersediaan.ReadOnly = true;
-            this.status_ketersediaan.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
+            this.jumlah_tersedia.Name = "jumlah_tersedia";
+            this.jumlah_tersedia.ReadOnly = true;
             // 
-            // button1
+            // jumlah_dipinjam
             // 
-            this.button1.BackColor = System.Drawing.Color.DimGray;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(15, 185);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(99, 28);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "BATAL";
-            this.button1.UseVisualStyleBackColor = false;
+            this.jumlah_dipinjam.HeaderText = "Jumlah Dipinjam";
+            this.jumlah_dipinjam.Name = "jumlah_dipinjam";
+            this.jumlah_dipinjam.ReadOnly = true;
             // 
-            // txtJumlahBarang
+            // txtNamaDetail
             // 
-            this.txtJumlahBarang.Location = new System.Drawing.Point(28, 128);
-            this.txtJumlahBarang.Name = "txtJumlahBarang";
-            this.txtJumlahBarang.Size = new System.Drawing.Size(237, 20);
-            this.txtJumlahBarang.TabIndex = 14;
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(79, 113);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(148, 20);
-            this.textBox9.TabIndex = 45;
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(14, 116);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(45, 17);
-            this.label16.TabIndex = 44;
-            this.label16.Text = "Bagus";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(79, 143);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(148, 20);
-            this.textBox3.TabIndex = 43;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(14, 146);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(44, 17);
-            this.label10.TabIndex = 42;
-            this.label10.Text = "Rusak";
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(130, 184);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(99, 29);
-            this.button2.TabIndex = 15;
-            this.button2.Text = "EDIT";
-            this.button2.UseVisualStyleBackColor = false;
+            this.txtNamaDetail.Location = new System.Drawing.Point(15, 61);
+            this.txtNamaDetail.Name = "txtNamaDetail";
+            this.txtNamaDetail.Size = new System.Drawing.Size(212, 20);
+            this.txtNamaDetail.TabIndex = 15;
             // 
             // FormDashboardAdmin
             // 
@@ -854,22 +858,23 @@
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ComboBox cmbFilterNama;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnData_Pinjam;
         private System.Windows.Forms.Button btnData_Barang;
         private System.Windows.Forms.Button btnData_Kembali;
         private System.Windows.Forms.Button btnTambah_Admin;
+        private System.Windows.Forms.Button btnBatalDetail;
+        private System.Windows.Forms.TextBox txtJumlahBarang;
+        private System.Windows.Forms.TextBox txtKondisiBagus;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox txtKondisiRusak;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnEditDetail;
         private System.Windows.Forms.DataGridViewTextBoxColumn nama_barang;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_kategori;
         private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_barang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn status_ketersediaan;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox txtJumlahBarang;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_tersedia;
+        private System.Windows.Forms.DataGridViewTextBoxColumn jumlah_dipinjam;
+        private System.Windows.Forms.TextBox txtNamaDetail;
     }
 }

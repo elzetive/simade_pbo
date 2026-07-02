@@ -60,7 +60,7 @@ namespace simade_pbo.Service
         public bool isExist(string nama_kategori)
         {
             bool cek = false;
-            Query = "SELECT * FROM kategori_barang WHERE nama_kategori = '" + nama_kategori + "'";
+            Query = "SELECT * FROM kategori WHERE nama_kategori = '" + nama_kategori + "'";
 
             if (jalankanQuery(Query).Rows.Count > 0)
             {
@@ -71,13 +71,13 @@ namespace simade_pbo.Service
 
         public int simpanKategori(string nama_kategori)
         {
-            Query = "INSERT INTO kategori_barang (nama_kategori) VALUES ('" + nama_kategori + "')";
+            Query = "INSERT INTO kategori (nama_kategori) VALUES ('" + nama_kategori + "')";
             return jalankanNonQuery(Query);
         }
 
         public DataTable tampilSemuaKategori()
         {
-            Query = "SELECT * FROM kategori_barang";
+            Query = "SELECT * FROM kategori";
             return jalankanQuery(Query);
         }
     }

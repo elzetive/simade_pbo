@@ -67,13 +67,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btnTambah = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnBatalKategori = new System.Windows.Forms.Button();
-            this.txtNo_Hp = new System.Windows.Forms.TextBox();
-            this.txtAlamat = new System.Windows.Forms.TextBox();
-            this.txtNama_Lengkap = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.dgv_NamaBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_KategoriBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_DeskripsiBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,8 +74,14 @@
             this.dgv_JumlahKembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_KondisiBagus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_KondisiRusak = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgv_KeteranganBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_Denda = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnBatalKategori = new System.Windows.Forms.Button();
+            this.txtNo_Hp = new System.Windows.Forms.TextBox();
+            this.txtAlamat = new System.Windows.Forms.TextBox();
+            this.txtNama_Lengkap = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -214,6 +213,7 @@
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // btnExit
             // 
@@ -545,13 +545,64 @@
             this.dgv_JumlahKembali,
             this.dgv_KondisiBagus,
             this.dgv_KondisiRusak,
-            this.dgv_KeteranganBarang,
             this.dgv_Denda});
             this.dataGridView1.Location = new System.Drawing.Point(-1, 63);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(728, 81);
             this.dataGridView1.TabIndex = 26;
+            // 
+            // dgv_NamaBarang
+            // 
+            this.dgv_NamaBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgv_NamaBarang.HeaderText = "Nama Barang";
+            this.dgv_NamaBarang.Name = "dgv_NamaBarang";
+            this.dgv_NamaBarang.ReadOnly = true;
+            this.dgv_NamaBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_KategoriBarang
+            // 
+            this.dgv_KategoriBarang.HeaderText = "Kategori Barang";
+            this.dgv_KategoriBarang.Name = "dgv_KategoriBarang";
+            this.dgv_KategoriBarang.ReadOnly = true;
+            // 
+            // dgv_DeskripsiBarang
+            // 
+            this.dgv_DeskripsiBarang.HeaderText = "Deskripsi Barang";
+            this.dgv_DeskripsiBarang.Name = "dgv_DeskripsiBarang";
+            this.dgv_DeskripsiBarang.ReadOnly = true;
+            this.dgv_DeskripsiBarang.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // dgv_JumlahPinjam
+            // 
+            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
+            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
+            this.dgv_JumlahPinjam.ReadOnly = true;
+            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_JumlahKembali
+            // 
+            this.dgv_JumlahKembali.HeaderText = "Jumlah Kembali";
+            this.dgv_JumlahKembali.Name = "dgv_JumlahKembali";
+            this.dgv_JumlahKembali.ReadOnly = true;
+            // 
+            // dgv_KondisiBagus
+            // 
+            this.dgv_KondisiBagus.HeaderText = "Kondisi Bagus";
+            this.dgv_KondisiBagus.Name = "dgv_KondisiBagus";
+            this.dgv_KondisiBagus.ReadOnly = true;
+            // 
+            // dgv_KondisiRusak
+            // 
+            this.dgv_KondisiRusak.HeaderText = "Kondisi Rusak";
+            this.dgv_KondisiRusak.Name = "dgv_KondisiRusak";
+            this.dgv_KondisiRusak.ReadOnly = true;
+            // 
+            // dgv_Denda
+            // 
+            this.dgv_Denda.HeaderText = "Denda";
+            this.dgv_Denda.Name = "dgv_Denda";
+            this.dgv_Denda.ReadOnly = true;
             // 
             // btnBatalKategori
             // 
@@ -613,63 +664,6 @@
             this.label8.Size = new System.Drawing.Size(83, 13);
             this.label8.TabIndex = 7;
             this.label8.Text = "Nama Peminjam";
-            // 
-            // dgv_NamaBarang
-            // 
-            this.dgv_NamaBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgv_NamaBarang.HeaderText = "Nama Barang";
-            this.dgv_NamaBarang.Name = "dgv_NamaBarang";
-            this.dgv_NamaBarang.ReadOnly = true;
-            this.dgv_NamaBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // dgv_KategoriBarang
-            // 
-            this.dgv_KategoriBarang.HeaderText = "Kategori Barang";
-            this.dgv_KategoriBarang.Name = "dgv_KategoriBarang";
-            this.dgv_KategoriBarang.ReadOnly = true;
-            // 
-            // dgv_DeskripsiBarang
-            // 
-            this.dgv_DeskripsiBarang.HeaderText = "Deskripsi Barang";
-            this.dgv_DeskripsiBarang.Name = "dgv_DeskripsiBarang";
-            this.dgv_DeskripsiBarang.ReadOnly = true;
-            // 
-            // dgv_JumlahPinjam
-            // 
-            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
-            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
-            this.dgv_JumlahPinjam.ReadOnly = true;
-            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // dgv_JumlahKembali
-            // 
-            this.dgv_JumlahKembali.HeaderText = "Jumlah Kembali";
-            this.dgv_JumlahKembali.Name = "dgv_JumlahKembali";
-            this.dgv_JumlahKembali.ReadOnly = true;
-            // 
-            // dgv_KondisiBagus
-            // 
-            this.dgv_KondisiBagus.HeaderText = "Kondisi Bagus";
-            this.dgv_KondisiBagus.Name = "dgv_KondisiBagus";
-            this.dgv_KondisiBagus.ReadOnly = true;
-            // 
-            // dgv_KondisiRusak
-            // 
-            this.dgv_KondisiRusak.HeaderText = "KondisiRusak";
-            this.dgv_KondisiRusak.Name = "dgv_KondisiRusak";
-            this.dgv_KondisiRusak.ReadOnly = true;
-            // 
-            // dgv_KeteranganBarang
-            // 
-            this.dgv_KeteranganBarang.HeaderText = "Keterangan Barang";
-            this.dgv_KeteranganBarang.Name = "dgv_KeteranganBarang";
-            this.dgv_KeteranganBarang.ReadOnly = true;
-            // 
-            // dgv_Denda
-            // 
-            this.dgv_Denda.HeaderText = "Denda";
-            this.dgv_Denda.Name = "dgv_Denda";
-            this.dgv_Denda.ReadOnly = true;
             // 
             // FormDataPengembalian
             // 
@@ -751,15 +745,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnTambah;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_NamaBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KategoriBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_DeskripsiBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahKembali;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KondisiBagus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KondisiRusak;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KeteranganBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_Denda;
         private System.Windows.Forms.Button btnBatalKategori;
         private System.Windows.Forms.TextBox txtNo_Hp;
         private System.Windows.Forms.TextBox txtAlamat;
@@ -767,5 +752,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_NamaBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KategoriBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_DeskripsiBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahKembali;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KondisiBagus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KondisiRusak;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_Denda;
     }
 }

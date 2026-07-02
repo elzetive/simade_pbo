@@ -20,10 +20,9 @@ namespace simade_pbo
             InitializeComponent();
 
             // Textbox detail hanya untuk dilihat
-            txtId.ReadOnly = true;
             txtNama.ReadOnly = true;
             txtKategori.ReadOnly = true;
-            txtKondisi.ReadOnly = true;
+            txtKondisiBagus.ReadOnly = true;
             txtStatus.ReadOnly = true;
 
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -32,11 +31,12 @@ namespace simade_pbo
             dgvBarang.AutoGenerateColumns = false;
 
             // Mapping kolom DataGrid
-            this.coid.DataPropertyName = "id_barang";
             this.colNama.DataPropertyName = "nama_barang";
-            this.colKondisi.DataPropertyName = "kondisi";
             this.colKategori.DataPropertyName = "nama_kategori";
-            this.colStatus.DataPropertyName = "status_ketersediaan";
+            this.colJumlah.DataPropertyName = "jumlah_barang";
+            this.colKondisiBagus.DataPropertyName = "kondisi_bagus";
+            this.colKondisiRusak.DataPropertyName = "kondisi_rusak";
+            this.colStatus.DataPropertyName = "status";
 
             tampilData();
         }
@@ -91,10 +91,10 @@ namespace simade_pbo
         {
             if (e.RowIndex >= 0)
             {
-                txtId.Text = dgvBarang.Rows[e.RowIndex].Cells["coid"].Value.ToString();
                 txtNama.Text = dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
-                txtKondisi.Text = dgvBarang.Rows[e.RowIndex].Cells["colKondisi"].Value.ToString();
                 txtKategori.Text = dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
+                txtKondisiBagus.Text = dgvBarang.Rows[e.RowIndex].Cells["colKondisiBagus"].Value.ToString();
+                txtKondisiRusak.Text = dgvBarang.Rows[e.RowIndex].Cells["colKondisiRusak"].Value.ToString();
                 txtStatus.Text = dgvBarang.Rows[e.RowIndex].Cells["colStatus"].Value.ToString();
 
                 // Warna status

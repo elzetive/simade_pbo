@@ -28,11 +28,6 @@ namespace simade_pbo
             }
         }
 
-        private void label4_Click(object sender, EventArgs e) { }
-        private void txtUsername_TextChanged(object sender, EventArgs e) { }
-        private void txtPassword_TextChanged(object sender, EventArgs e) { }
-        private void judul_Click(object sender, EventArgs e) { }
-
         private void btnLogin_Click(object sender, EventArgs e)
         {
             MySqlConnection conn = Koneksi.GetConn();
@@ -69,6 +64,7 @@ namespace simade_pbo
                     else if (idRole == 3)
                     {
                         FormDashboardWarga warga = new FormDashboardWarga();
+                        // Mengirim data session ke property public milik FormDashboardWarga
                         warga.IdUserLogin = idUser.ToString();
                         warga.NamaUserLogin = namaLengkap;
                         warga.Show();
@@ -107,5 +103,11 @@ namespace simade_pbo
             register.Show();
             this.Hide();
         }
+
+        // Kosongan event handler agar tidak error desainer
+        private void label4_Click(object sender, EventArgs e) { }
+        private void txtUsername_TextChanged(object sender, EventArgs e) { }
+        private void txtPassword_TextChanged(object sender, EventArgs e) { }
+        private void judul_Click(object sender, EventArgs e) { }
     }
 }

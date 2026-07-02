@@ -182,6 +182,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Barang_service.cs" />
     <Compile Include="Service\Kategori_service.cs" />
+    <Compile Include="Service\Pinjam_service.cs" />
     <Compile Include="TemaSistem.cs" />
     <EmbeddedResource Include="FormBarangKades.resx">
       <DependentUpon>FormBarangKades.cs</DependentUpon>
@@ -215,6 +216,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormRiwayat.resx">
       <DependentUpon>FormRiwayat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormRiwayatWarga.resx">
+      <DependentUpon>FormRiwayatWarga.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStatusPengajuan.resx">
+      <DependentUpon>FormStatusPengajuan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

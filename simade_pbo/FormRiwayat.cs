@@ -25,24 +25,24 @@ namespace simade_pbo
         void tampilRiwayat()
         {
             // 1. Ambil data riwayat dari database berupa DataTable
-            DataTable dt = barang.tampilRiwayat();
+            //DataTable dt = barang.tampilRiwayat();
 
             // 2. Kunci agar tidak membuat kolom baru otomatis di kanan desainer
             dgvRiwayat.AutoGenerateColumns = false;
 
             // 3. Petakan langsung data menggunakan urutan kolom DataTable asli database
-            if (dgvRiwayat.Columns.Count >= 6 && dt != null && dt.Columns.Count >= 6)
-            {
-                this.coid.DataPropertyName = dt.Columns[0].ColumnName;
-                this.colNama.DataPropertyName = dt.Columns[1].ColumnName;
-                this.colPeminjam.DataPropertyName = dt.Columns[2].ColumnName;
-                this.colTanggalPinjam.DataPropertyName = dt.Columns[3].ColumnName;
-                this.colTanggalKembali.DataPropertyName = dt.Columns[4].ColumnName;
-                this.colStatus.DataPropertyName = dt.Columns[5].ColumnName;
-            }
+            //if (dgvRiwayat.Columns.Count >= 6 && dt != null && dt.Columns.Count >= 6)
+            //{
+            //    this.coid.DataPropertyName = dt.Columns[0].ColumnName;
+            //    this.colNama.DataPropertyName = dt.Columns[1].ColumnName;
+            //    this.colPeminjam.DataPropertyName = dt.Columns[2].ColumnName;
+            //    this.colTanggalPinjam.DataPropertyName = dt.Columns[3].ColumnName;
+            //    this.colTanggalKembali.DataPropertyName = dt.Columns[4].ColumnName;
+            //    this.colStatus.DataPropertyName = dt.Columns[5].ColumnName;
+            //}
 
             // 4. Ikat datanya ke DataGridView
-            dgvRiwayat.DataSource = dt;
+            //dgvRiwayat.DataSource = dt;
         }
 
         private void btnExit_Click(object sender, EventArgs e)

@@ -28,23 +28,18 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
             this.dgvRiwayat = new System.Windows.Forms.DataGridView();
-            this.lblTabel = new System.Windows.Forms.Label();
-            this.panelDetail = new System.Windows.Forms.Panel();
-            this.lblFormDetail = new System.Windows.Forms.Label();
-            this.dgvDetailBarang = new System.Windows.Forms.DataGridView();
-
-            // Inisialisasi Kolom Tabel Utama (Kiri)
             this.colNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHistId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHistTglPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colHistTglKembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
-
-            // Inisialisasi Kolom Tabel Detail (Kanan)
+            this.lblTabel = new System.Windows.Forms.Label();
+            this.panelDetail = new System.Windows.Forms.Panel();
+            this.dgvDetailBarang = new System.Windows.Forms.DataGridView();
             this.colDetailNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDetailMerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDetailIdentitas = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDetailJumlah = new System.Windows.Forms.DataGridViewTextBoxColumn();
-
+            this.lblFormDetail = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRiwayat)).BeginInit();
@@ -74,16 +69,18 @@
             this.lblNamaWarga.Location = new System.Drawing.Point(9, 25);
             this.lblNamaWarga.Name = "lblNamaWarga";
             this.lblNamaWarga.Size = new System.Drawing.Size(177, 23);
+            this.lblNamaWarga.TabIndex = 0;
             this.lblNamaWarga.Text = "Halo, Warga!";
             this.lblNamaWarga.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblRole
             // 
-            this.lblRole.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular);
+            this.lblRole.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lblRole.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(163)))), ((int)(((byte)(175)))));
             this.lblRole.Location = new System.Drawing.Point(9, 48);
             this.lblRole.Name = "lblRole";
             this.lblRole.Size = new System.Drawing.Size(177, 19);
+            this.lblRole.TabIndex = 1;
             this.lblRole.Text = "User";
             this.lblRole.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -125,6 +122,7 @@
             this.btnMenuRiwayat.TabIndex = 5;
             this.btnMenuRiwayat.Text = "Riwayat Pinjam";
             this.btnMenuRiwayat.UseVisualStyleBackColor = false;
+            this.btnMenuRiwayat.Click += new System.EventHandler(this.btnMenuRiwayat_Click_1);
             // 
             // btnLogOut
             // 
@@ -135,6 +133,7 @@
             this.btnLogOut.Location = new System.Drawing.Point(16, 520);
             this.btnLogOut.Name = "btnLogOut";
             this.btnLogOut.Size = new System.Drawing.Size(160, 37);
+            this.btnLogOut.TabIndex = 6;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
             // 
@@ -145,7 +144,9 @@
             this.panelHeader.Controls.Add(this.btnExit);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(192, 0);
+            this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(854, 57);
+            this.panelHeader.TabIndex = 6;
             // 
             // lblTitle
             // 
@@ -153,6 +154,9 @@
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.lblTitle.Location = new System.Drawing.Point(19, 15);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(320, 30);
+            this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "SIMADE - Arsip Riwayat Selesai";
             // 
             // btnExit
@@ -163,6 +167,7 @@
             this.btnExit.Location = new System.Drawing.Point(808, 10);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(34, 24);
+            this.btnExit.TabIndex = 1;
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
             // 
@@ -216,6 +221,9 @@
             this.lblTabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblTabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.lblTabel.Location = new System.Drawing.Point(212, 81);
+            this.lblTabel.Name = "lblTabel";
+            this.lblTabel.Size = new System.Drawing.Size(202, 21);
+            this.lblTabel.TabIndex = 5;
             this.lblTabel.Text = "Riwayat Transaksi Selesai";
             // 
             // panelDetail
@@ -227,14 +235,6 @@
             this.panelDetail.Name = "panelDetail";
             this.panelDetail.Size = new System.Drawing.Size(397, 447);
             this.panelDetail.TabIndex = 4;
-            // 
-            // lblFormDetail
-            // 
-            this.lblFormDetail.AutoSize = true;
-            this.lblFormDetail.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblFormDetail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            this.lblFormDetail.Location = new System.Drawing.Point(15, 20);
-            this.lblFormDetail.Text = "Detail Item Kembali";
             // 
             // dgvDetailBarang
             // 
@@ -278,6 +278,17 @@
             this.colDetailJumlah.Name = "colDetailJumlah";
             this.colDetailJumlah.ReadOnly = true;
             // 
+            // lblFormDetail
+            // 
+            this.lblFormDetail.AutoSize = true;
+            this.lblFormDetail.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblFormDetail.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            this.lblFormDetail.Location = new System.Drawing.Point(15, 20);
+            this.lblFormDetail.Name = "lblFormDetail";
+            this.lblFormDetail.Size = new System.Drawing.Size(162, 21);
+            this.lblFormDetail.TabIndex = 2;
+            this.lblFormDetail.Text = "Detail Item Kembali";
+            // 
             // FormRiwayatWarga
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -302,6 +313,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetailBarang)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

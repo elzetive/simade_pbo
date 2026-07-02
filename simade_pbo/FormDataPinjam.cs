@@ -1,173 +1,317 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
+using simade_pbo.Service;
 
 namespace simade_pbo
 {
     public partial class FormDataPinjam : Form
     {
+        Pinjam_service pinjamService = new Pinjam_service();
+        string kodeNotaAktif = "";
+
         public FormDataPinjam()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             this.Load += new System.EventHandler(this.FormDataPinjam_Load);
-            this.dgvTabelList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTabelList_CellClick);
+            this.dgvUtama.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellClick);
+            this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
+
+            if (this.txtCari != null)
+            {
+                this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
+            }
+
+            txtNamaLengkap.ReadOnly = true;
+            txtAlamat.ReadOnly = true;
+            txtNoHp.ReadOnly = true;
+            txtTglPinjam.ReadOnly = true;
+            txtTglKembali.ReadOnly = true;
         }
 
         private void FormDataPinjam_Load(object sender, EventArgs e)
         {
-            dgvTabelList.ReadOnly = true;
-            dgvTabelList.AutoGenerateColumns = false;
-
-            // Pemetaan nama kolom DataGridView (sesuai nama objek di desainer) ke nama kolom kueri SQL
-            Peminjam.DataPropertyName = "nama_peminjam";
-            Barang.DataPropertyName = "nama_barang";
-            jumlah_pinjam.DataPropertyName = "jumlah_pinjam";
-            Waktu_Pinjam.DataPropertyName = "tgl_pinjam";
-            Waktu_Kembali.DataPropertyName = "tgl_kembali";
-            status.DataPropertyName = "status_peminjaman";
-
-            TampilkanListPeminjam();
-            HitungRingkasanStatistik();
+            SegarkanGridUtama();
         }
 
-        public void TampilkanListPeminjam()
+        private void SegarkanGridUtama()
         {
-            // Kueri join table untuk mengambil data peminjaman beserta detail profil user warga dan sub_kategori barang
-            string query = @"SELECT p.kode_peminjaman,
-                                    u.nama_lengkap AS nama_peminjam, u.alamat, u.no_hp,
-                                    b.nama_barang, sk.nama_sub AS nama_kategori, 1 AS jumlah_pinjam,
-                                    DATE_FORMAT(p.tgl_pinjam, '%d/%m/%Y') AS tgl_pinjam, 
-                                    IFNULL(DATE_FORMAT(p.tgl_kembali, '%d/%m/%Y'), '-') AS tgl_kembali,
-                                    p.status_peminjaman
-                             FROM peminjaman p
-                             INNER JOIN user u ON p.id_user = u.id_user
-                             INNER JOIN barang b ON p.id_barang = b.id_barang
-                             INNER JOIN sub_kategori sk ON b.id_sub = sk.id_sub
-                             ORDER BY p.id_pinjam DESC";
+            dgvUtama.AutoGenerateColumns = false;
 
-            try
+            DataTable dtUtama = pinjamService.tampilSemuaPeminjaman();
+            FormatDanTampilkanData(dtUtama);
+            HitungKPIPeminjaman(dtUtama);
+        }
+
+        private void txtCari_TextChanged(object sender, EventArgs e)
+        {
+            string kataKunci = txtCari.Text.Trim();
+            DataTable dtHasil;
+
+            if (string.IsNullOrEmpty(kataKunci))
             {
-                using (MySqlConnection conn = Koneksi.GetConn())
+                dtHasil = pinjamService.tampilSemuaPeminjaman();
+            }
+            else
+            {
+                dtHasil = pinjamService.cariPeminjaman(kataKunci);
+            }
+
+            FormatDanTampilkanData(dtHasil);
+        }
+
+        private void FormatDanTampilkanData(DataTable dt)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["status_peminjaman"] != DBNull.Value)
                 {
-                    conn.Open();
-                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn))
+                    string statusLower = row["status_peminjaman"].ToString().ToLower().Trim();
+                    if (statusLower == "pending") row["status_peminjaman"] = "Pending";
+                    else if (statusLower == "disetujui") row["status_peminjaman"] = "Disetujui";
+                    else if (statusLower == "ditolak") row["status_peminjaman"] = "Ditolak";
+                }
+            }
+
+            dgvUtama.DataSource = dt;
+
+            dgvUtama.Columns[0].DataPropertyName = "kode_peminjaman";
+            dgvUtama.Columns[1].DataPropertyName = "nama_lengkap";
+            dgvUtama.Columns[2].DataPropertyName = "tgl_pinjam";
+            dgvUtama.Columns[3].DataPropertyName = "tgl_kembali";
+            dgvUtama.Columns[4].DataPropertyName = "status_peminjaman";
+        }
+
+        private void HitungKPIPeminjaman(DataTable dt)
+        {
+            int totalTransaksi = dt.Rows.Count;
+            int totalPending = 0;
+            int totalDisetujui = 0;
+            int totalDitolak = 0;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["status_peminjaman"] != DBNull.Value)
+                {
+                    string st = row["status_peminjaman"].ToString().ToLower().Trim();
+                    if (st == "pending") totalPending++;
+                    else if (st == "disetujui") totalDisetujui++;
+                    else if (st == "ditolak") totalDitolak++;
+                }
+            }
+
+            if (lblTotalPengajuan != null) lblTotalPengajuan.Text = totalTransaksi.ToString();
+            if (lblTotalDisetujui != null) lblTotalDisetujui.Text = totalDisetujui.ToString();
+            if (lblTotalDitolak != null) lblTotalDitolak.Text = totalDitolak.ToString();
+        }
+
+        private void dgvUtama_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EksekusiKlikSelTabel(e.RowIndex);
+        }
+
+        private void dgvUtama_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            EksekusiKlikSelTabel(e.RowIndex);
+        }
+
+        private void EksekusiKlikSelTabel(int rowIndex)
+        {
+            if (rowIndex >= 0)
+            {
+                DataGridViewRow baris = this.dgvUtama.Rows[rowIndex];
+                DataRowView rowView = (baris.DataBoundItem != null) ? (DataRowView)baris.DataBoundItem : null;
+
+                if (rowView != null)
+                {
+                    DataRow dr = rowView.Row;
+
+                    kodeNotaAktif = dr["kode_peminjaman"].ToString();
+                    txtNamaLengkap.Text = dr["nama_lengkap"].ToString();
+                    txtTglPinjam.Text = dr["tgl_pinjam"].ToString();
+
+                    if (dr["tgl_kembali"] != DBNull.Value)
                     {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        dgvTabelList.DataSource = dt;
+                        txtTglKembali.Text = dr["tgl_kembali"].ToString();
+                    }
+                    else
+                    {
+                        txtTglKembali.Text = "-";
+                    }
+
+                    string statusNotaUtama = dr["status_peminjaman"].ToString().ToLower().Trim();
+
+                    DataTable dtDetail = pinjamService.tampilDetailBarang(kodeNotaAktif);
+
+                    if (dtDetail.Rows.Count > 0)
+                    {
+                        txtAlamat.Text = dtDetail.Rows[0]["alamat"].ToString();
+                        txtNoHp.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
+
+                        foreach (DataRow rowDetail in dtDetail.Rows)
+                        {
+                            if (rowDetail["status"] != DBNull.Value)
+                            {
+                                string st = rowDetail["status"].ToString().ToLower().Trim();
+                                if (st == "pending") rowDetail["status"] = "Pending";
+                                else if (st == "disetujui") rowDetail["status"] = "Disetujui";
+                                else if (st == "ditolak") rowDetail["status"] = "Ditolak";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        txtAlamat.Clear();
+                        txtNoHp.Clear();
+                    }
+
+                    dgvDetail.DataSource = null;
+                    dgvDetail.AutoGenerateColumns = false;
+
+                    dgvDetail.Columns[0].DataPropertyName = "nama_barang";
+                    dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
+                    dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
+                    dgvDetail.Columns[3].DataPropertyName = "jumlah_tersedia";
+                    dgvDetail.Columns[4].DataPropertyName = "status";
+                    dgvDetail.Columns[5].DataPropertyName = "keterangan";
+
+                    dgvDetail.DataSource = dtDetail;
+
+                    if (statusNotaUtama == "disetujui" || statusNotaUtama == "ditolak")
+                    {
+                        dgvDetail.ReadOnly = true;
+                        btnSimpan.Enabled = false;
+                    }
+                    else
+                    {
+                        dgvDetail.ReadOnly = false;
+                        dgvDetail.Columns[0].ReadOnly = true;
+                        dgvDetail.Columns[1].ReadOnly = true;
+                        dgvDetail.Columns[3].ReadOnly = true;
+
+                        dgvDetail.Columns[2].ReadOnly = false;
+                        dgvDetail.Columns[4].ReadOnly = false;
+                        dgvDetail.Columns[5].ReadOnly = false;
+
+                        btnSimpan.Enabled = true;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Gagal memuat data log peminjaman: " + ex.Message, "Database Error");
-            }
         }
 
-        private void HitungRingkasanStatistik()
+        private void dgvDetail_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
-            using (MySqlConnection conn = Koneksi.GetConn())
+            e.ThrowException = false;
+        }
+
+        private void btnSimpan_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(kodeNotaAktif))
             {
-                try
+                MessageBox.Show("Silakan pilih transaksi peminjaman terlebih dahulu!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            dgvDetail.EndEdit();
+
+            bool adaYangDisetujui = false;
+            int totalBaris = dgvDetail.Rows.Count;
+
+            for (int i = 0; i < totalBaris; i++)
+            {
+                var row = dgvDetail.Rows[i];
+                if (row.DataBoundItem != null)
                 {
-                    conn.Open();
-                    // Menghitung jumlah total pengajuan masuk
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM peminjaman", conn))
+                    DataRowView drv = (DataRowView)row.DataBoundItem;
+                    int idDetail = Convert.ToInt32(drv["id_detail_peminjaman"]);
+
+                    int jumlah = Convert.ToInt32(row.Cells[2].Value);
+
+                    int jumlahSedia = Convert.ToInt32(row.Cells[3].Value);
+                    string status = row.Cells[4].Value?.ToString() ?? "pending";
+                    string keterangan = row.Cells[5].Value?.ToString() ?? "";
+
+                    string statusCek = status.ToLower().Trim();
+
+                    if (statusCek == "disetujui" && jumlah > jumlahSedia)
                     {
-                        lblTotal.Text = cmd.ExecuteScalar().ToString();
+                        string namaBarang = row.Cells[0].Value?.ToString() ?? "Barang";
+                        MessageBox.Show($"Gagal menyimpan! Stok untuk '{namaBarang}' tidak mencukupi.\nDiminta: {jumlah}, Tersedia: {jumlahSedia}.", "Stok Kurang", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                     }
-                    // Menghitung jumlah berkas yang sudah disetujui (diterima/dipinjam)
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM peminjaman WHERE status_peminjaman = 'dipinjam'", conn))
+
+                    pinjamService.ubahStatusDetailItem(idDetail, jumlah, statusCek, keterangan);
+
+                    if (statusCek == "disetujui")
                     {
-                        lblDipinjam.Text = cmd.ExecuteScalar().ToString();
-                    }
-                    // Menghitung jumlah berkas yang ditolak / selesai
-                    using (MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM peminjaman WHERE status_peminjaman = 'dikembalikan'", conn))
-                    {
-                        lblTersedia.Text = cmd.ExecuteScalar().ToString();
+                        adaYangDisetujui = true;
                     }
                 }
-                catch (Exception) { }
             }
-        }
 
-        // EVENT CELL CLICK: Saat baris di tabel diklik, data profil lengkap langsung mengisi TextBox Detail di bawah
-        private void dgvTabelList_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
+            string statusNotaFinal = adaYangDisetujui ? "disetujui" : "ditolak";
+
+            if (pinjamService.ubahStatusNotaInduk(kodeNotaAktif, statusNotaFinal) > 0)
             {
-                try
-                {
-                    BindingSource bs = new BindingSource();
-                    bs.DataSource = dgvTabelList.DataSource;
-                    DataRowView drv = (DataRowView)bs[e.RowIndex];
+                MessageBox.Show("Status verifikasi peminjaman berhasil disimpan!\nStatus Nota: " + statusNotaFinal.ToUpper() + "\n", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    if (drv != null)
-                    {
-                        txtNama_Lengkap.Text = drv["nama_peminjam"].ToString();
-                        txtAlamat.Text = drv["alamat"].ToString();
-                        txtNo_Hp.Text = drv["no_hp"].ToString();
-                        txtNama_Barang.Text = drv["nama_barang"].ToString();
-                        txtKategori_Barang.Text = drv["nama_kategori"].ToString();
-                        txtJumlah_Pinjam.Text = drv["jumlah_pinjam"].ToString();
-                        txtTgl_Pinjam.Text = drv["tgl_pinjam"].ToString();
-                        txtTgl_Kembali.Text = drv["tgl_kembali"].ToString();
-                        txtStatus_Pinjam.Text = drv["status_peminjaman"].ToString().ToUpper();
-                    }
-                }
-                catch (Exception) { }
+                SegarkanGridUtama();
+                BersihkanPanelDetail();
             }
         }
 
-        // PERBAIKAN UTAMA: Menyediakan fungsi Batal/Clear Form yang diminta oleh file Designer
-        private void btnBatalKategori_Click(object sender, EventArgs e)
+        private void BersihkanPanelDetail()
         {
-            txtNama_Lengkap.Clear();
+            kodeNotaAktif = "";
+            txtNamaLengkap.Clear();
+            txtTglPinjam.Clear();
+            txtTglKembali.Clear();
             txtAlamat.Clear();
-            txtNo_Hp.Clear();
-            txtNama_Barang.Clear();
-            txtKategori_Barang.Clear();
-            txtJumlah_Pinjam.Clear();
-            txtTgl_Pinjam.Clear();
-            txtTgl_Kembali.Clear();
-            txtStatus_Pinjam.Clear();
-            txtCari.Clear();
-            TampilkanListPeminjam();
+            txtNoHp.Clear();
+            dgvDetail.DataSource = null;
+            btnSimpan.Enabled = true;
         }
 
-        // --- Sistem Navigasi Aliran Sidebar Admin ---
+        private void btnBatalDetail_Click(object sender, EventArgs e)
+        {
+            BersihkanPanelDetail();
+        }
+
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
             FormDashboardAdmin frm = new FormDashboardAdmin();
             frm.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnData_Pinjam_Click(object sender, EventArgs e)
         {
-            TampilkanListPeminjam();
-            HitungRingkasanStatistik();
+            FormDataPinjam frm = new FormDataPinjam();
+            frm.Show();
+            this.Hide();
         }
 
         private void btnData_Ambil_Click(object sender, EventArgs e)
         {
             FormDataPengambilan frm = new FormDataPengambilan();
             frm.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnData_Kembali_Click(object sender, EventArgs e)
         {
             FormDataPengembalian frm = new FormDataPengembalian();
             frm.Show();
-            this.Close();
+            this.Hide();
         }
 
         private void btnTambah_Admin_Click(object sender, EventArgs e)
         {
-            FormRegisterAdmin halamanRegisterAdmin = new FormRegisterAdmin();
-            halamanRegisterAdmin.ShowDialog();
+            FormRegisterAdmin frm = new FormRegisterAdmin();
+            frm.Show();
+            this.Hide();
         }
 
         private void btnExit_Click(object sender, EventArgs e)

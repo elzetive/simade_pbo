@@ -63,78 +63,142 @@ namespace simade_pbo.Service
 
         public bool isExist(string nama_barang)
         {
-            bool cek = false;
-            Query = "SELECT * FROM barang WHERE nama_barang = '" + nama_barang + "'";
-            if (jalankanQuery(Query).Rows.Count > 0)
+            bool hasil = false;
+            Query = "SELECT COUNT(*) FROM barang WHERE nama_barang = '" + nama_barang.Replace("'", "''") + "'";
+
+            DataTable dt = jalankanQuery(Query);
+
+            if (dt != null && dt.Rows.Count > 0)
             {
-                cek = true;
+                int jumlah = Convert.ToInt32(dt.Rows[0][0]);
+                if (jumlah > 0)
+                {
+                    hasil = true;
+                }
             }
-            return cek;
+            return hasil;
         }
 
         public int simpan()
         {
-            Query = "INSERT INTO barang (id_sub, nama_barang, status) VALUES ('" + Id_kategori + "', '" + Nama_barang + "', '" + Status_ketersediaan + "')";
+            Query = "INSERT INTO barang (id_kategori, nama_barang, jumlah_barang, kondisi_bagus, kondisi_rusak) " +
+                    "VALUES (" + Id_kategori + ", '" + Nama_barang + "', " + Jumlah_barang + ", " + Jumlah_barang + ", 0)";
             return jalankanNonQuery(Query);
         }
 
         public DataTable tampilSemua()
         {
-            // SINKRONISASI MUTLAK: Menggunakan join tiga arah (barang -> sub_kategori -> kategori) sesuai berkas .sql
             Query = @"SELECT 
-                        b.id_barang, 
-                        b.id_sub, 
-                        sk.nama_sub, 
-                        k.nama_kategori,
-                        b.nama_barang, 
-                        b.merk, 
-                        b.nomor_identitas, 
-                        b.status AS status_ketersediaan 
-                      FROM barang b 
-                      INNER JOIN sub_kategori sk ON b.id_sub = sk.id_sub
-                      INNER JOIN kategori k ON sk.id_kategori = k.id_kategori";
+                b.id_barang, 
+                b.id_kategori, 
+                b.nama_barang, 
+                k.nama_kategori,
+                b.kondisi_bagus,
+                b.kondisi_rusak,
+                b.jumlah_barang AS jumlah_total,
+                IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0) AS jumlah_dipinjam,
+                (b.kondisi_bagus - IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0)) AS jumlah_tersedia
+              FROM barang b
+              INNER JOIN kategori k ON k.id_kategori = b.id_kategori";
+
             return jalankanQuery(Query);
-        }
-
-        public int ubah(int idLama)
-        {
-            Query = "UPDATE barang SET id_sub = '" + Id_kategori + "', nama_barang = '" + Nama_barang + "', status = '" + Status_ketersediaan + "' WHERE id_barang = '" + idLama + "'";
-            return jalankanNonQuery(Query);
-        }
-
-        public int hapus(int id_barang)
-        {
-            Query = "DELETE FROM barang WHERE id_barang = '" + id_barang + "'";
-            return jalankanNonQuery(Query);
         }
 
         public DataTable tampilByNama(string nama_barang)
         {
             Query = @"SELECT 
-                        b.id_barang, 
-                        b.id_sub, 
-                        sk.nama_sub, 
-                        k.nama_kategori,
-                        b.nama_barang, 
-                        b.merk, 
-                        b.nomor_identitas, 
-                        b.status AS status_ketersediaan 
-                      FROM barang b 
-                      INNER JOIN sub_kategori sk ON b.id_sub = sk.id_sub
-                      INNER JOIN kategori k ON sk.id_kategori = k.id_kategori
-                      WHERE b.nama_barang LIKE '" + nama_barang + "%'";
+                b.id_barang, 
+                b.id_kategori, 
+                b.nama_barang, 
+                k.nama_kategori,
+                b.kondisi_bagus,
+                b.kondisi_rusak,
+                b.jumlah_barang AS jumlah_total,
+                IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0) AS jumlah_dipinjam,
+                (b.kondisi_bagus - IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0)) AS jumlah_tersedia
+              FROM barang b
+              INNER JOIN kategori k ON k.id_kategori = b.id_kategori
+              WHERE b.nama_barang LIKE '" + nama_barang + "%'";
+
             return jalankanQuery(Query);
         }
 
-        public string hitungStatistik(string status)
+        public int ubah(int id)
+        {
+            int kondisiBagusLama = 0;
+            int kondisiRusakLama = 0;
+            int jumlahTotalLama = 0;
+
+            string queryCek = "SELECT jumlah_barang, kondisi_bagus, kondisi_rusak FROM barang WHERE id_barang = " + id;
+            DataTable dtCek = jalankanQuery(queryCek);
+
+            if (dtCek != null && dtCek.Rows.Count > 0)
+            {
+                jumlahTotalLama = Convert.ToInt32(dtCek.Rows[0]["jumlah_barang"]);
+                kondisiBagusLama = Convert.ToInt32(dtCek.Rows[0]["kondisi_bagus"]);
+                kondisiRusakLama = Convert.ToInt32(dtCek.Rows[0]["kondisi_rusak"]);
+            }
+
+            int selisih = this.Jumlah_barang - jumlahTotalLama;
+
+            int kondisiBagusBaru = kondisiBagusLama;
+            int kondisiRusakBaru = kondisiRusakLama;
+
+            if (selisih > 0)
+            {
+                kondisiBagusBaru = kondisiBagusLama + selisih;
+            }
+            else if (selisih < 0)
+            {
+                kondisiBagusBaru = kondisiBagusLama + selisih;
+                if (kondisiBagusBaru < 0)
+                {
+                    kondisiRusakBaru = kondisiRusakBaru + kondisiBagusBaru;
+                    kondisiBagusBaru = 0;
+                }
+            }
+
+            Query = @"UPDATE barang SET 
+                nama_barang = '" + this.Nama_barang + @"', 
+                id_kategori = " + this.Id_kategori + @", 
+                jumlah_barang = " + this.Jumlah_barang + @",
+                kondisi_bagus = " + kondisiBagusBaru + @",
+                kondisi_rusak = " + kondisiRusakBaru + @"
+              WHERE id_barang = " + id;
+
+            return jalankanNonQuery(Query);
+        }
+
+        public int hapus(int id_barang)
+        {
+            Query = "DELETE FROM barang WHERE id_barang = " + id_barang;
+            return jalankanNonQuery(Query);
+        }
+
+        public DataTable DetailKondisi(string namaBarang)
+        {
+            Query = "SELECT kondisi_bagus, kondisi_rusak FROM barang WHERE nama_barang = '" + namaBarang.Replace("'", "''") + "' LIMIT 1";
+            return jalankanQuery(Query);
+        }
+
+        public int ubahDetailKondisi(int id, int bagus, int rusak)
+        {
+            int totalBaru = bagus + rusak;
+
+            Query = "UPDATE barang SET " + "kondisi_bagus = " + bagus + ", " + "kondisi_rusak = " + rusak + ", " + "jumlah_barang = " + totalBaru + " " + "WHERE id_barang = " + id;
+
+            return jalankanNonQuery(Query);
+        }
+
+        public string hitungStatistik(string tipe)
         {
             string hasil = "0";
-            if (status == "TOTAL")
-                Query = "SELECT COUNT(*) FROM barang";
-            else if (status == "DIPINJAM")
-                Query = "SELECT COUNT(*) FROM barang WHERE status = 'dipinjam'";
-            else if (status == "TERSEDIA")
-                Query = "SELECT COUNT(*) FROM barang WHERE status = 'tersedia'";
+            if (tipe == "TOTAL")
+                Query = "SELECT IFNULL(SUM(jumlah_barang), 0) FROM barang";
+            else if (tipe == "DIPINJAM")
+                Query = "SELECT IFNULL(SUM(jumlah_pinjam), 0) FROM detail_peminjaman WHERE status = 'disetujui'";
+            else if (tipe == "TERSEDIA")
+                Query = "SELECT (IFNULL(SUM(kondisi_bagus), 0) - IFNULL((SELECT SUM(jumlah_pinjam) FROM detail_peminjaman WHERE status = 'disetujui'), 0)) FROM barang";
 
             DataTable dt = jalankanQuery(Query);
             if (dt != null && dt.Rows.Count > 0)
@@ -142,21 +206,6 @@ namespace simade_pbo.Service
                 hasil = dt.Rows[0][0].ToString();
             }
             return hasil;
-        }
-
-        public DataTable tampilRiwayat()
-        {
-            Query = @"SELECT 
-                        p.id_pinjam AS colID, 
-                        b.nama_barang AS colNama, 
-                        u.nama_lengkap AS colPeminjam, 
-                        p.tgl_pinjam AS colTanggalPinjam, 
-                        p.tgl_kembali AS colTanggalKembali, 
-                        p.status_peminjaman AS colStatus 
-                      FROM peminjaman p 
-                      INNER JOIN user u ON p.id_user = u.id_user 
-                      INNER JOIN barang b ON p.id_barang = b.id_barang";
-            return jalankanQuery(Query);
         }
     }
 }
