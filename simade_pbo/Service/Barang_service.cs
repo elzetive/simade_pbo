@@ -207,5 +207,57 @@ namespace simade_pbo.Service
             }
             return hasil;
         }
+
+        public DataTable GrafikPeminjaman()
+        {
+            Query = @"
+        SELECT
+            MONTH(tgl_pinjam) AS bulan,
+            COUNT(*) AS jumlah
+        FROM peminjaman
+        GROUP BY MONTH(tgl_pinjam)
+        ORDER BY MONTH(tgl_pinjam)";
+
+            return jalankanQuery(Query);
+        }
+
+        public DataTable GrafikBarangTerpinjam()
+        {
+            Query = @"
+        SELECT
+            b.nama_barang,
+            SUM(dp.jumlah_pinjam) AS jumlah
+        FROM detail_peminjaman dp
+        INNER JOIN barang b
+            ON dp.id_barang = b.id_barang
+        WHERE dp.status = 'disetujui'
+        GROUP BY b.nama_barang
+        ORDER BY jumlah DESC
+        LIMIT 5";
+
+            return jalankanQuery(Query);
+        }
+
+        public DataTable tampilRiwayat()
+        {
+            Query = @"
+        SELECT 
+            p.id_peminjaman,
+            b.nama_barang,
+            u.username,
+            p.tgl_pinjam,
+            p.tgl_kembali,
+            p.status_peminjaman
+        FROM peminjaman p
+        INNER JOIN user u 
+            ON p.id_user = u.id_user
+        INNER JOIN detail_peminjaman dp 
+            ON p.id_peminjaman = dp.id_peminjaman
+        INNER JOIN barang b 
+            ON dp.id_barang = b.id_barang
+        ORDER BY p.id_peminjaman DESC";
+
+            return jalankanQuery(Query);
+        }
     }
 }

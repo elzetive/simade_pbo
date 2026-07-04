@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using Org.BouncyCastle.Asn1.Cmp;
+using Org.BouncyCastle.Asn1.Ocsp;
+using simade_pbo.Service;
+using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using simade_pbo.Service;
 
 namespace simade_pbo
 {
@@ -15,34 +12,76 @@ namespace simade_pbo
     {
         Barang_service barang = new Barang_service();
 
+        DataTable dtRiwayat = new DataTable();
+
         public FormRiwayat()
         {
             InitializeComponent();
+
             this.StartPosition = FormStartPosition.CenterScreen;
+
             tampilRiwayat();
         }
 
         void tampilRiwayat()
         {
-            // 1. Ambil data riwayat dari database berupa DataTable
-            //DataTable dt = barang.tampilRiwayat();
+            dtRiwayat = barang.tampilRiwayat();
 
-            // 2. Kunci agar tidak membuat kolom baru otomatis di kanan desainer
             dgvRiwayat.AutoGenerateColumns = false;
 
-            // 3. Petakan langsung data menggunakan urutan kolom DataTable asli database
-            //if (dgvRiwayat.Columns.Count >= 6 && dt != null && dt.Columns.Count >= 6)
-            //{
-            //    this.coid.DataPropertyName = dt.Columns[0].ColumnName;
-            //    this.colNama.DataPropertyName = dt.Columns[1].ColumnName;
-            //    this.colPeminjam.DataPropertyName = dt.Columns[2].ColumnName;
-            //    this.colTanggalPinjam.DataPropertyName = dt.Columns[3].ColumnName;
-            //    this.colTanggalKembali.DataPropertyName = dt.Columns[4].ColumnName;
-            //    this.colStatus.DataPropertyName = dt.Columns[5].ColumnName;
-            //}
+            // Mapping kolom dgv
+            colNama.DataPropertyName = "nama_barang";
+            colPeminjam.DataPropertyName = "username";
+            colTanggalPinjam.DataPropertyName = "tgl_pinjam";
+            colTanggalKembali.DataPropertyName = "tgl_kembali";
+            colStatus.DataPropertyName = "status_peminjaman";
 
-            // 4. Ikat datanya ke DataGridView
-            //dgvRiwayat.DataSource = dt;
+            dgvRiwayat.DataSource = dtRiwayat;
+
+            isiStatus();
+        }
+
+        void isiStatus()
+        {
+            cmbStatus.Items.Clear();
+
+            cmbStatus.Items.Add("Semua");
+            cmbStatus.Items.Add("Disetujui");
+            cmbStatus.Items.Add("Ditolak");
+
+            cmbStatus.SelectedIndex = 0;
+        }
+
+        // FILTER DATA
+        void filterData()
+        {
+            DataView dv = dtRiwayat.DefaultView;
+
+            string cari = txtCari.Text.Trim();
+            string status = cmbStatus.Text.ToLower();
+
+            string filter = "";
+
+            // SEARCH NAMA BARANG
+            if (cari != "")
+            {
+                filter = $"nama_barang LIKE '%{cari}%'";
+            }
+
+            // FILTER STATUS
+            if (status != "semua" && status != "")
+            {
+                if (filter != "")
+                {
+                    filter += " AND ";
+                }
+
+                filter += $"status_peminjaman LIKE '%{status}%'";
+            }
+
+            dv.RowFilter = filter;
+
+            dgvRiwayat.DataSource = dv;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -66,7 +105,7 @@ namespace simade_pbo
 
         private void btnRiwayat_Click(object sender, EventArgs e)
         {
-            // Diabaikan karena user sudah berada di halaman ini
+            // Sudah di halaman ini
         }
 
         private void btnLogout_Click_1(object sender, EventArgs e)
@@ -86,11 +125,24 @@ namespace simade_pbo
             }
         }
 
+        // SEARCH REALTIME
+        private void txtCari_TextChanged(object sender, EventArgs e)
+        {
+            filterData();
+        }
+
+        // FILTER STATUS
+        private void cmbStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterData();
+        }
+
         private void dgvRiwayat_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
 
+        // WARNA STATUS
         private void dgvRiwayat_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dgvRiwayat.Columns[e.ColumnIndex].Name == "colStatus")
@@ -99,17 +151,20 @@ namespace simade_pbo
                 {
                     string status = e.Value.ToString().ToLower();
 
-                    if (status == "pending")
-                    {
-                        e.CellStyle.BackColor = Color.Khaki;
-                    }
-                    else if (status == "dipinjam")
-                    {
-                        e.CellStyle.BackColor = Color.LightSalmon;
-                    }
-                    else if (status == "dikembalikan")
+                    // RESET default dulu
+                    e.CellStyle.ForeColor = Color.Black;
+
+                    if (status == "disetujui")
                     {
                         e.CellStyle.BackColor = Color.LightGreen;
+                    }
+                    else if (status == "ditolak")
+                    {
+                        e.CellStyle.BackColor = Color.LightCoral;
+                    }
+                    else if (status == "pending")
+                    {
+                        e.CellStyle.BackColor = Color.Khaki;
                     }
                 }
             }

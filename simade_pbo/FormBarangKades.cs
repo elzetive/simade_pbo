@@ -15,15 +15,11 @@ namespace simade_pbo
     {
         Barang_service barang = new Barang_service();
 
+        DataTable dtBarang = new DataTable();
+
         public FormBarangKades()
         {
             InitializeComponent();
-
-            // Textbox detail hanya untuk dilihat
-            txtNama.ReadOnly = true;
-            txtKategori.ReadOnly = true;
-            txtKondisiBagus.ReadOnly = true;
-            txtStatus.ReadOnly = true;
 
             this.StartPosition = FormStartPosition.CenterScreen;
 
@@ -33,17 +29,40 @@ namespace simade_pbo
             // Mapping kolom DataGrid
             this.colNama.DataPropertyName = "nama_barang";
             this.colKategori.DataPropertyName = "nama_kategori";
-            this.colJumlah.DataPropertyName = "jumlah_barang";
-            this.colKondisiBagus.DataPropertyName = "kondisi_bagus";
-            this.colKondisiRusak.DataPropertyName = "kondisi_rusak";
-            this.colStatus.DataPropertyName = "status";
+            this.colTotal.DataPropertyName = "jumlah_total";
+            this.colDipinjam.DataPropertyName = "jumlah_dipinjam";
+            this.colTersedia.DataPropertyName = "jumlah_tersedia";
 
             tampilData();
+            isiKategori();
         }
 
+        // tampil semua data
         void tampilData()
         {
-            dgvBarang.DataSource = barang.tampilSemua();
+            dtBarang = barang.tampilSemua();
+
+            dgvBarang.DataSource = dtBarang;
+        }
+
+        // isi combobox kategori
+        void isiKategori()
+        {
+            cmbKategori.Items.Clear();
+
+            cmbKategori.Items.Add("Semua");
+
+            foreach (DataRow row in dtBarang.Rows)
+            {
+                string kategori = row["nama_kategori"].ToString();
+
+                if (!cmbKategori.Items.Contains(kategori))
+                {
+                    cmbKategori.Items.Add(kategori);
+                }
+            }
+
+            cmbKategori.SelectedIndex = 0;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -87,27 +106,100 @@ namespace simade_pbo
             }
         }
 
+        // klik row dgv
         private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                txtNama.Text = dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
-                txtKategori.Text = dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
-                txtKondisiBagus.Text = dgvBarang.Rows[e.RowIndex].Cells["colKondisiBagus"].Value.ToString();
-                txtKondisiRusak.Text = dgvBarang.Rows[e.RowIndex].Cells["colKondisiRusak"].Value.ToString();
-                txtStatus.Text = dgvBarang.Rows[e.RowIndex].Cells["colStatus"].Value.ToString();
+                string nama =
+                    dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
 
-                // Warna status
-                if (txtStatus.Text.ToLower() == "tersedia")
-                    txtStatus.BackColor = Color.LightGreen;
-                else
-                    txtStatus.BackColor = Color.LightCoral;
+                string kategori =
+                    dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
+
+                string total =
+                    dgvBarang.Rows[e.RowIndex].Cells["colTotal"].Value.ToString();
+
+                string dipinjam =
+                    dgvBarang.Rows[e.RowIndex].Cells["colDipinjam"].Value.ToString();
+
+                string tersedia =
+                    dgvBarang.Rows[e.RowIndex].Cells["colTersedia"].Value.ToString();
+
+                MessageBox.Show(
+                    this,
+                    "Nama Barang : " + nama +
+                    "\nKategori : " + kategori +
+                    "\nTotal : " + total +
+                    "\nDipinjam : " + dipinjam +
+                    "\nTersedia : " + tersedia,
+                    "Detail Barang",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
             }
         }
 
         private void txtId_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        // SEARCH REALTIME
+        private void txtCari_TextChanged(object sender, EventArgs e)
+        {
+            filterData();
+        }
+
+        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        // FILTER KATEGORI
+        private void cmbKategori_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterData();
+        }
+
+        // fungsi filter
+        void filterData()
+        {
+            DataView dv = dtBarang.DefaultView;
+
+            string cari = txtCari.Text.Trim();
+            string kategori = cmbKategori.Text;
+
+            string filter = "";
+
+            // search nama barang
+            if (cari != "")
+            {
+                filter += $"nama_barang LIKE '%{cari}%'";
+            }
+
+            // filter kategori
+            if (kategori != "Semua" && kategori != "")
+            {
+                if (filter != "")
+                {
+                    filter += " AND ";
+                }
+
+                filter += $"nama_kategori = '{kategori}'";
+            }
+
+            dv.RowFilter = filter;
+
+            dgvBarang.DataSource = dv;
+        }
+
+        private void btnDetail_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Silakan klik salah satu barang pada tabel untuk melihat detail.",
+                "Informasi"
+            );
         }
     }
 }

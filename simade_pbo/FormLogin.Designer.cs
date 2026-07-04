@@ -52,7 +52,7 @@
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.label2.Location = new System.Drawing.Point(543, 89);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(262, 45);
+            this.label2.Size = new System.Drawing.Size(267, 45);
             this.label2.TabIndex = 2;
             this.label2.Text = "Selamat Datang!";
             // 
@@ -63,7 +63,7 @@
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
             this.label3.Location = new System.Drawing.Point(547, 134);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(236, 21);
+            this.label3.Size = new System.Drawing.Size(241, 21);
             this.label3.TabIndex = 3;
             this.label3.Text = "Silakan login menggunakan akun";
             // 
@@ -74,7 +74,7 @@
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
             this.label4.Location = new System.Drawing.Point(547, 195);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(123, 20);
+            this.label4.Size = new System.Drawing.Size(125, 20);
             this.label4.TabIndex = 4;
             this.label4.Text = "Username/Email";
             this.label4.Click += new System.EventHandler(this.label4_Click);
@@ -154,7 +154,7 @@
             this.label1.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.label1.Location = new System.Drawing.Point(70, 261);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(370, 25);
+            this.label1.Size = new System.Drawing.Size(359, 25);
             this.label1.TabIndex = 1;
             this.label1.Text = "Sistem Informasi Manajemen Aset Desa";
             // 
@@ -165,7 +165,7 @@
             this.judul.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.judul.Location = new System.Drawing.Point(165, 204);
             this.judul.Name = "judul";
-            this.judul.Size = new System.Drawing.Size(167, 50);
+            this.judul.Size = new System.Drawing.Size(163, 50);
             this.judul.TabIndex = 0;
             this.judul.Text = "SIMADE";
             this.judul.Click += new System.EventHandler(this.judul_Click);

@@ -29,12 +29,6 @@
         private void InitializeComponent()
         {
             this.dgvRiwayat = new System.Windows.Forms.DataGridView();
-            this.coid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPeminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTanggalPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTanggalKembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnRiwayat = new System.Windows.Forms.Button();
@@ -43,6 +37,15 @@
             this.panelHeader = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtCari = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbStatus = new System.Windows.Forms.ComboBox();
+            this.colNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPeminjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTanggalPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTanggalKembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRiwayat)).BeginInit();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -57,55 +60,18 @@
             this.dgvRiwayat.ColumnHeadersHeight = 35;
             this.dgvRiwayat.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvRiwayat.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.coid,
             this.colNama,
             this.colPeminjam,
             this.colTanggalPinjam,
             this.colTanggalKembali,
             this.colStatus});
-            this.dgvRiwayat.Location = new System.Drawing.Point(273, 97);
+            this.dgvRiwayat.Location = new System.Drawing.Point(216, 256);
             this.dgvRiwayat.Name = "dgvRiwayat";
             this.dgvRiwayat.ReadOnly = true;
-            this.dgvRiwayat.Size = new System.Drawing.Size(724, 337);
+            this.dgvRiwayat.Size = new System.Drawing.Size(805, 300);
             this.dgvRiwayat.TabIndex = 8;
             this.dgvRiwayat.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRiwayat_CellContentClick);
             this.dgvRiwayat.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvRiwayat_CellFormatting);
-            // 
-            // coid
-            // 
-            this.coid.HeaderText = "ID";
-            this.coid.Name = "coid";
-            this.coid.ReadOnly = true;
-            // 
-            // colNama
-            // 
-            this.colNama.HeaderText = "Nama Barang";
-            this.colNama.Name = "colNama";
-            this.colNama.ReadOnly = true;
-            // 
-            // colPeminjam
-            // 
-            this.colPeminjam.HeaderText = "Peminjam";
-            this.colPeminjam.Name = "colPeminjam";
-            this.colPeminjam.ReadOnly = true;
-            // 
-            // colTanggalPinjam
-            // 
-            this.colTanggalPinjam.HeaderText = "Tanggal Pinjam";
-            this.colTanggalPinjam.Name = "colTanggalPinjam";
-            this.colTanggalPinjam.ReadOnly = true;
-            // 
-            // colTanggalKembali
-            // 
-            this.colTanggalKembali.HeaderText = "Tanggal kembali";
-            this.colTanggalKembali.Name = "colTanggalKembali";
-            this.colTanggalKembali.ReadOnly = true;
-            // 
-            // colStatus
-            // 
-            this.colStatus.HeaderText = "Status";
-            this.colStatus.Name = "colStatus";
-            this.colStatus.ReadOnly = true;
             // 
             // panelSidebar
             // 
@@ -215,12 +181,81 @@
             this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(213, 97);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 17);
+            this.label1.TabIndex = 17;
+            this.label1.Text = " Cari :";
+            // 
+            // txtCari
+            // 
+            this.txtCari.Location = new System.Drawing.Point(216, 127);
+            this.txtCari.Name = "txtCari";
+            this.txtCari.Size = new System.Drawing.Size(805, 20);
+            this.txtCari.TabIndex = 18;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(213, 169);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(54, 17);
+            this.label2.TabIndex = 19;
+            this.label2.Text = "Status :";
+            // 
+            // cmbStatus
+            // 
+            this.cmbStatus.FormattingEnabled = true;
+            this.cmbStatus.Location = new System.Drawing.Point(216, 200);
+            this.cmbStatus.Name = "cmbStatus";
+            this.cmbStatus.Size = new System.Drawing.Size(805, 21);
+            this.cmbStatus.TabIndex = 21;
+            // 
+            // colNama
+            // 
+            this.colNama.HeaderText = "Nama Barang";
+            this.colNama.Name = "colNama";
+            this.colNama.ReadOnly = true;
+            // 
+            // colPeminjam
+            // 
+            this.colPeminjam.HeaderText = "Peminjam";
+            this.colPeminjam.Name = "colPeminjam";
+            this.colPeminjam.ReadOnly = true;
+            // 
+            // colTanggalPinjam
+            // 
+            this.colTanggalPinjam.HeaderText = "Tanggal Pinjam";
+            this.colTanggalPinjam.Name = "colTanggalPinjam";
+            this.colTanggalPinjam.ReadOnly = true;
+            // 
+            // colTanggalKembali
+            // 
+            this.colTanggalKembali.HeaderText = "Tanggal kembali";
+            this.colTanggalKembali.Name = "colTanggalKembali";
+            this.colTanggalKembali.ReadOnly = true;
+            // 
+            // colStatus
+            // 
+            this.colStatus.HeaderText = "Status";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.ReadOnly = true;
+            // 
             // FormRiwayat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(245)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1046, 589);
+            this.Controls.Add(this.cmbStatus);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtCari);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.panelSidebar);
             this.Controls.Add(this.dgvRiwayat);
@@ -233,6 +268,7 @@
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -246,7 +282,10 @@
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnExit;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coid;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtCari;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colNama;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPeminjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTanggalPinjam;

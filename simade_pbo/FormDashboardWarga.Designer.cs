@@ -17,8 +17,8 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.lblNamaWarga = new System.Windows.Forms.Label();
             this.lblRole = new System.Windows.Forms.Label();
@@ -427,8 +427,8 @@
             // nama_barang
             // 
             this.nama_barang.DataPropertyName = "nama_barang";
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle3;
             this.nama_barang.HeaderText = "Nama Barang";
             this.nama_barang.MinimumWidth = 6;
             this.nama_barang.Name = "nama_barang";
@@ -437,8 +437,8 @@
             // id_kategori
             // 
             this.id_kategori.DataPropertyName = "nama_kategori";
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle4;
             this.id_kategori.HeaderText = "Kategori Barang";
             this.id_kategori.MinimumWidth = 6;
             this.id_kategori.Name = "id_kategori";

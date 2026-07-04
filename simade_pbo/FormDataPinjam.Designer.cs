@@ -54,6 +54,12 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btnSimpan = new System.Windows.Forms.Button();
             this.dgvDetail = new System.Windows.Forms.DataGridView();
+            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_tersedia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.keterangan = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnBatalDetail = new System.Windows.Forms.Button();
             this.txtNoHp = new System.Windows.Forms.TextBox();
             this.txtAlamat = new System.Windows.Forms.TextBox();
@@ -75,12 +81,6 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_tersedia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.keterangan = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUtama)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -365,6 +365,55 @@
             this.dgvDetail.Size = new System.Drawing.Size(728, 81);
             this.dgvDetail.TabIndex = 26;
             // 
+            // nama_barang
+            // 
+            this.nama_barang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.nama_barang.HeaderText = "Nama Barang";
+            this.nama_barang.Name = "nama_barang";
+            this.nama_barang.ReadOnly = true;
+            this.nama_barang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // id_kategori
+            // 
+            this.id_kategori.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.id_kategori.HeaderText = "Kategori Barang";
+            this.id_kategori.Name = "id_kategori";
+            this.id_kategori.ReadOnly = true;
+            // 
+            // jumlah_pinjam
+            // 
+            this.jumlah_pinjam.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.jumlah_pinjam.HeaderText = "Jumlah Pinjam";
+            this.jumlah_pinjam.Name = "jumlah_pinjam";
+            this.jumlah_pinjam.ReadOnly = true;
+            this.jumlah_pinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // jumlah_tersedia
+            // 
+            this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
+            this.jumlah_tersedia.Name = "jumlah_tersedia";
+            this.jumlah_tersedia.ReadOnly = true;
+            // 
+            // status
+            // 
+            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.status.HeaderText = "Status";
+            this.status.Items.AddRange(new object[] {
+            "Pending",
+            "Disetujui",
+            "Ditolak"});
+            this.status.Name = "status";
+            this.status.ReadOnly = true;
+            this.status.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.status.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // keterangan
+            // 
+            this.keterangan.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.keterangan.HeaderText = "Keterangan";
+            this.keterangan.Name = "keterangan";
+            this.keterangan.ReadOnly = true;
+            // 
             // btnBatalDetail
             // 
             this.btnBatalDetail.BackColor = System.Drawing.Color.DimGray;
@@ -612,55 +661,6 @@
             this.lblTitle.Size = new System.Drawing.Size(232, 30);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "SIMADE - Data Pinjam";
-            // 
-            // nama_barang
-            // 
-            this.nama_barang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.nama_barang.HeaderText = "Nama Barang";
-            this.nama_barang.Name = "nama_barang";
-            this.nama_barang.ReadOnly = true;
-            this.nama_barang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // id_kategori
-            // 
-            this.id_kategori.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.id_kategori.HeaderText = "Kategori Barang";
-            this.id_kategori.Name = "id_kategori";
-            this.id_kategori.ReadOnly = true;
-            // 
-            // jumlah_pinjam
-            // 
-            this.jumlah_pinjam.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.jumlah_pinjam.HeaderText = "Jumlah Pinjam";
-            this.jumlah_pinjam.Name = "jumlah_pinjam";
-            this.jumlah_pinjam.ReadOnly = true;
-            this.jumlah_pinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // jumlah_tersedia
-            // 
-            this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
-            this.jumlah_tersedia.Name = "jumlah_tersedia";
-            this.jumlah_tersedia.ReadOnly = true;
-            // 
-            // status
-            // 
-            this.status.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.status.HeaderText = "Status";
-            this.status.Items.AddRange(new object[] {
-            "Pending",
-            "Disetujui",
-            "Ditolak"});
-            this.status.Name = "status";
-            this.status.ReadOnly = true;
-            this.status.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.status.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // keterangan
-            // 
-            this.keterangan.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.keterangan.HeaderText = "Keterangan";
-            this.keterangan.Name = "keterangan";
-            this.keterangan.ReadOnly = true;
             // 
             // FormDataPinjam
             // 

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnTambah_Admin = new System.Windows.Forms.Button();
             this.btnData_Kembali = new System.Windows.Forms.Button();
@@ -54,6 +54,11 @@
             this.lblTotal = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dgvBarang = new System.Windows.Forms.DataGridView();
+            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_tersedia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.jumlah_dipinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel4 = new System.Windows.Forms.Panel();
             this.txtJumlahBarang = new System.Windows.Forms.TextBox();
             this.txtNamaBarang = new System.Windows.Forms.TextBox();
@@ -73,6 +78,7 @@
             this.txtKategoriBarang = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.txtNamaDetail = new System.Windows.Forms.TextBox();
             this.btnEditDetail = new System.Windows.Forms.Button();
             this.txtKondisiBagus = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -82,12 +88,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_tersedia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.jumlah_dipinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtNamaDetail = new System.Windows.Forms.TextBox();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -412,6 +412,42 @@
             this.dgvBarang.TabIndex = 12;
             this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             // 
+            // nama_barang
+            // 
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle3;
+            this.nama_barang.HeaderText = "Nama Barang";
+            this.nama_barang.MinimumWidth = 6;
+            this.nama_barang.Name = "nama_barang";
+            this.nama_barang.ReadOnly = true;
+            // 
+            // id_kategori
+            // 
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle4;
+            this.id_kategori.HeaderText = "Kategori Barang";
+            this.id_kategori.MinimumWidth = 6;
+            this.id_kategori.Name = "id_kategori";
+            this.id_kategori.ReadOnly = true;
+            // 
+            // jumlah_barang
+            // 
+            this.jumlah_barang.HeaderText = "Jumlah Barang";
+            this.jumlah_barang.Name = "jumlah_barang";
+            this.jumlah_barang.ReadOnly = true;
+            // 
+            // jumlah_tersedia
+            // 
+            this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
+            this.jumlah_tersedia.Name = "jumlah_tersedia";
+            this.jumlah_tersedia.ReadOnly = true;
+            // 
+            // jumlah_dipinjam
+            // 
+            this.jumlah_dipinjam.HeaderText = "Jumlah Dipinjam";
+            this.jumlah_dipinjam.Name = "jumlah_dipinjam";
+            this.jumlah_dipinjam.ReadOnly = true;
+            // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.White;
@@ -635,6 +671,13 @@
             this.panel6.Size = new System.Drawing.Size(245, 231);
             this.panel6.TabIndex = 17;
             // 
+            // txtNamaDetail
+            // 
+            this.txtNamaDetail.Location = new System.Drawing.Point(15, 61);
+            this.txtNamaDetail.Name = "txtNamaDetail";
+            this.txtNamaDetail.Size = new System.Drawing.Size(212, 20);
+            this.txtNamaDetail.TabIndex = 15;
+            // 
             // btnEditDetail
             // 
             this.btnEditDetail.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
@@ -726,49 +769,6 @@
             this.label9.Size = new System.Drawing.Size(119, 21);
             this.label9.TabIndex = 5;
             this.label9.Text = "Kondisi Barang";
-            // 
-            // nama_barang
-            // 
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle1;
-            this.nama_barang.HeaderText = "Nama Barang";
-            this.nama_barang.MinimumWidth = 6;
-            this.nama_barang.Name = "nama_barang";
-            this.nama_barang.ReadOnly = true;
-            // 
-            // id_kategori
-            // 
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle2;
-            this.id_kategori.HeaderText = "Kategori Barang";
-            this.id_kategori.MinimumWidth = 6;
-            this.id_kategori.Name = "id_kategori";
-            this.id_kategori.ReadOnly = true;
-            // 
-            // jumlah_barang
-            // 
-            this.jumlah_barang.HeaderText = "Jumlah Barang";
-            this.jumlah_barang.Name = "jumlah_barang";
-            this.jumlah_barang.ReadOnly = true;
-            // 
-            // jumlah_tersedia
-            // 
-            this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
-            this.jumlah_tersedia.Name = "jumlah_tersedia";
-            this.jumlah_tersedia.ReadOnly = true;
-            // 
-            // jumlah_dipinjam
-            // 
-            this.jumlah_dipinjam.HeaderText = "Jumlah Dipinjam";
-            this.jumlah_dipinjam.Name = "jumlah_dipinjam";
-            this.jumlah_dipinjam.ReadOnly = true;
-            // 
-            // txtNamaDetail
-            // 
-            this.txtNamaDetail.Location = new System.Drawing.Point(15, 61);
-            this.txtNamaDetail.Name = "txtNamaDetail";
-            this.txtNamaDetail.Size = new System.Drawing.Size(212, 20);
-            this.txtNamaDetail.TabIndex = 15;
             // 
             // FormDashboardAdmin
             // 
