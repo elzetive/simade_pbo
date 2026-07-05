@@ -502,6 +502,10 @@ namespace simade_pbo
                 this.Close();
             }
         }
-     
+
+        private void lblHeaderDataPinjam_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

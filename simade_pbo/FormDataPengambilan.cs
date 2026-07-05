@@ -168,7 +168,7 @@ namespace simade_pbo
                     string noTelp = dr.Table.Columns.Contains("nomor_telepon_fix") ? dr["nomor_telepon_fix"].ToString() : "-";
 
                     // Isi komponen TextBox tengah
-                    PaksaIsiTextBoxForm(namaPeminjam, noTelp, tglPinjam, tglKembali);
+                    IsiTextBoxForm(namaPeminjam, noTelp, tglPinjam, tglKembali);
 
                     // Ambil detail item barang
                     MuatDetailBarangBawah(kodeNotaAktif);
@@ -180,7 +180,7 @@ namespace simade_pbo
             }
         }
 
-        private void PaksaIsiTextBoxForm(string nama, string telp, string pinjam, string kembali)
+        private void IsiTextBoxForm(string nama, string telp, string pinjam, string kembali)
         {
             try
             {

@@ -64,10 +64,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.btnSimpan = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dgv_NamaBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgv_KategoriBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgv_DeskripsiBarang = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.dgv_JumlahPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnBatal = new System.Windows.Forms.Button();
             this.txtDiambil_oleh = new System.Windows.Forms.TextBox();
             this.txtNomorTelepon = new System.Windows.Forms.TextBox();
@@ -82,6 +78,10 @@
             this.tgl_pinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tgl_kembali = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_NamaBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_KategoriBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_JumlahPinjam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgv_DeskripsiBarang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -513,6 +513,7 @@
             this.btnSimpan.TabIndex = 47;
             this.btnSimpan.Text = "SIMPAN";
             this.btnSimpan.UseVisualStyleBackColor = false;
+            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             // 
             // dataGridView1
             // 
@@ -522,45 +523,13 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dgv_NamaBarang,
             this.dgv_KategoriBarang,
-            this.dgv_DeskripsiBarang,
-            this.dgv_JumlahPinjam});
+            this.dgv_JumlahPinjam,
+            this.dgv_DeskripsiBarang});
             this.dataGridView1.Location = new System.Drawing.Point(-1, 63);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(728, 81);
             this.dataGridView1.TabIndex = 26;
-            // 
-            // dgv_NamaBarang
-            // 
-            this.dgv_NamaBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgv_NamaBarang.HeaderText = "Nama Barang";
-            this.dgv_NamaBarang.Name = "dgv_NamaBarang";
-            this.dgv_NamaBarang.ReadOnly = true;
-            this.dgv_NamaBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // dgv_KategoriBarang
-            // 
-            this.dgv_KategoriBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgv_KategoriBarang.HeaderText = "Kategori Barang";
-            this.dgv_KategoriBarang.Name = "dgv_KategoriBarang";
-            this.dgv_KategoriBarang.ReadOnly = true;
-            // 
-            // dgv_DeskripsiBarang
-            // 
-            this.dgv_DeskripsiBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgv_DeskripsiBarang.HeaderText = "Deskripsi Barang";
-            this.dgv_DeskripsiBarang.Name = "dgv_DeskripsiBarang";
-            this.dgv_DeskripsiBarang.ReadOnly = true;
-            this.dgv_DeskripsiBarang.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_DeskripsiBarang.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // dgv_JumlahPinjam
-            // 
-            this.dgv_JumlahPinjam.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
-            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
-            this.dgv_JumlahPinjam.ReadOnly = true;
-            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // btnBatal
             // 
@@ -574,6 +543,7 @@
             this.btnBatal.TabIndex = 25;
             this.btnBatal.Text = "BATAL";
             this.btnBatal.UseVisualStyleBackColor = false;
+            this.btnBatal.Click += new System.EventHandler(this.btnBatal_Click);
             // 
             // txtDiambil_oleh
             // 
@@ -652,7 +622,6 @@
             this.dgvTabelList.RowHeadersWidth = 51;
             this.dgvTabelList.Size = new System.Drawing.Size(728, 132);
             this.dgvTabelList.TabIndex = 31;
-          
             // 
             // kode_peminjaman
             // 
@@ -691,6 +660,38 @@
             this.status.HeaderText = "Status";
             this.status.Name = "status";
             this.status.ReadOnly = true;
+            // 
+            // dgv_NamaBarang
+            // 
+            this.dgv_NamaBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgv_NamaBarang.HeaderText = "Nama Barang";
+            this.dgv_NamaBarang.Name = "dgv_NamaBarang";
+            this.dgv_NamaBarang.ReadOnly = true;
+            this.dgv_NamaBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_KategoriBarang
+            // 
+            this.dgv_KategoriBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgv_KategoriBarang.HeaderText = "Kategori Barang";
+            this.dgv_KategoriBarang.Name = "dgv_KategoriBarang";
+            this.dgv_KategoriBarang.ReadOnly = true;
+            this.dgv_KategoriBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_JumlahPinjam
+            // 
+            this.dgv_JumlahPinjam.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgv_JumlahPinjam.HeaderText = "Jumlah Pinjam";
+            this.dgv_JumlahPinjam.Name = "dgv_JumlahPinjam";
+            this.dgv_JumlahPinjam.ReadOnly = true;
+            this.dgv_JumlahPinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // dgv_DeskripsiBarang
+            // 
+            this.dgv_DeskripsiBarang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgv_DeskripsiBarang.HeaderText = "Deskripsi Barang";
+            this.dgv_DeskripsiBarang.Name = "dgv_DeskripsiBarang";
+            this.dgv_DeskripsiBarang.ReadOnly = true;
+            this.dgv_DeskripsiBarang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // FormDataPengambilan
             // 
@@ -782,15 +783,14 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.DataGridView dgvTabelList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_NamaBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KategoriBarang;
-        private System.Windows.Forms.DataGridViewComboBoxColumn dgv_DeskripsiBarang;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn kode_peminjaman;
         private System.Windows.Forms.DataGridViewTextBoxColumn nama_peminjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn tgl_pinjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn tgl_kembali;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_NamaBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_KategoriBarang;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_JumlahPinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgv_DeskripsiBarang;
     }
 }
