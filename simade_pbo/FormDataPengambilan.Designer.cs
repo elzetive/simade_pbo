@@ -652,7 +652,7 @@
             this.dgvTabelList.RowHeadersWidth = 51;
             this.dgvTabelList.Size = new System.Drawing.Size(728, 132);
             this.dgvTabelList.TabIndex = 31;
-            this.dgvTabelList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTabelList_CellContentClick_1);
+          
             // 
             // kode_peminjaman
             // 
