@@ -17,7 +17,7 @@ namespace simade_pbo
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new FormDataPengembalian());
+            Application.Run(new FormLogin());
         }
     }
 }

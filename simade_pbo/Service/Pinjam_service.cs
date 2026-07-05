@@ -98,5 +98,27 @@ namespace simade_pbo.Service
                     LIKE '%" + kataKunci + "%' OR u.nama_lengkap LIKE '%" + kataKunci + "%'";
             return jalankanQuery(query);
         }
+
+        public int updateStokBarangKembali(int idDetailPeminjaman, int kondisiBagus, int kondisiRusak, string dikembalikanOleh)
+        {
+            // 1. Ambil id_barang terlebih dahulu berdasarkan id_detail_peminjaman
+            // 2. Update status pengembalian di detail_peminjaman (kondisi_bagus, kondisi_rusak, denda, dll)
+            // 3. Update data inventaris di tabel barang (kurangi dipinjam, sesuaikan kondisi bagus & rusak)
+            string query = $@"
+        UPDATE detail_peminjaman dp
+        INNER JOIN barang b ON dp.id_barang = b.id_barang
+        SET 
+            dp.kondisi_bagus = {kondisiBagus},
+            dp.kondisi_rusak = {kondisiRusak},
+            dp.dikembalikan_oleh = '{dikembalikanOleh}',
+            dp.jumlah_kembali = {kondisiBagus + kondisiRusak},
+            
+            b.jumlah_dipinjam = b.jumlah_dipinjam - {kondisiBagus + kondisiRusak},
+            b.kondisi_bagus = b.kondisi_bagus - {kondisiRusak},
+            b.kondisi_rusak = b.kondisi_rusak + {kondisiRusak}
+        WHERE dp.id_detail_peminjaman = {idDetailPeminjaman};";
+
+            return jalankanNonQuery(query);
+        }
     }
 }
