@@ -135,58 +135,65 @@ namespace simade_pbo
         {
             if (e.RowIndex >= 0)
             {
-                DataGridViewRow baris = this.dataGridView1.Rows[e.RowIndex];
-                DataRowView rowView = baris.DataBoundItem as DataRowView;
-
-                if (rowView != null)
+                try
                 {
-                    DataRow dr = rowView.Row;
+                    DataGridViewRow baris = this.dataGridView1.Rows[e.RowIndex];
+                    DataRowView rowView = baris.DataBoundItem as DataRowView;
 
-                    // VALIDASI HANGUS: Cegah pemrosesan jika barang sudah hangus
-                    string statusCek = baris.Cells[4].Value?.ToString() ?? "";
-                    if (statusCek.ToLower() == "hangus")
+                    if (rowView != null)
                     {
-                        MessageBox.Show("Transaksi ini sudah HANGUS. Barang tidak dapat diambil kembali!", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                        btnSimpan.Enabled = false;
-                        return;
+                        DataRow dr = rowView.Row;
+
+                        // VALIDASI HANGUS: Cegah pemrosesan jika barang sudah hangus
+                        string statusCek = baris.Cells[4].Value?.ToString() ?? "";
+                        if (statusCek.ToLower() == "hangus")
+                        {
+                            MessageBox.Show("Transaksi ini sudah HANGUS. Barang tidak dapat diambil kembali!", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                            btnSimpan.Enabled = false;
+                            return;
+                        }
+
+                        kodeNotaAktif = dr["kode_peminjaman"].ToString();
+                        txtNamaPeminjam.Text = dr["nama_lengkap"].ToString();
+                        txtTglPinjam.Text = dr["tgl_pinjam"].ToString();
+                        txtTglKembali.Text = dr["tgl_kembali"] != DBNull.Value ? dr["tgl_kembali"].ToString() : "-";
+
+                        DataTable dtDetail = pinjamService.tampilDetailBarang(kodeNotaAktif);
+
+                        if (dtDetail.Rows.Count > 0)
+                        {
+                            txtNoTelepon.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
+                        }
+                        else
+                        {
+                            txtNoTelepon.Text = "-";
+                        }
+
+                        dgvDetail.DataSource = null;
+                        dgvDetail.AutoGenerateColumns = false;
+
+                        if (dgvDetail.Columns.Count >= 4)
+                        {
+                            dgvDetail.Columns[0].DataPropertyName = "nama_barang";
+                            dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
+                            dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
+                            dgvDetail.Columns[3].DataPropertyName = "";
+                        }
+
+                        dgvDetail.DataSource = dtDetail;
+
+                        dgvDetail.ReadOnly = false;
+                        dgvDetail.Columns[0].ReadOnly = true;
+                        dgvDetail.Columns[1].ReadOnly = true;
+                        dgvDetail.Columns[2].ReadOnly = true;
+                        dgvDetail.Columns[3].ReadOnly = false;
+
+                        btnSimpan.Enabled = true;
                     }
-
-                    kodeNotaAktif = dr["kode_peminjaman"].ToString();
-                    txtNamaPeminjam.Text = dr["nama_lengkap"].ToString();
-                    txtTglPinjam.Text = dr["tgl_pinjam"].ToString();
-                    txtTglKembali.Text = dr["tgl_kembali"] != DBNull.Value ? dr["tgl_kembali"].ToString() : "-";
-
-                    DataTable dtDetail = pinjamService.tampilDetailBarang(kodeNotaAktif);
-
-                    if (dtDetail.Rows.Count > 0)
-                    {
-                        txtNoTelepon.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
-                    }
-                    else
-                    {
-                        txtNoTelepon.Text = "-";
-                    }
-
-                    dgvDetail.DataSource = null;
-                    dgvDetail.AutoGenerateColumns = false;
-
-                    if (dgvDetail.Columns.Count >= 4)
-                    {
-                        dgvDetail.Columns[0].DataPropertyName = "nama_barang";
-                        dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
-                        dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
-                        dgvDetail.Columns[3].DataPropertyName = "";
-                    }
-
-                    dgvDetail.DataSource = dtDetail;
-
-                    dgvDetail.ReadOnly = false;
-                    dgvDetail.Columns[0].ReadOnly = true;
-                    dgvDetail.Columns[1].ReadOnly = true;
-                    dgvDetail.Columns[2].ReadOnly = true;
-                    dgvDetail.Columns[3].ReadOnly = false;
-
-                    btnSimpan.Enabled = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Gagal memuat rincian item: " + ex.Message, "Error Rincian", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -240,7 +247,7 @@ namespace simade_pbo
                 }
                 catch (Exception ex)
                 {
-                    suksesUpdateDeskripsi = false;
+                    suksesUpdateDeskripsi = false; // SINKRONISASI: Mengganti nama variabel typo sebelumnya
                     MessageBox.Show("Gagal menyimpan deskripsi barang: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
@@ -277,19 +284,19 @@ namespace simade_pbo
             dgvDetail.DataSource = null;
         }
 
-        // --- Navigasi Sidebar ---
+        // --- REVISI NAVIGASI SIDEBAR: Mengubah .Hide() ke .Close() agar Form Dashboard reload segar ---
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
             FormDashboardAdmin frm = new FormDashboardAdmin();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnData_Pinjam_Click(object sender, EventArgs e)
         {
             FormDataPinjam frm = new FormDataPinjam();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnData_Ambil_Click(object sender, EventArgs e)
@@ -302,14 +309,14 @@ namespace simade_pbo
         {
             FormDataPengembalian frm = new FormDataPengembalian();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnTambah_Admin_Click(object sender, EventArgs e)
         {
             FormRegisterAdmin frm = new FormRegisterAdmin();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnExit_Click(object sender, EventArgs e)

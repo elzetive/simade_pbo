@@ -47,6 +47,10 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblTotalPengajuan = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.panelPending = new System.Windows.Forms.Panel();
+            this.pictureBoxPending = new System.Windows.Forms.PictureBox();
+            this.lblTotalPending = new System.Windows.Forms.Label();
+            this.labelPendingTitle = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.txtTglKembali = new System.Windows.Forms.TextBox();
             this.txtTglPinjam = new System.Windows.Forms.TextBox();
@@ -88,6 +92,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panelPending.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPending)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetail)).BeginInit();
             this.panelSidebar.SuspendLayout();
@@ -113,7 +119,6 @@
             this.dgvUtama.RowHeadersWidth = 51;
             this.dgvUtama.Size = new System.Drawing.Size(728, 132);
             this.dgvUtama.TabIndex = 18;
-            this.dgvUtama.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellContentClick);
             // 
             // kode_peminjaman
             // 
@@ -124,21 +129,18 @@
             // nama_lengkap
             // 
             this.nama_lengkap.HeaderText = "Nama Peminjam";
-            this.nama_lengkap.MinimumWidth = 6;
             this.nama_lengkap.Name = "nama_lengkap";
             this.nama_lengkap.ReadOnly = true;
             // 
             // tgl_pinjam
             // 
             this.tgl_pinjam.HeaderText = "Tanggal Pinjam";
-            this.tgl_pinjam.MinimumWidth = 6;
             this.tgl_pinjam.Name = "tgl_pinjam";
             this.tgl_pinjam.ReadOnly = true;
             // 
             // tgl_kembali
             // 
             this.tgl_kembali.HeaderText = "Tanggal Kembali";
-            this.tgl_kembali.MinimumWidth = 6;
             this.tgl_kembali.Name = "tgl_kembali";
             this.tgl_kembali.ReadOnly = true;
             // 
@@ -148,93 +150,6 @@
             this.status_peminjaman.Name = "status_peminjaman";
             this.status_peminjaman.ReadOnly = true;
             // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.White;
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.pictureBox3);
-            this.panel3.Controls.Add(this.lblTotalDitolak);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Location = new System.Drawing.Point(767, 69);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(214, 92);
-            this.panel3.TabIndex = 21;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.White;
-            this.pictureBox3.Image = global::simade_pbo.Properties.Resources.tersedia;
-            this.pictureBox3.Location = new System.Drawing.Point(48, 12);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(29, 25);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 11;
-            this.pictureBox3.TabStop = false;
-            // 
-            // lblTotalDitolak
-            // 
-            this.lblTotalDitolak.AutoSize = true;
-            this.lblTotalDitolak.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalDitolak.Location = new System.Drawing.Point(89, 37);
-            this.lblTotalDitolak.Name = "lblTotalDitolak";
-            this.lblTotalDitolak.Size = new System.Drawing.Size(38, 45);
-            this.lblTotalDitolak.TabIndex = 3;
-            this.lblTotalDitolak.Text = "0";
-            this.lblTotalDitolak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(83, 12);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(76, 25);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Ditolak";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.lblTotalDisetujui);
-            this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(510, 69);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(214, 92);
-            this.panel2.TabIndex = 20;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.White;
-            this.pictureBox2.Image = global::simade_pbo.Properties.Resources.dipinjam;
-            this.pictureBox2.Location = new System.Drawing.Point(40, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 25);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 10;
-            this.pictureBox2.TabStop = false;
-            // 
-            // lblTotalDisetujui
-            // 
-            this.lblTotalDisetujui.AutoSize = true;
-            this.lblTotalDisetujui.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalDisetujui.Location = new System.Drawing.Point(88, 37);
-            this.lblTotalDisetujui.Name = "lblTotalDisetujui";
-            this.lblTotalDisetujui.Size = new System.Drawing.Size(38, 45);
-            this.lblTotalDisetujui.TabIndex = 2;
-            this.lblTotalDisetujui.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(78, 12);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 25);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Diterima";
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
@@ -242,16 +157,16 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.lblTotalPengajuan);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(253, 69);
+            this.panel1.Location = new System.Drawing.Point(210, 69);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(214, 92);
+            this.panel1.Size = new System.Drawing.Size(185, 92);
             this.panel1.TabIndex = 19;
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Image = global::simade_pbo.Properties.Resources.totalbarang;
-            this.pictureBox1.Location = new System.Drawing.Point(28, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 25);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -261,8 +176,8 @@
             // lblTotalPengajuan
             // 
             this.lblTotalPengajuan.AutoSize = true;
-            this.lblTotalPengajuan.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalPengajuan.Location = new System.Drawing.Point(86, 37);
+            this.lblTotalPengajuan.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTotalPengajuan.Location = new System.Drawing.Point(70, 37);
             this.lblTotalPengajuan.Name = "lblTotalPengajuan";
             this.lblTotalPengajuan.Size = new System.Drawing.Size(38, 45);
             this.lblTotalPengajuan.TabIndex = 1;
@@ -271,12 +186,142 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(66, 12);
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label2.Location = new System.Drawing.Point(45, 14);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 25);
+            this.label2.Size = new System.Drawing.Size(92, 21);
             this.label2.TabIndex = 0;
             this.label2.Text = "Pengajuan";
+            // 
+            // panelPending
+            // 
+            this.panelPending.BackColor = System.Drawing.Color.White;
+            this.panelPending.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelPending.Controls.Add(this.pictureBoxPending);
+            this.panelPending.Controls.Add(this.lblTotalPending);
+            this.panelPending.Controls.Add(this.labelPendingTitle);
+            this.panelPending.Location = new System.Drawing.Point(410, 69);
+            this.panelPending.Name = "panelPending";
+            this.panelPending.Size = new System.Drawing.Size(185, 92);
+            this.panelPending.TabIndex = 24;
+            // 
+            // pictureBoxPending
+            // 
+            this.pictureBoxPending.BackColor = System.Drawing.Color.White;
+            this.pictureBoxPending.Image = global::simade_pbo.Properties.Resources.dipinjam;
+            this.pictureBoxPending.Location = new System.Drawing.Point(10, 12);
+            this.pictureBoxPending.Name = "pictureBoxPending";
+            this.pictureBoxPending.Size = new System.Drawing.Size(32, 25);
+            this.pictureBoxPending.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxPending.TabIndex = 10;
+            this.pictureBoxPending.TabStop = false;
+            // 
+            // lblTotalPending
+            // 
+            this.lblTotalPending.AutoSize = true;
+            this.lblTotalPending.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTotalPending.Location = new System.Drawing.Point(70, 37);
+            this.lblTotalPending.Name = "lblTotalPending";
+            this.lblTotalPending.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalPending.TabIndex = 2;
+            this.lblTotalPending.Text = "0";
+            // 
+            // labelPendingTitle
+            // 
+            this.labelPendingTitle.AutoSize = true;
+            this.labelPendingTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.labelPendingTitle.Location = new System.Drawing.Point(45, 14);
+            this.labelPendingTitle.Name = "labelPendingTitle";
+            this.labelPendingTitle.Size = new System.Drawing.Size(73, 21);
+            this.labelPendingTitle.TabIndex = 2;
+            this.labelPendingTitle.Text = "Pending";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.pictureBox2);
+            this.panel2.Controls.Add(this.lblTotalDisetujui);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Location = new System.Drawing.Point(610, 69);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(185, 92);
+            this.panel2.TabIndex = 20;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.White;
+            this.pictureBox2.Image = global::simade_pbo.Properties.Resources.dipinjam;
+            this.pictureBox2.Location = new System.Drawing.Point(10, 12);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(32, 25);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 10;
+            this.pictureBox2.TabStop = false;
+            // 
+            // lblTotalDisetujui
+            // 
+            this.lblTotalDisetujui.AutoSize = true;
+            this.lblTotalDisetujui.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTotalDisetujui.Location = new System.Drawing.Point(70, 37);
+            this.lblTotalDisetujui.Name = "lblTotalDisetujui";
+            this.lblTotalDisetujui.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalDisetujui.TabIndex = 2;
+            this.lblTotalDisetujui.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label4.Location = new System.Drawing.Point(45, 14);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(73, 21);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Diterima";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.pictureBox3);
+            this.panel3.Controls.Add(this.lblTotalDitolak);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Location = new System.Drawing.Point(810, 69);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(185, 92);
+            this.panel3.TabIndex = 21;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.White;
+            this.pictureBox3.Image = global::simade_pbo.Properties.Resources.tersedia;
+            this.pictureBox3.Location = new System.Drawing.Point(10, 12);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(29, 25);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 11;
+            this.pictureBox3.TabStop = false;
+            // 
+            // lblTotalDitolak
+            // 
+            this.lblTotalDitolak.AutoSize = true;
+            this.lblTotalDitolak.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTotalDitolak.Location = new System.Drawing.Point(70, 37);
+            this.lblTotalDitolak.Name = "lblTotalDitolak";
+            this.lblTotalDitolak.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalDitolak.TabIndex = 3;
+            this.lblTotalDitolak.Text = "0";
+            this.lblTotalDitolak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label6.Location = new System.Drawing.Point(45, 14);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(65, 21);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Ditolak";
             // 
             // panel4
             // 
@@ -337,7 +382,7 @@
             // 
             this.btnSimpan.BackColor = System.Drawing.Color.SeaGreen;
             this.btnSimpan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSimpan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSimpan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.btnSimpan.ForeColor = System.Drawing.Color.White;
             this.btnSimpan.Location = new System.Drawing.Point(618, 151);
             this.btnSimpan.Name = "btnSimpan";
@@ -345,7 +390,6 @@
             this.btnSimpan.TabIndex = 47;
             this.btnSimpan.Text = "SIMPAN";
             this.btnSimpan.UseVisualStyleBackColor = false;
-            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             // 
             // dgvDetail
             // 
@@ -371,7 +415,6 @@
             this.nama_barang.HeaderText = "Nama Barang";
             this.nama_barang.Name = "nama_barang";
             this.nama_barang.ReadOnly = true;
-            this.nama_barang.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // id_kategori
             // 
@@ -386,7 +429,6 @@
             this.jumlah_pinjam.HeaderText = "Jumlah Pinjam";
             this.jumlah_pinjam.Name = "jumlah_pinjam";
             this.jumlah_pinjam.ReadOnly = true;
-            this.jumlah_pinjam.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // jumlah_tersedia
             // 
@@ -404,8 +446,6 @@
             "Ditolak"});
             this.status.Name = "status";
             this.status.ReadOnly = true;
-            this.status.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.status.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // keterangan
             // 
@@ -418,7 +458,7 @@
             // 
             this.btnBatalDetail.BackColor = System.Drawing.Color.DimGray;
             this.btnBatalDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBatalDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBatalDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.btnBatalDetail.ForeColor = System.Drawing.Color.White;
             this.btnBatalDetail.Location = new System.Drawing.Point(513, 152);
             this.btnBatalDetail.Name = "btnBatalDetail";
@@ -426,7 +466,6 @@
             this.btnBatalDetail.TabIndex = 25;
             this.btnBatalDetail.Text = "BATAL";
             this.btnBatalDetail.UseVisualStyleBackColor = false;
-            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
             // 
             // txtNoHp
             // 
@@ -479,7 +518,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
             this.label7.Location = new System.Drawing.Point(2, 2);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(177, 25);
@@ -496,7 +535,7 @@
             // lblCari
             // 
             this.lblCari.AutoSize = true;
-            this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblCari.Location = new System.Drawing.Point(249, 170);
             this.lblCari.Name = "lblCari";
             this.lblCari.Size = new System.Drawing.Size(40, 21);
@@ -516,7 +555,6 @@
             this.btnData_Kembali.TabIndex = 7;
             this.btnData_Kembali.Text = "Data Pengembalian";
             this.btnData_Kembali.UseVisualStyleBackColor = false;
-            this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
             // 
             // btnData_Pinjam
             // 
@@ -531,7 +569,6 @@
             this.btnData_Pinjam.TabIndex = 6;
             this.btnData_Pinjam.Text = "Data Pinjam";
             this.btnData_Pinjam.UseVisualStyleBackColor = false;
-            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             // 
             // btnData_Barang
             // 
@@ -546,7 +583,6 @@
             this.btnData_Barang.TabIndex = 5;
             this.btnData_Barang.Text = "Data Barang";
             this.btnData_Barang.UseVisualStyleBackColor = false;
-            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             // 
             // btnData_Ambil
             // 
@@ -561,7 +597,6 @@
             this.btnData_Ambil.TabIndex = 4;
             this.btnData_Ambil.Text = "Data Pengambilan";
             this.btnData_Ambil.UseVisualStyleBackColor = false;
-            this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
             // 
             // lblNamaWarga
             // 
@@ -589,7 +624,6 @@
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
-            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // panelSidebar
             // 
@@ -621,7 +655,6 @@
             this.btnTambah_Admin.TabIndex = 9;
             this.btnTambah_Admin.Text = "Tambah Admin";
             this.btnTambah_Admin.UseVisualStyleBackColor = false;
-            this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             // 
             // btnExit
             // 
@@ -636,7 +669,6 @@
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // panelHeader
             // 
@@ -674,13 +706,14 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panelPending);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgvUtama);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormDataPinjam";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = resources.GetString("$this.Text");
+            this.Text = "Form Data Pinjam Admin";
             ((System.ComponentModel.ISupportInitialize)(this.dgvUtama)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
@@ -691,6 +724,9 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panelPending.ResumeLayout(false);
+            this.panelPending.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPending)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetail)).EndInit();
@@ -716,6 +752,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblTotalPengajuan;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panelPending;
+        private System.Windows.Forms.PictureBox pictureBoxPending;
+        private System.Windows.Forms.Label lblTotalPending;
+        private System.Windows.Forms.Label labelPendingTitle;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.TextBox txtCari;
         private System.Windows.Forms.Label lblCari;

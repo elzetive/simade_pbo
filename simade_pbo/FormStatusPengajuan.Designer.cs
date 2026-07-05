@@ -2,8 +2,15 @@
 {
     partial class FormStatusPengajuan
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -15,6 +22,10 @@
 
         #region Windows Form Designer generated code
 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
             this.panelSidebar = new System.Windows.Forms.Panel();
@@ -88,7 +99,7 @@
             // 
             this.btnMenuDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
             this.btnMenuDashboard.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenuDashboard.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
+            this.btnMenuDashboard.FlatAppearance.BorderSize = 0;
             this.btnMenuDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDashboard.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuDashboard.ForeColor = System.Drawing.Color.White;
@@ -103,7 +114,7 @@
             // 
             this.btnMenuStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.btnMenuStatus.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenuStatus.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
+            this.btnMenuStatus.FlatAppearance.BorderSize = 0;
             this.btnMenuStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuStatus.ForeColor = System.Drawing.Color.White;
@@ -118,7 +129,7 @@
             // 
             this.btnMenuRiwayat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
             this.btnMenuRiwayat.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMenuRiwayat.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
+            this.btnMenuRiwayat.FlatAppearance.BorderSize = 0;
             this.btnMenuRiwayat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuRiwayat.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuRiwayat.ForeColor = System.Drawing.Color.White;
@@ -133,7 +144,7 @@
             // 
             this.btnLogOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLogOut.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
+            this.btnLogOut.FlatAppearance.BorderSize = 0;
             this.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
@@ -248,14 +259,15 @@
             // 
             // lblStatusBadge
             // 
-            this.lblStatusBadge.BackColor = System.Drawing.Color.Orange;
+            // PERBAIKAN MUTAKHIR: Mengosongkan text bawaan desainer visual & warna default
+            this.lblStatusBadge.BackColor = System.Drawing.Color.Transparent;
             this.lblStatusBadge.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblStatusBadge.ForeColor = System.Drawing.Color.White;
             this.lblStatusBadge.Location = new System.Drawing.Point(145, 342);
             this.lblStatusBadge.Name = "lblStatusBadge";
             this.lblStatusBadge.Size = new System.Drawing.Size(237, 26);
             this.lblStatusBadge.TabIndex = 0;
-            this.lblStatusBadge.Text = "PENDING";
+            this.lblStatusBadge.Text = "";
             this.lblStatusBadge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTxtStatus

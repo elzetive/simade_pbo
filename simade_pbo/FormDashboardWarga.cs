@@ -12,11 +12,9 @@ namespace simade_pbo
         int idBarangTerpilih = 0;
         int stokTersediaTerpilih = 0;
 
-        // Properti publik penampung sesi kiriman data dari FormLogin
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
-        // Nilai fallback default jika pengiriman data antar-form bermasalah saat debugging
         int idUserLoginAngka = 4;
 
         public FormDashboardWarga()
@@ -24,7 +22,6 @@ namespace simade_pbo
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Kaitkan event handler secara aman langsung dari runtime constructor
             this.Load += new System.EventHandler(this.FormDashboardWarga_Load);
             this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             this.btnTambahKeList.Click += new System.EventHandler(this.btnTambahKeList_Click);
@@ -39,10 +36,9 @@ namespace simade_pbo
 
         private void FormDashboardWarga_Load(object sender, EventArgs e)
         {
-            // Konversi IdUserLogin string menjadi format integer numerik database
             if (!string.IsNullOrEmpty(IdUserLogin))
             {
-                int.TryParse(IdUserLogin, out idUserLoginAngka);
+                int.TryParse(IdUserLogin, out idUserLoginAngka); // PERBAIKAN: Menggunakan nama variabel yang valid
             }
 
             if (!string.IsNullOrEmpty(NamaUserLogin))
@@ -62,28 +58,39 @@ namespace simade_pbo
         {
             dgvBarang.AutoGenerateColumns = false;
 
-            // SINKRONISASI SKEMA TERBARU: Sesuai struktur relasi tabel kategori baru milik teman kelompokmu
-            string queryKatalog = @"SELECT b.id_barang, b.nama_barang, k.nama_kategori, b.kondisi_bagus
-                                   FROM barang b
-                                   INNER JOIN kategori k ON b.id_kategori = k.id_kategori
-                                   WHERE b.kondisi_bagus > 0
-                                   ORDER BY b.nama_barang ASC";
+            // SINKRONISASI COUPLING STOK: Menghitung 'pending' dan 'dipinjam' sebagai pengurang kuota tersedia warga
+            string queryKatalog = @"
+                SELECT 
+                    b.id_barang, 
+                    b.nama_barang, 
+                    k.nama_kategori, 
+                    (b.kondisi_bagus - IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)) AS stok_siap_pakai
+                FROM barang b
+                INNER JOIN kategori k ON b.id_kategori = k.id_kategori
+                LEFT JOIN detail_peminjaman dp ON b.id_barang = dp.id_barang
+                LEFT JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                GROUP BY b.id_barang, b.nama_barang, k.nama_kategori, b.kondisi_bagus
+                HAVING stok_siap_pakai > 0
+                ORDER BY b.nama_barang ASC";
 
             try
             {
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
                     conn.Open();
-                    using (MySqlDataAdapter da = new MySqlDataAdapter(queryKatalog, conn))
+                    using (MySqlCommand cmd = new MySqlCommand(queryKatalog, conn))
                     {
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
 
-                        nama_barang.DataPropertyName = "nama_barang";
-                        id_kategori.DataPropertyName = "nama_kategori";
-                        jumlah_tersedia.DataPropertyName = "kondisi_bagus";
+                            nama_barang.DataPropertyName = "nama_barang";
+                            id_kategori.DataPropertyName = "nama_kategori";
+                            jumlah_tersedia.DataPropertyName = "stok_siap_pakai";
 
-                        dgvBarang.DataSource = dt;
+                            dgvBarang.DataSource = dt;
+                        }
                     }
                 }
             }
@@ -120,10 +127,7 @@ namespace simade_pbo
         private void btnExit_Click(object sender, EventArgs e)
         {
             DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin menutup aplikasi?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (konfirmasi == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+            if (konfirmasi == DialogResult.Yes) Application.Exit();
         }
 
         private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -138,7 +142,7 @@ namespace simade_pbo
                     if (dr != null)
                     {
                         idBarangTerpilih = Convert.ToInt32(dr["id_barang"]);
-                        stokTersediaTerpilih = Convert.ToInt32(dr["kondisi_bagus"]);
+                        stokTersediaTerpilih = Convert.ToInt32(dr["stok_siap_pakai"]);
 
                         txtNamaBarang.Text = dr["nama_barang"].ToString();
                         txtJumlahPinjam.Text = "1";
@@ -208,7 +212,7 @@ namespace simade_pbo
                 {
                     try
                     {
-                        // 1. INSERT TABEL INDUK INDEPENDEN (peminjaman)
+                        // Menaruh data master permohonan dengan status awal 'pending'
                         string queryMaster = @"INSERT INTO peminjaman (kode_peminjaman, id_user, tgl_pinjam, tgl_kembali, status_peminjaman)
                                                VALUES (@kode, @uid, @tglP, @tglK, 'pending')";
 
@@ -224,7 +228,6 @@ namespace simade_pbo
                             idPeminjamanTerbuat = cmdMaster.LastInsertedId;
                         }
 
-                        // 2. LOOPING SIMPAN MULTI-ITEM DETAIL (detail_peminjaman)
                         int suksesDetailCount = 0;
                         foreach (DataRow barisAntrean in dtAntrean.Rows)
                         {
@@ -256,7 +259,7 @@ namespace simade_pbo
                         else
                         {
                             tr.Rollback();
-                            MessageBox.Show("Terjadi masalah, jumlah item tersimpan tidak sesuai.", "Gagal Simpan");
+                            MessageBox.Show("Terjadi masalah penyimpanan data.", "Gagal Simpan");
                         }
                     }
                     catch (Exception ex)
@@ -268,10 +271,7 @@ namespace simade_pbo
             }
         }
 
-        private void btnMenuDashboard_Click(object sender, EventArgs e)
-        {
-            tampilDaftarAset();
-        }
+        private void btnMenuDashboard_Click(object sender, EventArgs e) { tampilDaftarAset(); }
 
         private void btnMenuStatus_Click(object sender, EventArgs e)
         {

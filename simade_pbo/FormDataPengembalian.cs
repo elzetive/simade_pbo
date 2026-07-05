@@ -122,34 +122,38 @@ namespace simade_pbo
         {
             if (e.RowIndex >= 0)
             {
-                DataGridViewRow baris = this.dgvTabelList.Rows[e.RowIndex];
-                DataRowView rowView = baris.DataBoundItem as DataRowView;
-
-                if (rowView != null)
+                try
                 {
-                    DataRow dr = rowView.Row;
-                    kodeNotaAktif = dr["kode_peminjaman"].ToString();
-                    string statusTransaksi = dr["status_peminjaman"].ToString().ToLower();
+                    DataGridViewRow baris = this.dgvTabelList.Rows[e.RowIndex];
+                    DataRowView rowView = baris.DataBoundItem as DataRowView;
 
-                    txtNama_Lengkap.Text = dr["nama_lengkap"].ToString();
-                    txtTgl_Pinjam.Text = dr["tgl_pinjam"].ToString();
-                    txtTgl_Kembali.Text = dr["tgl_kembali"].ToString();
-                    txtNo_Hp.Text = dr["no_hp"].ToString();
-
-                    txtDikembalikanOleh.Clear();
-                    MuatDetailBarangBawah(kodeNotaAktif);
-
-                    if (statusTransaksi == "dikembalikan")
+                    if (rowView != null)
                     {
-                        btnSimpan.Enabled = false;
-                        txtDikembalikanOleh.ReadOnly = true;
-                    }
-                    else
-                    {
-                        btnSimpan.Enabled = true;
-                        txtDikembalikanOleh.ReadOnly = false;
+                        DataRow dr = rowView.Row;
+                        kodeNotaAktif = dr["kode_peminjaman"].ToString();
+                        string statusTransaksi = dr["status_peminjaman"].ToString().ToLower();
+
+                        txtNama_Lengkap.Text = dr["nama_lengkap"].ToString();
+                        txtTgl_Pinjam.Text = dr["tgl_pinjam"].ToString();
+                        txtTgl_Kembali.Text = dr["tgl_kembali"].ToString();
+                        txtNo_Hp.Text = dr["no_hp"].ToString();
+
+                        txtDikembalikanOleh.Clear();
+                        MuatDetailBarangBawah(kodeNotaAktif);
+
+                        if (statusTransaksi == "dikembalikan")
+                        {
+                            btnSimpan.Enabled = false;
+                            txtDikembalikanOleh.ReadOnly = true;
+                        }
+                        else
+                        {
+                            btnSimpan.Enabled = true;
+                            txtDikembalikanOleh.ReadOnly = false;
+                        }
                     }
                 }
+                catch (Exception) { }
             }
         }
 
@@ -164,7 +168,7 @@ namespace simade_pbo
                 {
                     conn.Open();
                     string queryDetail = @"SELECT b.nama_barang, k.nama_kategori, dp.deskripsi_barang, dp.jumlah_pinjam,
-                                                  dp.jumlah_kembali, dp.kondisi_bagus, dp.kondisi_rusak, dp.denda, dp.dikembalikan_oleh
+                                                  dp.jumlah_kembali, dp.kondisi_bagus, dp.kondisi_rusak, dp.denda, '' AS dikembalikan_oleh
                                            FROM detail_peminjaman dp
                                            INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
                                            INNER JOIN barang b ON dp.id_barang = b.id_barang
@@ -181,6 +185,16 @@ namespace simade_pbo
 
                             bool dataSudahKembali = false;
 
+                            if (dgvTabelList.CurrentRow != null)
+                            {
+                                string statusNotaUtama = dgvTabelList.CurrentRow.Cells[4].Value?.ToString().ToLower() ?? "";
+                                if (statusNotaUtama == "dikembalikan")
+                                {
+                                    dataSudahKembali = true;
+                                    txtDikembalikanOleh.Text = "Warga/Admin";
+                                }
+                            }
+
                             foreach (DataRow row in dtDetail.Rows)
                             {
                                 if (row["jumlah_kembali"] == DBNull.Value || Convert.ToInt32(row["jumlah_kembali"]) == 0)
@@ -190,11 +204,6 @@ namespace simade_pbo
                                     row["kondisi_bagus"] = jmlPinjam;
                                     row["kondisi_rusak"] = 0;
                                     row["denda"] = 0;
-                                }
-                                else
-                                {
-                                    dataSudahKembali = true;
-                                    txtDikembalikanOleh.Text = row["dikembalikan_oleh"].ToString();
                                 }
                             }
 
@@ -284,14 +293,13 @@ namespace simade_pbo
                                                  SET jumlah_kembali = @jmlKembali, 
                                                      kondisi_bagus = @bagus, 
                                                      kondisi_rusak = @rusak, 
-                                                     denda = @denda,
-                                                     dikembalikan_oleh = @oleh
+                                                     denda = @denda
                                                  WHERE id_peminjaman = @id 
                                                  AND id_barang = (SELECT id_barang FROM barang WHERE nama_barang = @namaBarang LIMIT 1)";
 
-                    // 3. QUERY UPDATE BARANG (Hanya memodifikasi kolom riil database: kondisi_bagus & kondisi_rusak)
+                    // 3. QUERY UPDATE BARANG (MUTASI DINAMIS KETAT: Mengurangi stok bagus hanya sebesar barang yang rusak)
                     string queryUpdateStokBarang = @"UPDATE barang 
-                                                     SET kondisi_bagus = kondisi_bagus + @bagus,
+                                                     SET kondisi_bagus = kondisi_bagus - @rusak,
                                                          kondisi_rusak = kondisi_rusak + @rusak
                                                      WHERE nama_barang = @namaBarang";
 
@@ -312,7 +320,6 @@ namespace simade_pbo
                                 cmdDetail.Parameters.AddWithValue("@bagus", kondBagus);
                                 cmdDetail.Parameters.AddWithValue("@rusak", kondRusak);
                                 cmdDetail.Parameters.AddWithValue("@denda", nominalDenda);
-                                cmdDetail.Parameters.AddWithValue("@oleh", txtDikembalikanOleh.Text.Trim());
                                 cmdDetail.Parameters.AddWithValue("@id", idPeminjamanAsli);
                                 cmdDetail.Parameters.AddWithValue("@namaBarang", namaBarang);
 
@@ -322,7 +329,6 @@ namespace simade_pbo
                             // Eksekusi Update ke Tabel Barang riil
                             using (MySqlCommand cmdBarang = new MySqlCommand(queryUpdateStokBarang, conn, transaksi))
                             {
-                                cmdBarang.Parameters.AddWithValue("@bagus", kondBagus);
                                 cmdBarang.Parameters.AddWithValue("@rusak", kondRusak);
                                 cmdBarang.Parameters.AddWithValue("@namaBarang", namaBarang);
 
@@ -377,21 +383,21 @@ namespace simade_pbo
         {
             FormDashboardAdmin frm = new FormDashboardAdmin();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnData_Pinjam_Click(object sender, EventArgs e)
         {
             FormDataPinjam frm = new FormDataPinjam();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnData_Ambil_Click(object sender, EventArgs e)
         {
             FormDataPengambilan frm = new FormDataPengambilan();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnData_Kembali_Click(object sender, EventArgs e)
@@ -404,7 +410,7 @@ namespace simade_pbo
         {
             FormRegisterAdmin frm = new FormRegisterAdmin();
             frm.Show();
-            this.Hide();
+            this.Close();
         }
 
         private void btnExit_Click(object sender, EventArgs e)

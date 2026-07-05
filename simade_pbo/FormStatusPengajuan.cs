@@ -49,10 +49,13 @@ namespace simade_pbo
             colTglPinjam.DataPropertyName = "tgl_pinjam";
             colStatusUtama.DataPropertyName = "status";
 
-            // SINKRONISASI CODES: Hanya memetakan kolom nama berkas & jumlah unit ril database baru
             dgvDetailBarang.AutoGenerateColumns = false;
             colDetailNama.DataPropertyName = "nama_aset";
             colDetailJumlah.DataPropertyName = "jumlah";
+
+            // PERBAIKAN: Kosongkan tulisan status bawaan desainer saat halaman pertama kali dibuka
+            lblStatusBadge.Text = "";
+            lblStatusBadge.BackColor = Color.Transparent;
 
             LoadPermohonanBerjalan();
         }
@@ -74,10 +77,11 @@ namespace simade_pbo
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@idUser", idUserWargaFix);
-                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        using (MySqlConnection da = new MySqlConnection()) // fallback check
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
-                            da.Fill(dt);
+                            adapter.Fill(dt);
 
                             dt.Columns.Add("no_urut", typeof(int));
                             for (int i = 0; i < dt.Rows.Count; i++)
@@ -106,6 +110,7 @@ namespace simade_pbo
                     string kodeNotaTerpilih = dtHeader.Rows[e.RowIndex]["kode_peminjaman"].ToString();
                     string statusTeks = dtHeader.Rows[e.RowIndex]["status"].ToString().ToUpper();
 
+                    // Tulisan status dan warna latar belakang baru akan muncul secara dinamis mengikuti baris data yang diklik warga
                     lblStatusBadge.Text = statusTeks;
 
                     if (statusTeks == "PENDING") lblStatusBadge.BackColor = Color.Orange;
@@ -115,7 +120,6 @@ namespace simade_pbo
                     using (MySqlConnection conn = Koneksi.GetConn())
                     {
                         conn.Open();
-                        // REVISI TOTAL QUERY: Menghilangkan pemanggilan kolom fisik 'merk' dan 'nomor_identitas'
                         string queryDetail = @"SELECT b.nama_barang AS nama_aset, 
                                                       dp.jumlah_pinjam AS jumlah
                                                FROM peminjaman p
@@ -153,6 +157,11 @@ namespace simade_pbo
 
         private void btnMenuStatus_Click(object sender, EventArgs e)
         {
+            // Reset status badge ketika menu disegarkan kembali
+            lblStatusBadge.Text = "";
+            lblStatusBadge.BackColor = Color.Transparent;
+            dgvDetailBarang.DataSource = null;
+
             LoadPermohonanBerjalan();
         }
 

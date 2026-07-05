@@ -53,6 +53,11 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblTotal = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            // PENAMBAHAN PANEL BARU: Menunggu Persetujuan / Booking
+            this.panelMenunggu = new System.Windows.Forms.Panel();
+            this.pictureBoxMenunggu = new System.Windows.Forms.PictureBox();
+            this.lblMenunggu = new System.Windows.Forms.Label();
+            this.labelMenungguTitle = new System.Windows.Forms.Label();
             this.dgvBarang = new System.Windows.Forms.DataGridView();
             this.nama_barang = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.id_kategori = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -90,12 +95,14 @@
             this.label9 = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
-            this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panelMenunggu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMenunggu)).BeginInit();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBarang)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -132,7 +139,6 @@
             this.btnTambah_Admin.TabIndex = 9;
             this.btnTambah_Admin.Text = "Tambah Admin";
             this.btnTambah_Admin.UseVisualStyleBackColor = false;
-            this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             // 
             // btnData_Kembali
             // 
@@ -147,7 +153,6 @@
             this.btnData_Kembali.TabIndex = 7;
             this.btnData_Kembali.Text = "Data Pengembalian";
             this.btnData_Kembali.UseVisualStyleBackColor = false;
-            this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
             // 
             // btnData_Pinjam
             // 
@@ -162,7 +167,6 @@
             this.btnData_Pinjam.TabIndex = 6;
             this.btnData_Pinjam.Text = "Data Pinjam";
             this.btnData_Pinjam.UseVisualStyleBackColor = false;
-            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click_1);
             // 
             // btnData_Barang
             // 
@@ -177,7 +181,6 @@
             this.btnData_Barang.TabIndex = 5;
             this.btnData_Barang.Text = "Data Barang";
             this.btnData_Barang.UseVisualStyleBackColor = false;
-            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             // 
             // btnData_Ambil
             // 
@@ -192,7 +195,6 @@
             this.btnData_Ambil.TabIndex = 4;
             this.btnData_Ambil.Text = "Data Pengambilan";
             this.btnData_Ambil.UseVisualStyleBackColor = false;
-            this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
             // 
             // lblNamaWarga
             // 
@@ -220,7 +222,6 @@
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
-            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // panelHeader
             // 
@@ -259,94 +260,6 @@
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.White;
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.pictureBox3);
-            this.panel3.Controls.Add(this.lblTersedia);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Location = new System.Drawing.Point(767, 69);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(214, 92);
-            this.panel3.TabIndex = 11;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.White;
-            this.pictureBox3.Image = global::simade_pbo.Properties.Resources.tersedia;
-            this.pictureBox3.Location = new System.Drawing.Point(48, 12);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(29, 25);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 11;
-            this.pictureBox3.TabStop = false;
-            // 
-            // lblTersedia
-            // 
-            this.lblTersedia.AutoSize = true;
-            this.lblTersedia.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTersedia.Location = new System.Drawing.Point(89, 37);
-            this.lblTersedia.Name = "lblTersedia";
-            this.lblTersedia.Size = new System.Drawing.Size(38, 45);
-            this.lblTersedia.TabIndex = 3;
-            this.lblTersedia.Text = "0";
-            this.lblTersedia.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(83, 12);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 25);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Tersedia";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.lblDipinjam);
-            this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(510, 69);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(214, 92);
-            this.panel2.TabIndex = 10;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.White;
-            this.pictureBox2.Image = global::simade_pbo.Properties.Resources.dipinjam;
-            this.pictureBox2.Location = new System.Drawing.Point(40, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 25);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 10;
-            this.pictureBox2.TabStop = false;
-            // 
-            // lblDipinjam
-            // 
-            this.lblDipinjam.AutoSize = true;
-            this.lblDipinjam.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDipinjam.Location = new System.Drawing.Point(88, 37);
-            this.lblDipinjam.Name = "lblDipinjam";
-            this.lblDipinjam.Size = new System.Drawing.Size(38, 45);
-            this.lblDipinjam.TabIndex = 2;
-            this.lblDipinjam.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(78, 12);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(92, 25);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Dipinjam";
             // 
             // panel1
             // 
@@ -355,16 +268,16 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.lblTotal);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(253, 69);
+            this.panel1.Location = new System.Drawing.Point(210, 69);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(214, 92);
+            this.panel1.Size = new System.Drawing.Size(185, 92);
             this.panel1.TabIndex = 9;
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Image = global::simade_pbo.Properties.Resources.totalbarang;
-            this.pictureBox1.Location = new System.Drawing.Point(28, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 25);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -375,7 +288,7 @@
             // 
             this.lblTotal.AutoSize = true;
             this.lblTotal.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotal.Location = new System.Drawing.Point(86, 37);
+            this.lblTotal.Location = new System.Drawing.Point(70, 37);
             this.lblTotal.Name = "lblTotal";
             this.lblTotal.Size = new System.Drawing.Size(38, 45);
             this.lblTotal.TabIndex = 1;
@@ -384,12 +297,142 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(66, 12);
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label2.Location = new System.Drawing.Point(45, 14);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(124, 25);
+            this.label2.Size = new System.Drawing.Size(107, 21);
             this.label2.TabIndex = 0;
             this.label2.Text = "Total Barang";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.pictureBox2);
+            this.panel2.Controls.Add(this.lblDipinjam);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Location = new System.Drawing.Point(410, 69);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(185, 92);
+            this.panel2.TabIndex = 10;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.White;
+            this.pictureBox2.Image = global::simade_pbo.Properties.Resources.dipinjam;
+            this.pictureBox2.Location = new System.Drawing.Point(10, 12);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(32, 25);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 10;
+            this.pictureBox2.TabStop = false;
+            // 
+            // lblDipinjam
+            // 
+            this.lblDipinjam.AutoSize = true;
+            this.lblDipinjam.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDipinjam.Location = new System.Drawing.Point(70, 37);
+            this.lblDipinjam.Name = "lblDipinjam";
+            this.lblDipinjam.Size = new System.Drawing.Size(38, 45);
+            this.lblDipinjam.TabIndex = 2;
+            this.lblDipinjam.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label4.Location = new System.Drawing.Point(45, 14);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(79, 21);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Dipinjam";
+            // 
+            // panelMenunggu
+            // 
+            this.panelMenunggu.BackColor = System.Drawing.Color.White;
+            this.panelMenunggu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelMenunggu.Controls.Add(this.pictureBoxMenunggu);
+            this.panelMenunggu.Controls.Add(this.lblMenunggu);
+            this.panelMenunggu.Controls.Add(this.labelMenungguTitle);
+            this.panelMenunggu.Location = new System.Drawing.Point(610, 69);
+            this.panelMenunggu.Name = "panelMenunggu";
+            this.panelMenunggu.Size = new System.Drawing.Size(200, 92);
+            this.panelMenunggu.TabIndex = 20;
+            // 
+            // pictureBoxMenunggu
+            // 
+            this.pictureBoxMenunggu.BackColor = System.Drawing.Color.White;
+            this.pictureBoxMenunggu.Image = global::simade_pbo.Properties.Resources.dipinjam; // Menggunakan resource yang ada
+            this.pictureBoxMenunggu.Location = new System.Drawing.Point(5, 12);
+            this.pictureBoxMenunggu.Name = "pictureBoxMenunggu";
+            this.pictureBoxMenunggu.Size = new System.Drawing.Size(25, 25);
+            this.pictureBoxMenunggu.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxMenunggu.TabIndex = 10;
+            this.pictureBoxMenunggu.TabStop = false;
+            // 
+            // lblMenunggu
+            // 
+            this.lblMenunggu.AutoSize = true;
+            this.lblMenunggu.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblMenunggu.Location = new System.Drawing.Point(70, 37);
+            this.lblMenunggu.Name = "lblMenunggu";
+            this.lblMenunggu.Size = new System.Drawing.Size(38, 45);
+            this.lblMenunggu.TabIndex = 2;
+            this.lblMenunggu.Text = "0";
+            // 
+            // labelMenungguTitle
+            // 
+            this.labelMenungguTitle.AutoSize = true;
+            this.labelMenungguTitle.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelMenungguTitle.Location = new System.Drawing.Point(32, 16);
+            this.labelMenungguTitle.Name = "labelMenungguTitle";
+            this.labelMenungguTitle.Size = new System.Drawing.Size(163, 17);
+            this.labelMenungguTitle.TabIndex = 2;
+            this.labelMenungguTitle.Text = "Menunggu Persetujuan";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.pictureBox3);
+            this.panel3.Controls.Add(this.lblTersedia);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Location = new System.Drawing.Point(825, 69);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(185, 92);
+            this.panel3.TabIndex = 11;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.White;
+            this.pictureBox3.Image = global::simade_pbo.Properties.Resources.tersedia;
+            this.pictureBox3.Location = new System.Drawing.Point(10, 12);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(29, 25);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 11;
+            this.pictureBox3.TabStop = false;
+            // 
+            // lblTersedia
+            // 
+            this.lblTersedia.AutoSize = true;
+            this.lblTersedia.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTersedia.Location = new System.Drawing.Point(70, 37);
+            this.lblTersedia.Name = "lblTersedia";
+            this.lblTersedia.Size = new System.Drawing.Size(38, 45);
+            this.lblTersedia.TabIndex = 3;
+            this.lblTersedia.Text = "0";
+            this.lblTersedia.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label6.Location = new System.Drawing.Point(45, 14);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 21);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Tersedia";
             // 
             // dgvBarang
             // 
@@ -410,7 +453,6 @@
             this.dgvBarang.RowHeadersWidth = 51;
             this.dgvBarang.Size = new System.Drawing.Size(471, 165);
             this.dgvBarang.TabIndex = 12;
-            this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             // 
             // nama_barang
             // 
@@ -492,8 +534,6 @@
             this.btnBatal.Size = new System.Drawing.Size(99, 28);
             this.btnBatal.TabIndex = 12;
             this.btnBatal.Text = "BATAL";
-            this.btnBatal.UseVisualStyleBackColor = false;
-            this.btnBatal.Click += new System.EventHandler(this.btnBatal_Click);
             // 
             // btnHapus
             // 
@@ -506,8 +546,6 @@
             this.btnHapus.Size = new System.Drawing.Size(99, 30);
             this.btnHapus.TabIndex = 11;
             this.btnHapus.Text = "HAPUS";
-            this.btnHapus.UseVisualStyleBackColor = false;
-            this.btnHapus.Click += new System.EventHandler(this.btnHapus_Click);
             // 
             // btnEdit
             // 
@@ -520,8 +558,6 @@
             this.btnEdit.Size = new System.Drawing.Size(99, 29);
             this.btnEdit.TabIndex = 10;
             this.btnEdit.Text = "EDIT";
-            this.btnEdit.UseVisualStyleBackColor = false;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnTambah
             // 
@@ -534,8 +570,6 @@
             this.btnTambah.Size = new System.Drawing.Size(99, 29);
             this.btnTambah.TabIndex = 9;
             this.btnTambah.Text = "TAMBAH";
-            this.btnTambah.UseVisualStyleBackColor = false;
-            this.btnTambah.Click += new System.EventHandler(this.btnTambah_Click);
             // 
             // cmbKategoriBarang
             // 
@@ -592,7 +626,6 @@
             this.txtCari.Name = "txtCari";
             this.txtCari.Size = new System.Drawing.Size(421, 20);
             this.txtCari.TabIndex = 15;
-            this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             // 
             // panel5
             // 
@@ -618,8 +651,6 @@
             this.btnBatalKategori.Size = new System.Drawing.Size(99, 28);
             this.btnBatalKategori.TabIndex = 16;
             this.btnBatalKategori.Text = "BATAL";
-            this.btnBatalKategori.UseVisualStyleBackColor = false;
-            this.btnBatalKategori.Click += new System.EventHandler(this.btnBatalKategori_Click);
             // 
             // btnTambahKategori
             // 
@@ -632,8 +663,6 @@
             this.btnTambahKategori.Size = new System.Drawing.Size(99, 29);
             this.btnTambahKategori.TabIndex = 15;
             this.btnTambahKategori.Text = "TAMBAH";
-            this.btnTambahKategori.UseVisualStyleBackColor = false;
-            this.btnTambahKategori.Click += new System.EventHandler(this.btnTambahKategori_Click);
             // 
             // txtKategoriBarang
             // 
@@ -689,8 +718,6 @@
             this.btnEditDetail.Size = new System.Drawing.Size(99, 29);
             this.btnEditDetail.TabIndex = 15;
             this.btnEditDetail.Text = "EDIT";
-            this.btnEditDetail.UseVisualStyleBackColor = false;
-            this.btnEditDetail.Click += new System.EventHandler(this.btnEditDetail_Click);
             // 
             // txtKondisiBagus
             // 
@@ -737,8 +764,6 @@
             this.btnBatalDetail.Size = new System.Drawing.Size(99, 28);
             this.btnBatalDetail.TabIndex = 18;
             this.btnBatalDetail.Text = "BATAL";
-            this.btnBatalDetail.UseVisualStyleBackColor = false;
-            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click_1);
             // 
             // label11
             // 
@@ -783,6 +808,7 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.dgvBarang);
             this.Controls.Add(this.panel3);
+            this.Controls.Add(this.panelMenunggu);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panelHeader);
@@ -791,19 +817,21 @@
             this.Name = "FormDashboardAdmin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormDashboardAdmin";
-            this.Load += new System.EventHandler(this.FormDashboardAdmin_Load_1);
             this.panelSidebar.ResumeLayout(false);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panelMenunggu.ResumeLayout(false);
+            this.panelMenunggu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMenunggu)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBarang)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
@@ -836,6 +864,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label lblTotal;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panelMenunggu;
+        private System.Windows.Forms.PictureBox pictureBoxMenunggu;
+        private System.Windows.Forms.Label lblMenunggu;
+        private System.Windows.Forms.Label labelMenungguTitle;
         private System.Windows.Forms.DataGridView dgvBarang;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label1;
