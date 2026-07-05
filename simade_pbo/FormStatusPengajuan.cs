@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -10,9 +11,12 @@ namespace simade_pbo
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
+        private int idUserWargaFix = 4;
+
         public FormStatusPengajuan()
         {
             InitializeComponent();
+
             this.Load += new System.EventHandler(this.FormStatusPengajuan_Load);
             this.btnMenuDashboard.Click += new System.EventHandler(this.btnMenuDashboard_Click);
             this.btnMenuStatus.Click += new System.EventHandler(this.btnMenuStatus_Click);
@@ -24,12 +28,20 @@ namespace simade_pbo
 
         private void FormStatusPengajuan_Load(object sender, EventArgs e)
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            if (!string.IsNullOrEmpty(IdUserLogin))
+            {
+                int.TryParse(IdUserLogin, out idUserWargaFix);
+            }
+
             if (!string.IsNullOrEmpty(NamaUserLogin))
+            {
                 lblNamaWarga.Text = "Halo, " + NamaUserLogin + "!";
+            }
 
             dgvPengajuan.ReadOnly = true;
             dgvDetailBarang.ReadOnly = true;
-            dgvDetailBarang.AllowUserToAddRows = false;
 
             dgvPengajuan.AutoGenerateColumns = false;
             colNo.DataPropertyName = "no_urut";
@@ -37,10 +49,9 @@ namespace simade_pbo
             colTglPinjam.DataPropertyName = "tgl_pinjam";
             colStatusUtama.DataPropertyName = "status";
 
+            // SINKRONISASI CODES: Hanya memetakan kolom nama berkas & jumlah unit ril database baru
             dgvDetailBarang.AutoGenerateColumns = false;
             colDetailNama.DataPropertyName = "nama_aset";
-            colDetailMerk.DataPropertyName = "merk";
-            colDetailIdentitas.DataPropertyName = "no_identitas";
             colDetailJumlah.DataPropertyName = "jumlah";
 
             LoadPermohonanBerjalan();
@@ -48,23 +59,21 @@ namespace simade_pbo
 
         private void LoadPermohonanBerjalan()
         {
-            if (string.IsNullOrEmpty(IdUserLogin)) return;
-
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
                     conn.Open();
-                    // REVISI: Menggunakan IN ('pending', 'dipinjam') agar status yang berubah tetap tampil di sini
-                    string query = @"SELECT kode_peminjaman, tgl_pinjam, status_peminjaman AS status
+                    string query = @"SELECT kode_peminjaman, 
+                                            DATE_FORMAT(tgl_pinjam, '%d/%m/%Y') AS tgl_pinjam, 
+                                            status_peminjaman AS status
                                      FROM peminjaman
-                                     WHERE id_user = @idUser AND status_peminjaman IN ('pending', 'dipinjam')
-                                     GROUP BY kode_peminjaman, tgl_pinjam, status_peminjaman
-                                     ORDER BY tgl_pinjam DESC";
+                                     WHERE id_user = @idUser AND status_peminjaman IN ('pending', 'disetujui', 'dipinjam', 'ditolak')
+                                     ORDER BY id_peminjaman DESC";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idUser", Convert.ToInt32(IdUserLogin));
+                        cmd.Parameters.AddWithValue("@idUser", idUserWargaFix);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
@@ -82,7 +91,7 @@ namespace simade_pbo
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Gagal memuat nota berjalan: " + ex.Message, "Error");
+                    MessageBox.Show("Gagal memuat antrean permohonan berjalan: " + ex.Message, "Error Database");
                 }
             }
         }
@@ -93,43 +102,42 @@ namespace simade_pbo
             {
                 try
                 {
-                    DataGridViewRow row = dgvPengajuan.Rows[e.RowIndex];
+                    DataTable dtHeader = (DataTable)dgvPengajuan.DataSource;
+                    string kodeNotaTerpilih = dtHeader.Rows[e.RowIndex]["kode_peminjaman"].ToString();
+                    string statusTeks = dtHeader.Rows[e.RowIndex]["status"].ToString().ToUpper();
 
-                    if (row.Cells["colIdPinjam"].Value != null)
+                    lblStatusBadge.Text = statusTeks;
+
+                    if (statusTeks == "PENDING") lblStatusBadge.BackColor = Color.Orange;
+                    else if (statusTeks == "DISETUJUI" || statusTeks == "DIPINJAM") lblStatusBadge.BackColor = Color.MediumSeaGreen;
+                    else if (statusTeks == "DITOLAK") lblStatusBadge.BackColor = Color.Crimson;
+
+                    using (MySqlConnection conn = Koneksi.GetConn())
                     {
-                        string kodeNotaTerpilih = row.Cells["colIdPinjam"].Value.ToString();
+                        conn.Open();
+                        // REVISI TOTAL QUERY: Menghilangkan pemanggilan kolom fisik 'merk' dan 'nomor_identitas'
+                        string queryDetail = @"SELECT b.nama_barang AS nama_aset, 
+                                                      dp.jumlah_pinjam AS jumlah
+                                               FROM peminjaman p
+                                               INNER JOIN detail_peminjaman dp ON p.id_peminjaman = dp.id_peminjaman
+                                               INNER JOIN barang b ON dp.id_barang = b.id_barang
+                                               WHERE p.kode_peminjaman = @kodeNota";
 
-                        if (row.Cells["colStatusUtama"].Value != null)
+                        using (MySqlCommand cmd = new MySqlCommand(queryDetail, conn))
                         {
-                            lblStatusBadge.Text = row.Cells["colStatusUtama"].Value.ToString().ToUpper();
-                        }
-
-                        using (MySqlConnection conn = Koneksi.GetConn())
-                        {
-                            conn.Open();
-
-                            // Menggunakan b.nomor_identitas sesuai fakta fisik tabel barang di phpMyAdmin
-                            string queryDetail = @"SELECT b.nama_barang AS nama_aset, b.merk, b.nomor_identitas AS no_identitas, 1 AS jumlah
-                                                   FROM peminjaman p
-                                                   INNER JOIN barang b ON p.id_barang = b.id_barang
-                                                   WHERE p.kode_peminjaman = @kodeNota";
-
-                            using (MySqlCommand cmd = new MySqlCommand(queryDetail, conn))
+                            cmd.Parameters.AddWithValue("@kodeNota", kodeNotaTerpilih);
+                            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                             {
-                                cmd.Parameters.AddWithValue("@kodeNota", kodeNotaTerpilih);
-                                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                                {
-                                    DataTable dtDetail = new DataTable();
-                                    da.Fill(dtDetail);
-                                    dgvDetailBarang.DataSource = dtDetail;
-                                }
+                                DataTable dtDetail = new DataTable();
+                                da.Fill(dtDetail);
+                                dgvDetailBarang.DataSource = dtDetail;
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Gagal membongkar isi nota: " + ex.Message, "Rincian Error");
+                    MessageBox.Show("Gagal membongkar rincian item nota berjalan: " + ex.Message, "Rincian Error");
                 }
             }
         }
@@ -137,13 +145,16 @@ namespace simade_pbo
         private void btnMenuDashboard_Click(object sender, EventArgs e)
         {
             FormDashboardWarga frm = new FormDashboardWarga();
-            //frm.IdUserLogin = this.IdUserLogin;
-            //frm.NamaUserLogin = this.NamaUserLogin;
+            frm.IdUserLogin = this.IdUserLogin;
+            frm.NamaUserLogin = this.NamaUserLogin;
             frm.Show();
             this.Close();
         }
 
-        private void btnMenuStatus_Click(object sender, EventArgs e) { LoadPermohonanBerjalan(); }
+        private void btnMenuStatus_Click(object sender, EventArgs e)
+        {
+            LoadPermohonanBerjalan();
+        }
 
         private void btnMenuRiwayat_Click(object sender, EventArgs e)
         {
@@ -162,10 +173,5 @@ namespace simade_pbo
         }
 
         private void btnExit_Click(object sender, EventArgs e) { Application.Exit(); }
-
-        private void btnMenuDashboard_Click_1(object sender, EventArgs e)
-        {
-
-        }
     }
 }

@@ -112,7 +112,6 @@
             this.btnMenuDashboard.TabIndex = 3;
             this.btnMenuDashboard.Text = "Peminjaman Aset";
             this.btnMenuDashboard.UseVisualStyleBackColor = false;
-            this.btnMenuDashboard.Click += new System.EventHandler(this.btnMenuDashboard_Click);
             // 
             // btnMenuStatus
             // 
@@ -129,7 +128,6 @@
             this.btnMenuStatus.TabIndex = 4;
             this.btnMenuStatus.Text = "Status Pengajuan";
             this.btnMenuStatus.UseVisualStyleBackColor = false;
-            this.btnMenuStatus.Click += new System.EventHandler(this.btnMenuStatus_Click);
             // 
             // btnMenuRiwayat
             // 
@@ -146,7 +144,6 @@
             this.btnMenuRiwayat.TabIndex = 5;
             this.btnMenuRiwayat.Text = "Riwayat Pinjam";
             this.btnMenuRiwayat.UseVisualStyleBackColor = false;
-            this.btnMenuRiwayat.Click += new System.EventHandler(this.btnMenuRiwayat_Click);
             // 
             // btnLogOut
             // 
@@ -162,7 +159,6 @@
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
-            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // panelHeader
             // 
@@ -201,7 +197,6 @@
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // lblTabel
             // 
@@ -270,7 +265,6 @@
             this.btnTambahKeList.TabIndex = 9;
             this.btnTambahKeList.Text = "Tambah ke List";
             this.btnTambahKeList.UseVisualStyleBackColor = false;
-            this.btnTambahKeList.Click += new System.EventHandler(this.btnTambahKeList_Click);
             // 
             // dtpTanggalPinjam
             // 
@@ -392,7 +386,6 @@
             this.btnKirimPengajuan.TabIndex = 6;
             this.btnKirimPengajuan.Text = "Kirim Pengajuan";
             this.btnKirimPengajuan.UseVisualStyleBackColor = false;
-            this.btnKirimPengajuan.Click += new System.EventHandler(this.btnKirimPengajuan_Click);
             // 
             // lblCartTitle
             // 
@@ -422,7 +415,6 @@
             this.dgvBarang.RowHeadersWidth = 51;
             this.dgvBarang.Size = new System.Drawing.Size(491, 443);
             this.dgvBarang.TabIndex = 13;
-            this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             // 
             // nama_barang
             // 

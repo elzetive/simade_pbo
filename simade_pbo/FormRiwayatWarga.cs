@@ -10,10 +10,14 @@ namespace simade_pbo
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
+        // Variabel angka internal jika konversi properti string mengalami null
+        private int idUserWargaFix = 4;
+
         public FormRiwayatWarga()
         {
             InitializeComponent();
 
+            // Mengaitkan Event Runtime secara terpadu
             this.Load += new System.EventHandler(this.FormRiwayatWarga_Load);
             this.btnMenuDashboard.Click += new System.EventHandler(this.btnMenuDashboard_Click);
             this.btnMenuStatus.Click += new System.EventHandler(this.btnMenuStatus_Click);
@@ -25,6 +29,13 @@ namespace simade_pbo
 
         private void FormRiwayatWarga_Load(object sender, EventArgs e)
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
+
+            if (!string.IsNullOrEmpty(IdUserLogin))
+            {
+                int.TryParse(IdUserLogin, out idUserWargaFix);
+            }
+
             if (!string.IsNullOrEmpty(NamaUserLogin))
             {
                 lblNamaWarga.Text = "Halo, " + NamaUserLogin + "!";
@@ -32,20 +43,18 @@ namespace simade_pbo
 
             dgvRiwayat.ReadOnly = true;
             dgvDetailBarang.ReadOnly = true;
-            dgvDetailBarang.AllowUserToAddRows = false;
 
-            // Pemetaan Data Transaksi Bundel Nota (Kiri)
+            // Pemetaan Data Transaksi Bundel Nota (Tabel Kiri)
             dgvRiwayat.AutoGenerateColumns = false;
             colNo.DataPropertyName = "no_urut";
             colHistId.DataPropertyName = "kode_peminjaman";
             colHistTglPinjam.DataPropertyName = "tgl_pinjam";
             colHistTglKembali.DataPropertyName = "tgl_kembali";
 
-            // Pemetaan Data Rincian Multi-Barang (Kanan)
+            // Pemetaan Data Rincian Multi-Barang (Tabel Kanan)
+            // PERBAIKAN: Menghapus referensi mapping colDetailMerk dan colDetailIdentitas yang sudah tidak ada di file desainer baru
             dgvDetailBarang.AutoGenerateColumns = false;
             colDetailNama.DataPropertyName = "nama_aset";
-            colDetailMerk.DataPropertyName = "merk";
-            colDetailIdentitas.DataPropertyName = "no_identitas";
             colDetailJumlah.DataPropertyName = "jumlah";
 
             tampilDataSelesai();
@@ -53,26 +62,22 @@ namespace simade_pbo
 
         private void tampilDataSelesai()
         {
-            if (string.IsNullOrEmpty(IdUserLogin)) return;
-
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
                     conn.Open();
-                    // REVISI UTAMA: Mengubah MAX(tgl_kembali) menjadi MAX(updated_at)
-                    // Agar mencatat tanggal dan jam riil saat Admin melakukan konfirmasi pengembalian berkas
+                    // SINKRONISASI DATABASE BARU: Menarik nota induk warga yang berstatus 'dikembalikan'
                     string query = @"SELECT kode_peminjaman, 
-                                            DATE_FORMAT(MIN(tgl_pinjam), '%d/%m/%Y') AS tgl_pinjam, 
-                                            DATE_FORMAT(MAX(updated_at), '%d/%m/%Y') AS tgl_kembali
+                                            DATE_FORMAT(tgl_pinjam, '%d/%m/%Y') AS tgl_pinjam, 
+                                            DATE_FORMAT(updated_at, '%d/%m/%Y') AS tgl_kembali
                                      FROM peminjaman
                                      WHERE id_user = @idUser AND status_peminjaman = 'dikembalikan'
-                                     GROUP BY kode_peminjaman
-                                     ORDER BY MAX(updated_at) DESC";
+                                     ORDER BY updated_at DESC";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@idUser", Convert.ToInt32(IdUserLogin));
+                        cmd.Parameters.AddWithValue("@idUser", idUserWargaFix);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
@@ -90,7 +95,7 @@ namespace simade_pbo
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Gagal memuat arsip transaksi: " + ex.Message, "Error Database");
+                    MessageBox.Show("Gagal memuat arsip transaksi selesai: " + ex.Message, "Error Database");
                 }
             }
         }
@@ -101,37 +106,35 @@ namespace simade_pbo
             {
                 try
                 {
-                    DataGridViewRow row = dgvRiwayat.Rows[e.RowIndex];
+                    DataTable dtHeader = (DataTable)dgvRiwayat.DataSource;
+                    string kodeNotaTerpilih = dtHeader.Rows[e.RowIndex]["kode_peminjaman"].ToString();
 
-                    if (row.Cells["colHistId"].Value != null)
+                    using (MySqlConnection conn = Koneksi.GetConn())
                     {
-                        string kodeNotaTerpilih = row.Cells["colHistId"].Value.ToString();
+                        conn.Open();
+                        // SINKRONISASI SKEMA HEADER-DETAIL BARU: Membedah item barang via detail_peminjaman tanpa kolom fisik lama yang tidak ada
+                        string queryDetail = @"SELECT b.nama_barang AS nama_aset, 
+                                                      dp.jumlah_pinjam AS jumlah
+                                               FROM peminjaman p
+                                               INNER JOIN detail_peminjaman dp ON p.id_peminjaman = dp.id_peminjaman
+                                               INNER JOIN barang b ON dp.id_barang = b.id_barang
+                                               WHERE p.kode_peminjaman = @kodeNota";
 
-                        using (MySqlConnection conn = Koneksi.GetConn())
+                        using (MySqlCommand cmd = new MySqlCommand(queryDetail, conn))
                         {
-                            conn.Open();
-                            // Query membongkar rincian aset di dalam nota terpilih beserta kolom nomor_identitas fisik
-                            string queryDetail = @"SELECT b.nama_barang AS nama_aset, b.merk, b.nomor_identitas AS no_identitas, 1 AS jumlah
-                                                   FROM peminjaman p
-                                                   INNER JOIN barang b ON p.id_barang = b.id_barang
-                                                   WHERE p.kode_peminjaman = @kodeNota";
-
-                            using (MySqlCommand cmd = new MySqlCommand(queryDetail, conn))
+                            cmd.Parameters.AddWithValue("@kodeNota", kodeNotaTerpilih);
+                            using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                             {
-                                cmd.Parameters.AddWithValue("@kodeNota", kodeNotaTerpilih);
-                                using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
-                                {
-                                    DataTable dtDetail = new DataTable();
-                                    da.Fill(dtDetail);
-                                    dgvDetailBarang.DataSource = dtDetail;
-                                }
+                                DataTable dtDetail = new DataTable();
+                                da.Fill(dtDetail);
+                                dgvDetailBarang.DataSource = dtDetail;
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Gagal membongkar item riwayat: " + ex.Message, "Rincian Error");
+                    MessageBox.Show("Gagal membongkar rincian item riwayat: " + ex.Message, "Rincian Error");
                 }
             }
         }
@@ -139,8 +142,8 @@ namespace simade_pbo
         private void btnMenuDashboard_Click(object sender, EventArgs e)
         {
             FormDashboardWarga frm = new FormDashboardWarga();
-            //frm.IdUserLogin = this.IdUserLogin;
-            //frm.NamaUserLogin = this.NamaUserLogin;
+            frm.IdUserLogin = this.IdUserLogin;
+            frm.NamaUserLogin = this.NamaUserLogin;
             frm.Show();
             this.Close();
         }
@@ -154,13 +157,21 @@ namespace simade_pbo
             this.Close();
         }
 
-        private void btnMenuRiwayat_Click(object sender, EventArgs e) { tampilDataSelesai(); }
-        private void btnLogOut_Click(object sender, EventArgs e) { FormLogin l = new FormLogin(); l.Show(); this.Close(); }
-        private void btnExit_Click(object sender, EventArgs e) { Application.Exit(); }
-
-        private void btnMenuRiwayat_Click_1(object sender, EventArgs e)
+        private void btnMenuRiwayat_Click(object sender, EventArgs e)
         {
+            tampilDataSelesai();
+        }
 
+        private void btnLogOut_Click(object sender, EventArgs e)
+        {
+            FormLogin login = new FormLogin();
+            login.Show();
+            this.Close();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

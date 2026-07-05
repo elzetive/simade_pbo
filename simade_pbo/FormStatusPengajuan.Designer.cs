@@ -1,22 +1,22 @@
 ﻿namespace simade_pbo
 {
-	partial class FormStatusPengajuan
-	{
-		private System.ComponentModel.IContainer components = null;
+    partial class FormStatusPengajuan
+    {
+        private System.ComponentModel.IContainer components = null;
 
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		private void InitializeComponent()
-		{
+        private void InitializeComponent()
+        {
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.lblNamaWarga = new System.Windows.Forms.Label();
             this.lblRole = new System.Windows.Forms.Label();
@@ -38,8 +38,6 @@
             this.lblTxtStatus = new System.Windows.Forms.Label();
             this.dgvDetailBarang = new System.Windows.Forms.DataGridView();
             this.colDetailNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDetailMerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDetailIdentitas = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDetailJumlah = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblFormDetail = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
@@ -89,6 +87,8 @@
             // btnMenuDashboard
             // 
             this.btnMenuDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
+            this.btnMenuDashboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuDashboard.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
             this.btnMenuDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDashboard.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuDashboard.ForeColor = System.Drawing.Color.White;
@@ -98,11 +98,12 @@
             this.btnMenuDashboard.TabIndex = 2;
             this.btnMenuDashboard.Text = "Peminjaman Aset";
             this.btnMenuDashboard.UseVisualStyleBackColor = false;
-            this.btnMenuDashboard.Click += new System.EventHandler(this.btnMenuDashboard_Click_1);
             // 
             // btnMenuStatus
             // 
             this.btnMenuStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.btnMenuStatus.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuStatus.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
             this.btnMenuStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuStatus.ForeColor = System.Drawing.Color.White;
@@ -116,6 +117,8 @@
             // btnMenuRiwayat
             // 
             this.btnMenuRiwayat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
+            this.btnMenuRiwayat.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuRiwayat.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
             this.btnMenuRiwayat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuRiwayat.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuRiwayat.ForeColor = System.Drawing.Color.White;
@@ -129,6 +132,8 @@
             // btnLogOut
             // 
             this.btnLogOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogOut.FlatAppearance.BorderSize = 0; // PERBAIKAN: Menghapus border putih
             this.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
@@ -189,6 +194,7 @@
             this.dgvPengajuan.Location = new System.Drawing.Point(212, 114);
             this.dgvPengajuan.Name = "dgvPengajuan";
             this.dgvPengajuan.ReadOnly = true;
+            this.dgvPengajuan.RowHeadersVisible = false;
             this.dgvPengajuan.Size = new System.Drawing.Size(397, 447);
             this.dgvPengajuan.TabIndex = 2;
             // 
@@ -201,10 +207,9 @@
             // 
             // colIdPinjam
             // 
-            this.colIdPinjam.HeaderText = "ID Pinjam";
+            this.colIdPinjam.HeaderText = "Kode Nota";
             this.colIdPinjam.Name = "colIdPinjam";
             this.colIdPinjam.ReadOnly = true;
-            this.colIdPinjam.Visible = false;
             // 
             // colTglPinjam
             // 
@@ -246,9 +251,9 @@
             this.lblStatusBadge.BackColor = System.Drawing.Color.Orange;
             this.lblStatusBadge.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.lblStatusBadge.ForeColor = System.Drawing.Color.White;
-            this.lblStatusBadge.Location = new System.Drawing.Point(180, 342);
+            this.lblStatusBadge.Location = new System.Drawing.Point(145, 342);
             this.lblStatusBadge.Name = "lblStatusBadge";
-            this.lblStatusBadge.Size = new System.Drawing.Size(202, 26);
+            this.lblStatusBadge.Size = new System.Drawing.Size(237, 26);
             this.lblStatusBadge.TabIndex = 0;
             this.lblStatusBadge.Text = "PENDING";
             this.lblStatusBadge.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -273,12 +278,11 @@
             this.dgvDetailBarang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDetailBarang.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colDetailNama,
-            this.colDetailMerk,
-            this.colDetailIdentitas,
             this.colDetailJumlah});
             this.dgvDetailBarang.Location = new System.Drawing.Point(15, 60);
             this.dgvDetailBarang.Name = "dgvDetailBarang";
             this.dgvDetailBarang.ReadOnly = true;
+            this.dgvDetailBarang.RowHeadersVisible = false;
             this.dgvDetailBarang.Size = new System.Drawing.Size(367, 260);
             this.dgvDetailBarang.TabIndex = 1;
             // 
@@ -287,18 +291,6 @@
             this.colDetailNama.HeaderText = "Nama Aset";
             this.colDetailNama.Name = "colDetailNama";
             this.colDetailNama.ReadOnly = true;
-            // 
-            // colDetailMerk
-            // 
-            this.colDetailMerk.HeaderText = "Merk";
-            this.colDetailMerk.Name = "colDetailMerk";
-            this.colDetailMerk.ReadOnly = true;
-            // 
-            // colDetailIdentitas
-            // 
-            this.colDetailIdentitas.HeaderText = "No. Identitas";
-            this.colDetailIdentitas.Name = "colDetailIdentitas";
-            this.colDetailIdentitas.ReadOnly = true;
             // 
             // colDetailJumlah
             // 
@@ -342,35 +334,33 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Panel panelSidebar;
-		private System.Windows.Forms.Label lblNamaWarga;
-		private System.Windows.Forms.Label lblRole;
-		private System.Windows.Forms.Button btnMenuDashboard;
-		private System.Windows.Forms.Button btnMenuStatus;
-		private System.Windows.Forms.Button btnMenuRiwayat;
-		private System.Windows.Forms.Button btnLogOut;
-		private System.Windows.Forms.Panel panelHeader;
-		private System.Windows.Forms.Label lblTitle;
-		private System.Windows.Forms.Button btnExit;
-		private System.Windows.Forms.DataGridView dgvPengajuan;
-		private System.Windows.Forms.Label lblTabel;
-		private System.Windows.Forms.Panel panelDetail;
-		private System.Windows.Forms.Label lblFormDetail;
-		private System.Windows.Forms.DataGridView dgvDetailBarang;
-		private System.Windows.Forms.Label lblStatusBadge;
-		private System.Windows.Forms.Label lblTxtStatus;
+        private System.Windows.Forms.Panel panelSidebar;
+        private System.Windows.Forms.Label lblNamaWarga;
+        private System.Windows.Forms.Label lblRole;
+        private System.Windows.Forms.Button btnMenuDashboard;
+        private System.Windows.Forms.Button btnMenuStatus;
+        private System.Windows.Forms.Button btnMenuRiwayat;
+        private System.Windows.Forms.Button btnLogOut;
+        private System.Windows.Forms.Panel panelHeader;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.DataGridView dgvPengajuan;
+        private System.Windows.Forms.Label lblTabel;
+        private System.Windows.Forms.Panel panelDetail;
+        private System.Windows.Forms.Label lblFormDetail;
+        private System.Windows.Forms.DataGridView dgvDetailBarang;
+        private System.Windows.Forms.Label lblStatusBadge;
+        private System.Windows.Forms.Label lblTxtStatus;
 
-		private System.Windows.Forms.DataGridViewTextBoxColumn colNo;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colIdPinjam;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colTglPinjam;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colStatusUtama;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colDetailNama;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colDetailMerk;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colDetailIdentitas;
-		private System.Windows.Forms.DataGridViewTextBoxColumn colDetailJumlah;
-	}
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIdPinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTglPinjam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatusUtama;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDetailNama;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDetailJumlah;
+    }
 }

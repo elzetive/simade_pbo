@@ -36,8 +36,6 @@
             this.panelDetail = new System.Windows.Forms.Panel();
             this.dgvDetailBarang = new System.Windows.Forms.DataGridView();
             this.colDetailNama = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDetailMerk = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDetailIdentitas = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDetailJumlah = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblFormDetail = new System.Windows.Forms.Label();
             this.panelSidebar.SuspendLayout();
@@ -87,6 +85,8 @@
             // btnMenuDashboard
             // 
             this.btnMenuDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
+            this.btnMenuDashboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuDashboard.FlatAppearance.BorderSize = 0; // Mengunci hilangnya border putih
             this.btnMenuDashboard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuDashboard.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuDashboard.ForeColor = System.Drawing.Color.White;
@@ -100,6 +100,8 @@
             // btnMenuStatus
             // 
             this.btnMenuStatus.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(85)))), ((int)(((byte)(99)))));
+            this.btnMenuStatus.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuStatus.FlatAppearance.BorderSize = 0; // Mengunci hilangnya border putih
             this.btnMenuStatus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuStatus.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuStatus.ForeColor = System.Drawing.Color.White;
@@ -113,6 +115,8 @@
             // btnMenuRiwayat
             // 
             this.btnMenuRiwayat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.btnMenuRiwayat.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMenuRiwayat.FlatAppearance.BorderSize = 0; // Mengunci hilangnya border putih
             this.btnMenuRiwayat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMenuRiwayat.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnMenuRiwayat.ForeColor = System.Drawing.Color.White;
@@ -122,11 +126,12 @@
             this.btnMenuRiwayat.TabIndex = 5;
             this.btnMenuRiwayat.Text = "Riwayat Pinjam";
             this.btnMenuRiwayat.UseVisualStyleBackColor = false;
-            this.btnMenuRiwayat.Click += new System.EventHandler(this.btnMenuRiwayat_Click_1);
             // 
             // btnLogOut
             // 
             this.btnLogOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
+            this.btnLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogOut.FlatAppearance.BorderSize = 0; // Mengunci hilangnya border putih
             this.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
@@ -145,8 +150,7 @@
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(192, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(854, 57);
-            this.panelHeader.TabIndex = 6;
+            this.panelHeader.Size = new System.Drawing.Size(854, 57); this.panelHeader.TabIndex = 6;
             // 
             // lblTitle
             // 
@@ -187,6 +191,7 @@
             this.dgvRiwayat.Location = new System.Drawing.Point(212, 114);
             this.dgvRiwayat.Name = "dgvRiwayat";
             this.dgvRiwayat.ReadOnly = true;
+            this.dgvRiwayat.RowHeadersVisible = false;
             this.dgvRiwayat.Size = new System.Drawing.Size(397, 447);
             this.dgvRiwayat.TabIndex = 2;
             // 
@@ -245,12 +250,11 @@
             this.dgvDetailBarang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDetailBarang.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colDetailNama,
-            this.colDetailMerk,
-            this.colDetailIdentitas,
             this.colDetailJumlah});
             this.dgvDetailBarang.Location = new System.Drawing.Point(15, 60);
             this.dgvDetailBarang.Name = "dgvDetailBarang";
             this.dgvDetailBarang.ReadOnly = true;
+            this.dgvDetailBarang.RowHeadersVisible = false;
             this.dgvDetailBarang.Size = new System.Drawing.Size(367, 360);
             this.dgvDetailBarang.TabIndex = 1;
             // 
@@ -259,18 +263,6 @@
             this.colDetailNama.HeaderText = "Nama Aset";
             this.colDetailNama.Name = "colDetailNama";
             this.colDetailNama.ReadOnly = true;
-            // 
-            // colDetailMerk
-            // 
-            this.colDetailMerk.HeaderText = "Merk";
-            this.colDetailMerk.Name = "colDetailMerk";
-            this.colDetailMerk.ReadOnly = true;
-            // 
-            // colDetailIdentitas
-            // 
-            this.colDetailIdentitas.HeaderText = "No. Identitas";
-            this.colDetailIdentitas.Name = "colDetailIdentitas";
-            this.colDetailIdentitas.ReadOnly = true;
             // 
             // colDetailJumlah
             // 
@@ -339,8 +331,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colHistTglPinjam;
         private System.Windows.Forms.DataGridViewTextBoxColumn colHistTglKembali;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDetailNama;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDetailMerk;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDetailIdentitas;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDetailJumlah;
     }
 }
