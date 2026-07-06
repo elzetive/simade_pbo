@@ -14,6 +14,7 @@ namespace simade_pbo
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            // Mengikat event handler utama secara aman
             this.Load += new System.EventHandler(this.FormDataPengembalian_Load);
             this.dgvTabelList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTabelList_CellClick);
             this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
@@ -21,6 +22,22 @@ namespace simade_pbo
             if (this.txtCari != null)
             {
                 this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
+            }
+
+            // Bind Event Klik Tombol Sidebar Left Admin agar Sinkron & Tidak Freeze
+            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
+            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
+            this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
+            this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
+            this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+
+            // Operasi Form Kontrol Bawah
+            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
+            if (this.btnBatal != null)
+            {
+                this.btnBatal.Click += new System.EventHandler(this.btnBatal_Click);
             }
 
             txtNama_Lengkap.ReadOnly = true;
@@ -31,7 +48,8 @@ namespace simade_pbo
 
         private void FormDataPengembalian_Load(object sender, EventArgs e)
         {
-            SegarkanGridUtama();
+            // Menggunakan BeginInvoke untuk memisahkan UI Thread dengan query database KPI/SQL
+            this.BeginInvoke(new MethodInvoker(SegarkanGridUtama));
         }
 
         private void SegarkanGridUtama()
@@ -56,11 +74,50 @@ namespace simade_pbo
                         FormatDanTampilkanDataAtas(dt);
                     }
                 }
+
+                HitungKPIPengembalian();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Gagal memuat data pengembalian: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void HitungKPIPengembalian()
+        {
+            int totalPeminjamanAktif = 0;
+            int totalKembaliSukses = 0;
+
+            string queryKPI = "SELECT status_peminjaman FROM peminjaman WHERE status_peminjaman IN ('dipinjam', 'dikembalikan')";
+
+            try
+            {
+                using (MySqlConnection conn = Koneksi.GetConn())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(queryKPI, conn))
+                    {
+                        using (MySqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                string status = dr["status_peminjaman"].ToString().ToLower().Trim();
+                                if (status == "dipinjam") totalPeminjamanAktif++;
+                                else if (status == "dikembalikan") totalKembaliSukses++;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception) { }
+
+            // Menampilkan hasil kalkulasi logistik ke kotak Card KPI atas (Ganti nama label jika berbeda)
+            if (this.Controls.Find("lblPeminjaman", true).Length > 0)
+                this.Controls.Find("lblPeminjaman", true)[0].Text = totalPeminjamanAktif.ToString();
+            if (this.Controls.Find("lblJatuhTempo", true).Length > 0)
+                this.Controls.Find("lblJatuhTempo", true)[0].Text = "0";
+            if (this.Controls.Find("lblKembali", true).Length > 0)
+                this.Controls.Find("lblKembali", true)[0].Text = totalKembaliSukses.ToString();
         }
 
         private void FormatDanTampilkanDataAtas(DataTable dt)
@@ -131,12 +188,25 @@ namespace simade_pbo
                     {
                         DataRow dr = rowView.Row;
                         kodeNotaAktif = dr["kode_peminjaman"].ToString();
-                        string statusTransaksi = dr["status_peminjaman"].ToString().ToLower();
+                        string statusTransaksi = dr["status_peminjaman"].ToString().ToLower().Trim();
 
                         txtNama_Lengkap.Text = dr["nama_lengkap"].ToString();
-                        txtTgl_Pinjam.Text = dr["tgl_pinjam"].ToString();
-                        txtTgl_Kembali.Text = dr["tgl_kembali"].ToString();
                         txtNo_Hp.Text = dr["no_hp"].ToString();
+
+                        // PERBAIKAN FORMAT JAM: Memotong nilai DateTime agar murni menampilkan Tanggal saja (dd/MM/yyyy)
+                        if (dr["tgl_pinjam"] != DBNull.Value)
+                        {
+                            DateTime tPinjam = Convert.ToDateTime(dr["tgl_pinjam"]);
+                            txtTgl_Pinjam.Text = tPinjam.ToString("dd/MM/yyyy");
+                        }
+                        else txtTgl_Pinjam.Clear();
+
+                        if (dr["tgl_kembali"] != DBNull.Value)
+                        {
+                            DateTime tKembali = Convert.ToDateTime(dr["tgl_kembali"]);
+                            txtTgl_Kembali.Text = tKembali.ToString("dd/MM/yyyy");
+                        }
+                        else txtTgl_Kembali.Clear();
 
                         txtDikembalikanOleh.Clear();
                         MuatDetailBarangBawah(kodeNotaAktif);
@@ -150,6 +220,7 @@ namespace simade_pbo
                         {
                             btnSimpan.Enabled = true;
                             txtDikembalikanOleh.ReadOnly = false;
+                            txtDikembalikanOleh.Text = txtNama_Lengkap.Text; // auto-fill pengembali barang default
                         }
                     }
                 }
@@ -167,8 +238,8 @@ namespace simade_pbo
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
                     conn.Open();
-                    string queryDetail = @"SELECT b.nama_barang, k.nama_kategori, dp.deskripsi_barang, dp.jumlah_pinjam,
-                                                  dp.jumlah_kembali, dp.kondisi_bagus, dp.kondisi_rusak, dp.denda, '' AS dikembalikan_oleh
+                    string queryDetail = @"SELECT b.id_barang, b.nama_barang, k.nama_kategori, dp.deskripsi_barang, dp.jumlah_pinjam,
+                                                  dp.jumlah_kembali, dp.kondisi_bagus, dp.kondisi_rusak, dp.denda, dp.dikembalikan_oleh
                                            FROM detail_peminjaman dp
                                            INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
                                            INNER JOIN barang b ON dp.id_barang = b.id_barang
@@ -191,7 +262,14 @@ namespace simade_pbo
                                 if (statusNotaUtama == "dikembalikan")
                                 {
                                     dataSudahKembali = true;
-                                    txtDikembalikanOleh.Text = "Warga/Admin";
+                                    if (dtDetail.Rows.Count > 0 && dtDetail.Rows[0]["dikembalikan_oleh"] != DBNull.Value)
+                                    {
+                                        txtDikembalikanOleh.Text = dtDetail.Rows[0]["dikembalikan_oleh"].ToString();
+                                    }
+                                    else
+                                    {
+                                        txtDikembalikanOleh.Text = "Warga/Admin";
+                                    }
                                 }
                             }
 
@@ -258,7 +336,7 @@ namespace simade_pbo
 
             dgvDetail.EndEdit();
 
-            DialogResult res = MessageBox.Show($"Simpan pengembalian untuk Nota {kodeNotaAktif}?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult res = MessageBox.Show($"Simpan pengembalian untuk Nota {kodeNotaAktif}?", "Konfirmasi Logistik", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (res == DialogResult.Yes)
             {
                 MySqlConnection conn = Koneksi.GetConn();
@@ -280,38 +358,42 @@ namespace simade_pbo
 
                     if (idPeminjamanAsli == 0) throw new Exception("ID Peminjaman tidak ditemukan.");
 
-                    // 1. UPDATE INDUK (Tabel peminjaman) -> diubah ke 'dikembalikan' agar rumus hitungan barang dipinjam berkurang
-                    string queryUpdateInduk = "UPDATE peminjaman SET status_peminjaman = 'dikembalikan', tgl_kembali = NOW() WHERE id_peminjaman = @id";
+                    // 1. UPDATE INDUK (Tabel peminjaman) -> Diubah ke 'dikembalikan' dengan tgl_kembali hari ini
+                    string queryUpdateInduk = "UPDATE peminjaman SET status_peminjaman = 'dikembalikan', tgl_kembali = CURDATE() WHERE id_peminjaman = @id";
                     using (MySqlCommand cmdInduk = new MySqlCommand(queryUpdateInduk, conn, transaksi))
                     {
                         cmdInduk.Parameters.AddWithValue("@id", idPeminjamanAsli);
                         cmdInduk.ExecuteNonQuery();
                     }
 
-                    // 2. QUERY UPDATE DETAIL (Mencatat log fisik barang kembali)
+                    // 2. QUERY UPDATE DETAIL (Mencatat log fisik barang kembali + Pengembali barang)
                     string queryUpdateDetail = @"UPDATE detail_peminjaman 
                                                  SET jumlah_kembali = @jmlKembali, 
                                                      kondisi_bagus = @bagus, 
                                                      kondisi_rusak = @rusak, 
-                                                     denda = @denda
+                                                     denda = @denda,
+                                                     dikembalikan_oleh = @oleh
                                                  WHERE id_peminjaman = @id 
-                                                 AND id_barang = (SELECT id_barang FROM barang WHERE nama_barang = @namaBarang LIMIT 1)";
+                                                 AND id_barang = @idBarang";
 
-                    // 3. QUERY UPDATE BARANG (MUTASI DINAMIS KETAT: Mengurangi stok bagus hanya sebesar barang yang rusak)
+                    // 3. QUERY UPDATE BARANG (Mengurangi stok kondisi bagus gudang hanya sebesar barang yang rusak)
                     string queryUpdateStokBarang = @"UPDATE barang 
                                                      SET kondisi_bagus = kondisi_bagus - @rusak,
                                                          kondisi_rusak = kondisi_rusak + @rusak
-                                                     WHERE nama_barang = @namaBarang";
+                                                     WHERE id_barang = @idBarang";
 
                     foreach (DataGridViewRow baris in dgvDetail.Rows)
                     {
-                        if (baris.Cells[0].Value != null)
+                        if (baris.Cells[0].Value != null && baris.DataBoundItem != null)
                         {
-                            string namaBarang = baris.Cells[0].Value.ToString();
+                            DataRowView drv = (DataRowView)baris.DataBoundItem;
+                            int idBarangItem = Convert.ToInt32(drv["id_barang"]);
+
                             int jmlKembali = baris.Cells[4].Value != null ? Convert.ToInt32(baris.Cells[4].Value) : 0;
                             int kondBagus = baris.Cells[5].Value != null ? Convert.ToInt32(baris.Cells[5].Value) : 0;
                             int kondRusak = baris.Cells[6].Value != null ? Convert.ToInt32(baris.Cells[6].Value) : 0;
                             int nominalDenda = baris.Cells[7].Value != null ? Convert.ToInt32(baris.Cells[7].Value) : 0;
+                            string penerimaSektor = txtDikembalikanOleh.Text.Trim();
 
                             // Eksekusi Update Tabel Detail Peminjaman
                             using (MySqlCommand cmdDetail = new MySqlCommand(queryUpdateDetail, conn, transaksi))
@@ -320,25 +402,29 @@ namespace simade_pbo
                                 cmdDetail.Parameters.AddWithValue("@bagus", kondBagus);
                                 cmdDetail.Parameters.AddWithValue("@rusak", kondRusak);
                                 cmdDetail.Parameters.AddWithValue("@denda", nominalDenda);
+                                cmdDetail.Parameters.AddWithValue("@oleh", penerimaSektor);
                                 cmdDetail.Parameters.AddWithValue("@id", idPeminjamanAsli);
-                                cmdDetail.Parameters.AddWithValue("@namaBarang", namaBarang);
+                                cmdDetail.Parameters.AddWithValue("@idBarang", idBarangItem);
 
                                 cmdDetail.ExecuteNonQuery();
                             }
 
-                            // Eksekusi Update ke Tabel Barang riil
-                            using (MySqlCommand cmdBarang = new MySqlCommand(queryUpdateStokBarang, conn, transaksi))
+                            // Eksekusi Update Mutasi Fisik ke Tabel Master Barang Gudang jika ada kerusakan
+                            if (kondRusak > 0)
                             {
-                                cmdBarang.Parameters.AddWithValue("@rusak", kondRusak);
-                                cmdBarang.Parameters.AddWithValue("@namaBarang", namaBarang);
+                                using (MySqlCommand cmdBarang = new MySqlCommand(queryUpdateStokBarang, conn, transaksi))
+                                {
+                                    cmdBarang.Parameters.AddWithValue("@rusak", kondRusak);
+                                    cmdBarang.Parameters.AddWithValue("@idBarang", idBarangItem);
 
-                                cmdBarang.ExecuteNonQuery();
+                                    cmdBarang.ExecuteNonQuery();
+                                }
                             }
                         }
                     }
 
                     transaksi.Commit();
-                    MessageBox.Show("Sukses! Status nota telah diubah menjadi DIKEMBALIKAN. Logika dinamis hitungan stok Data Barang otomatis sinkron.", "Informasi Gudang", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Sukses! Status nota telah diperbarui menjadi DIKEMBALIKAN. Logika dinamis sirkulasi stok master barang otomatis sinkron.", "Informasi Gudang Desa", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     BersihkanSeluruhForm();
                     SegarkanGridUtama();
@@ -346,7 +432,7 @@ namespace simade_pbo
                 catch (Exception ex)
                 {
                     if (transaksi != null) transaksi.Rollback();
-                    MessageBox.Show("Gagal memproses pengembalian: " + ex.Message, "Error Database Update", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Gagal memproses transaksi pengembalian: " + ex.Message, "Error Database Update", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -379,6 +465,7 @@ namespace simade_pbo
             e.ThrowException = false;
         }
 
+        // --- SISTEM NAVIGASI SIDEBAR LEFT ADMIN ---
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
             FormDashboardAdmin frm = new FormDashboardAdmin();

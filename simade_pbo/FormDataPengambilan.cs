@@ -11,14 +11,15 @@ namespace simade_pbo
         Pinjam_service pinjamService = new Pinjam_service();
         string kodeNotaAktif = "";
 
-        // Menetapkan variabel tanggal hari ini sesuai dengan waktu sistem (5 Juli 2026)
-        DateTime hariIni = new DateTime(2026, 7, 5);
+        // Menetapkan variabel tanggal hari ini sesuai dengan waktu sistem
+        DateTime hariIni = DateTime.Now;
 
         public FormDataPengambilan()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            // Mengikat semua event handler secara eksplisit agar bebas bug navigasi berat
             this.Load += new System.EventHandler(this.FormDataPengambilan_Load);
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
@@ -26,6 +27,22 @@ namespace simade_pbo
             if (this.txtCari != null)
             {
                 this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
+            }
+
+            // Hubungkan event klik tombol sidebar left admin
+            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
+            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
+            this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
+            this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
+            this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+
+            // Operasi Kontrol Form Bawah (Disesuaikan ke nama tombol asli: btnBatal)
+            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
+            if (this.btnBatal != null)
+            {
+                this.btnBatal.Click += new System.EventHandler(this.btnBatal_Click);
             }
 
             txtNamaPeminjam.ReadOnly = true;
@@ -36,13 +53,18 @@ namespace simade_pbo
 
         private void FormDataPengambilan_Load(object sender, EventArgs e)
         {
-            SegarkanGridUtama();
+            // KUNCI RINGAN: Gunakan BeginInvoke agar perpindahan menu sidebar langsung melesat cepat tanpa lag
+            this.BeginInvoke(new MethodInvoker(SegarkanGridUtama));
         }
 
         private void SegarkanGridUtama()
         {
             dataGridView1.AutoGenerateColumns = false;
+
+            // Mengambil data peminjaman dari service
             DataTable dtMentah = pinjamService.tampilSemuaPeminjaman();
+
+            if (dtMentah == null) return;
 
             // Membuat clone struktur DataTable untuk menampung data filter akhir
             DataTable dtFiltered = dtMentah.Clone();
@@ -53,52 +75,40 @@ namespace simade_pbo
             }
 
             int hitungAntrean = 0;
-            int hitungHangus = 0;
             int hitungHariIni = 0;
             int hitungDiambil = 0;
+            int hitungHangus = 0;
 
             foreach (DataRow row in dtMentah.Rows)
             {
-                string statusReal = row["status_peminjaman"].ToString().ToLower();
+                string statusReal = row["status_peminjaman"].ToString().ToLower().Trim();
                 DateTime tglPinjam = Convert.ToDateTime(row["tgl_pinjam"]);
 
+                // 1. REKAP ANTREAN (Hanya status 'disetujui' yang masuk ke tabel utama)
                 if (statusReal == "disetujui")
                 {
-                    // 1. Logika HANGUS: Jika sudah lewat dari hari ini (5 Juli 2026)
-                    if (tglPinjam.Date < hariIni.Date)
+                    hitungAntrean++;
+
+                    // Logika Hari Ini: Jika tanggal pinjamnya bertepatan dengan hari ini
+                    if (tglPinjam.Date == hariIni.Date)
                     {
-                        hitungHangus++;
-
-                        DataRow newRow = dtFiltered.NewRow();
-                        newRow.ItemArray = row.ItemArray;
-                        newRow["status_tampilan"] = "Hangus"; // Tampilan status berubah jadi Hangus
-                        dtFiltered.Rows.Add(newRow);
+                        hitungHariIni++;
                     }
-                    // 2. Logika ANTREAN ASLI (Belum Hangus)
-                    else
-                    {
-                        hitungAntrean++; // Angka Antrean bertambah hanya jika belum hangus
 
-                        // Logika HARI INI: Jika pas hari ini
-                        if (tglPinjam.Date == hariIni.Date)
-                        {
-                            hitungHariIni++;
-                        }
-
-                        DataRow newRow = dtFiltered.NewRow();
-                        newRow.ItemArray = row.ItemArray;
-                        newRow["status_tampilan"] = row["status_peminjaman"]; // Tetap "disetujui"
-                        dtFiltered.Rows.Add(newRow);
-                    }
+                    DataRow newRow = dtFiltered.NewRow();
+                    newRow.ItemArray = row.ItemArray;
+                    newRow["status_tampilan"] = "Disetujui (Siap Ambil)";
+                    dtFiltered.Rows.Add(newRow);
                 }
-                // 3. Logika DIAMBIL (status database 'dipinjam')
+                // 2. REKAP DIAMBIL (Status 'dipinjam' hanya dihitung ke Card KPI atas, tidak dimasukkan ke tabel)
                 else if (statusReal == "dipinjam")
                 {
                     hitungDiambil++;
+                    // Sengaja dilewatkan (tidak di-`dtFiltered.Rows.Add`) agar hilang dari antrean tabel setelah di-simpan
                 }
             }
 
-            // Update Angka KPI ke masing-masing Label di interface C#
+            // Update Angka KPI ke masing-masing Label di desainer C# secara realtime
             if (lblAntrean != null) lblAntrean.Text = hitungAntrean.ToString();
             if (lblHariIni != null) lblHariIni.Text = hitungHariIni.ToString();
             if (lblDiambil != null) lblDiambil.Text = hitungDiambil.ToString();
@@ -109,7 +119,6 @@ namespace simade_pbo
 
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
-            // Fitur pencarian otomatis disesuaikan dengan refresh grid utama
             SegarkanGridUtama();
         }
 
@@ -124,8 +133,8 @@ namespace simade_pbo
                 dataGridView1.Columns[2].DataPropertyName = "tgl_pinjam";
                 dataGridView1.Columns[3].DataPropertyName = "tgl_kembali";
 
-                // Gunakan status_tampilan agar transaksi hangus terlihat jelas oleh Admin
-                dataGridView1.Columns[4].DataPropertyName = dt.Columns.Contains("status_tampilan") ? "status_tampilan" : "status_peminjaman";
+                // Menampilkan status visual yang informatif bagi Admin
+                dataGridView1.Columns[4].DataPropertyName = "status_tampilan";
             }
 
             dataGridView1.DataSource = dt;
@@ -144,25 +153,32 @@ namespace simade_pbo
                     {
                         DataRow dr = rowView.Row;
 
-                        // VALIDASI HANGUS: Cegah pemrosesan jika barang sudah hangus
-                        string statusCek = baris.Cells[4].Value?.ToString() ?? "";
-                        if (statusCek.ToLower() == "hangus")
-                        {
-                            MessageBox.Show("Transaksi ini sudah HANGUS. Barang tidak dapat diambil kembali!", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                            btnSimpan.Enabled = false;
-                            return;
-                        }
-
                         kodeNotaAktif = dr["kode_peminjaman"].ToString();
                         txtNamaPeminjam.Text = dr["nama_lengkap"].ToString();
-                        txtTglPinjam.Text = dr["tgl_pinjam"].ToString();
-                        txtTglKembali.Text = dr["tgl_kembali"] != DBNull.Value ? dr["tgl_kembali"].ToString() : "-";
+
+                        // PERBAIKAN FORMAT: Memotong jam 00:00:00 murni menjadi Tanggal saja (dd/MM/yyyy)
+                        if (dr["tgl_pinjam"] != DBNull.Value)
+                        {
+                            DateTime tPinjam = Convert.ToDateTime(dr["tgl_pinjam"]);
+                            txtTglPinjam.Text = tPinjam.ToString("dd/MM/yyyy");
+                        }
+                        else
+                        {
+                            txtTglPinjam.Clear();
+                        }
+
+                        txtTglKembali.Text = "-";
 
                         DataTable dtDetail = pinjamService.tampilDetailBarang(kodeNotaAktif);
 
                         if (dtDetail.Rows.Count > 0)
                         {
-                            txtNoTelepon.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
+                            if (dtDetail.Columns.Contains("nomor_telepon"))
+                                txtNoTelepon.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
+                            else if (dtDetail.Columns.Contains("no_hp"))
+                                txtNoTelepon.Text = dtDetail.Rows[0]["no_hp"].ToString();
+                            else
+                                txtNoTelepon.Text = "-";
                         }
                         else
                         {
@@ -177,18 +193,24 @@ namespace simade_pbo
                             dgvDetail.Columns[0].DataPropertyName = "nama_barang";
                             dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
                             dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
-                            dgvDetail.Columns[3].DataPropertyName = "";
+                            dgvDetail.Columns[3].DataPropertyName = "deskripsi_barang";
                         }
 
                         dgvDetail.DataSource = dtDetail;
 
+                        // Konfigurasi hak akses edit kolom detail pengambilan
+                        btnSimpan.Enabled = true;
                         dgvDetail.ReadOnly = false;
                         dgvDetail.Columns[0].ReadOnly = true;
                         dgvDetail.Columns[1].ReadOnly = true;
                         dgvDetail.Columns[2].ReadOnly = true;
-                        dgvDetail.Columns[3].ReadOnly = false;
+                        dgvDetail.Columns[3].ReadOnly = false; // Kolom deskripsi bisa dicatat nomor serinya jika ada
 
-                        btnSimpan.Enabled = true;
+                        if (txtDiambilOleh != null)
+                        {
+                            txtDiambilOleh.ReadOnly = false;
+                            txtDiambilOleh.Text = txtNamaPeminjam.Text; // Otomatis mengisi nama pemegang barang
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -211,9 +233,16 @@ namespace simade_pbo
                 return;
             }
 
-            dgvDetail.EndEdit();
+            if (txtDiambilOleh != null && string.IsNullOrWhiteSpace(txtDiambilOleh.Text))
+            {
+                MessageBox.Show("Nama Pengambil barang wajib diisi sebagai penanggung jawab fisik!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtDiambilOleh.Focus();
+                return;
+            }
 
-            DialogResult konfirmasi = MessageBox.Show($"Konfirmasi barang untuk Nota {kodeNotaAktif} resmi diambil?", "Siklus Inventaris", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            string namaPenerima = txtDiambilOleh != null ? txtDiambilOleh.Text.Trim() : txtNamaPeminjam.Text;
+
+            DialogResult konfirmasi = MessageBox.Show($"Konfirmasi penyerahan fisik barang untuk Nota {kodeNotaAktif} resmi diambil oleh {namaPenerima}?", "Siklus Logistik SIMADE", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (konfirmasi == DialogResult.Yes)
             {
@@ -234,10 +263,11 @@ namespace simade_pbo
                                 int idDetail = Convert.ToInt32(drv["id_detail_peminjaman"]);
                                 string deskripsiInput = row.Cells[3].Value?.ToString() ?? "";
 
-                                string queryUpdate = "UPDATE detail_peminjaman SET deskripsi_barang = @deskripsi WHERE id_detail_peminjaman = @id";
+                                string queryUpdate = "UPDATE detail_peminjaman SET deskripsi_barang = @deskripsi, dipinjam_oleh = @oleh WHERE id_detail_peminjaman = @id";
                                 using (MySqlCommand cmd = new MySqlCommand(queryUpdate, conn))
                                 {
                                     cmd.Parameters.AddWithValue("@deskripsi", deskripsiInput);
+                                    cmd.Parameters.AddWithValue("@oleh", namaPenerima);
                                     cmd.Parameters.AddWithValue("@id", idDetail);
                                     cmd.ExecuteNonQuery();
                                 }
@@ -247,22 +277,22 @@ namespace simade_pbo
                 }
                 catch (Exception ex)
                 {
-                    suksesUpdateDeskripsi = false; // SINKRONISASI: Mengganti nama variabel typo sebelumnya
-                    MessageBox.Show("Gagal menyimpan deskripsi barang: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    suksesUpdateDeskripsi = false;
+                    MessageBox.Show("Gagal menyimpan rincian berita acara pengambilan barang: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 if (suksesUpdateDeskripsi)
                 {
                     if (pinjamService.ubahStatusNotaInduk(kodeNotaAktif, "dipinjam") > 0)
                     {
-                        MessageBox.Show("Sukses! Status diperbarui menjadi 'DIPINJAM' dan deskripsi pengambilan berhasil disimpan ke database.", "Selesai", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Sukses! Fisik barang resmi diserahkan ke warga.\nStatus Nota diperbarui menjadi 'DIPINJAM'.", "Selesai", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         SegarkanGridUtama();
                         BersihkanPanelDetail();
                     }
                     else
                     {
-                        MessageBox.Show("Gagal memperbarui status nota peminjaman.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Gagal memperbarui status nota peminjaman induk.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -284,7 +314,7 @@ namespace simade_pbo
             dgvDetail.DataSource = null;
         }
 
-        // --- REVISI NAVIGASI SIDEBAR: Mengubah .Hide() ke .Close() agar Form Dashboard reload segar ---
+        // --- SIDEBAR NAVIGASI LINKING ADMIN ---
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
             FormDashboardAdmin frm = new FormDashboardAdmin();
@@ -319,14 +349,6 @@ namespace simade_pbo
             this.Close();
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
-        }
-
         private void btnLogOut_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -334,6 +356,14 @@ namespace simade_pbo
                 FormLogin halamanLogin = new FormLogin();
                 halamanLogin.Show();
                 this.Close();
+            }
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Application.Exit();
             }
         }
     }

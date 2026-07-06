@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDataPinjam));
             this.dgvUtama = new System.Windows.Forms.DataGridView();
             this.kode_peminjaman = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nama_lengkap = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -113,42 +112,143 @@
             this.tgl_pinjam,
             this.tgl_kembali,
             this.status_peminjaman});
-            this.dgvUtama.Location = new System.Drawing.Point(253, 203);
+            this.dgvUtama.Location = new System.Drawing.Point(337, 250);
+            this.dgvUtama.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgvUtama.Name = "dgvUtama";
             this.dgvUtama.ReadOnly = true;
             this.dgvUtama.RowHeadersWidth = 51;
-            this.dgvUtama.Size = new System.Drawing.Size(728, 132);
+            this.dgvUtama.Size = new System.Drawing.Size(971, 162);
             this.dgvUtama.TabIndex = 18;
             // 
             // kode_peminjaman
             // 
             this.kode_peminjaman.HeaderText = "Kode Peminjaman";
+            this.kode_peminjaman.MinimumWidth = 6;
             this.kode_peminjaman.Name = "kode_peminjaman";
             this.kode_peminjaman.ReadOnly = true;
             // 
             // nama_lengkap
             // 
             this.nama_lengkap.HeaderText = "Nama Peminjam";
+            this.nama_lengkap.MinimumWidth = 6;
             this.nama_lengkap.Name = "nama_lengkap";
             this.nama_lengkap.ReadOnly = true;
             // 
             // tgl_pinjam
             // 
             this.tgl_pinjam.HeaderText = "Tanggal Pinjam";
+            this.tgl_pinjam.MinimumWidth = 6;
             this.tgl_pinjam.Name = "tgl_pinjam";
             this.tgl_pinjam.ReadOnly = true;
             // 
             // tgl_kembali
             // 
             this.tgl_kembali.HeaderText = "Tanggal Kembali";
+            this.tgl_kembali.MinimumWidth = 6;
             this.tgl_kembali.Name = "tgl_kembali";
             this.tgl_kembali.ReadOnly = true;
             // 
             // status_peminjaman
             // 
             this.status_peminjaman.HeaderText = "Status";
+            this.status_peminjaman.MinimumWidth = 6;
             this.status_peminjaman.Name = "status_peminjaman";
             this.status_peminjaman.ReadOnly = true;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.pictureBox3);
+            this.panel3.Controls.Add(this.lblTotalDitolak);
+            this.panel3.Controls.Add(this.label6);
+            this.panel3.Location = new System.Drawing.Point(1080, 85);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(246, 113);
+            this.panel3.TabIndex = 21;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.White;
+            this.pictureBox3.Image = global::simade_pbo.Properties.Resources.tersedia;
+            this.pictureBox3.Location = new System.Drawing.Point(13, 15);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(39, 31);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 11;
+            this.pictureBox3.TabStop = false;
+            // 
+            // lblTotalDitolak
+            // 
+            this.lblTotalDitolak.AutoSize = true;
+            this.lblTotalDitolak.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTotalDitolak.Location = new System.Drawing.Point(93, 46);
+            this.lblTotalDitolak.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTotalDitolak.Name = "lblTotalDitolak";
+            this.lblTotalDitolak.Size = new System.Drawing.Size(46, 54);
+            this.lblTotalDitolak.TabIndex = 3;
+            this.lblTotalDitolak.Text = "0";
+            this.lblTotalDitolak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label6.Location = new System.Drawing.Point(60, 17);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(81, 28);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Ditolak";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.pictureBox2);
+            this.panel2.Controls.Add(this.lblTotalDisetujui);
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Location = new System.Drawing.Point(813, 85);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(246, 113);
+            this.panel2.TabIndex = 20;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.White;
+            this.pictureBox2.Image = global::simade_pbo.Properties.Resources.dipinjam;
+            this.pictureBox2.Location = new System.Drawing.Point(13, 15);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(43, 31);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 10;
+            this.pictureBox2.TabStop = false;
+            // 
+            // lblTotalDisetujui
+            // 
+            this.lblTotalDisetujui.AutoSize = true;
+            this.lblTotalDisetujui.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTotalDisetujui.Location = new System.Drawing.Point(93, 46);
+            this.lblTotalDisetujui.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTotalDisetujui.Name = "lblTotalDisetujui";
+            this.lblTotalDisetujui.Size = new System.Drawing.Size(46, 54);
+            this.lblTotalDisetujui.TabIndex = 2;
+            this.lblTotalDisetujui.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.label4.Location = new System.Drawing.Point(60, 17);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(95, 28);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Diterima";
             // 
             // panel1
             // 
@@ -157,18 +257,20 @@
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.lblTotalPengajuan);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(210, 69);
+            this.panel1.Location = new System.Drawing.Point(280, 85);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(185, 92);
+            this.panel1.Size = new System.Drawing.Size(246, 113);
             this.panel1.TabIndex = 19;
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.Image = global::simade_pbo.Properties.Resources.totalbarang;
-            this.pictureBox1.Location = new System.Drawing.Point(10, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(13, 15);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 25);
+            this.pictureBox1.Size = new System.Drawing.Size(43, 31);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 9;
             this.pictureBox1.TabStop = false;
@@ -177,9 +279,10 @@
             // 
             this.lblTotalPengajuan.AutoSize = true;
             this.lblTotalPengajuan.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTotalPengajuan.Location = new System.Drawing.Point(70, 37);
+            this.lblTotalPengajuan.Location = new System.Drawing.Point(93, 46);
+            this.lblTotalPengajuan.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTotalPengajuan.Name = "lblTotalPengajuan";
-            this.lblTotalPengajuan.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalPengajuan.Size = new System.Drawing.Size(46, 54);
             this.lblTotalPengajuan.TabIndex = 1;
             this.lblTotalPengajuan.Text = "0";
             // 
@@ -187,9 +290,10 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label2.Location = new System.Drawing.Point(45, 14);
+            this.label2.Location = new System.Drawing.Point(60, 17);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(92, 21);
+            this.label2.Size = new System.Drawing.Size(110, 28);
             this.label2.TabIndex = 0;
             this.label2.Text = "Pengajuan";
             // 
@@ -200,18 +304,20 @@
             this.panelPending.Controls.Add(this.pictureBoxPending);
             this.panelPending.Controls.Add(this.lblTotalPending);
             this.panelPending.Controls.Add(this.labelPendingTitle);
-            this.panelPending.Location = new System.Drawing.Point(410, 69);
+            this.panelPending.Location = new System.Drawing.Point(547, 85);
+            this.panelPending.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelPending.Name = "panelPending";
-            this.panelPending.Size = new System.Drawing.Size(185, 92);
+            this.panelPending.Size = new System.Drawing.Size(246, 113);
             this.panelPending.TabIndex = 24;
             // 
             // pictureBoxPending
             // 
             this.pictureBoxPending.BackColor = System.Drawing.Color.White;
             this.pictureBoxPending.Image = global::simade_pbo.Properties.Resources.dipinjam;
-            this.pictureBoxPending.Location = new System.Drawing.Point(10, 12);
+            this.pictureBoxPending.Location = new System.Drawing.Point(13, 15);
+            this.pictureBoxPending.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBoxPending.Name = "pictureBoxPending";
-            this.pictureBoxPending.Size = new System.Drawing.Size(32, 25);
+            this.pictureBoxPending.Size = new System.Drawing.Size(43, 31);
             this.pictureBoxPending.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxPending.TabIndex = 10;
             this.pictureBoxPending.TabStop = false;
@@ -220,9 +326,10 @@
             // 
             this.lblTotalPending.AutoSize = true;
             this.lblTotalPending.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTotalPending.Location = new System.Drawing.Point(70, 37);
+            this.lblTotalPending.Location = new System.Drawing.Point(93, 46);
+            this.lblTotalPending.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTotalPending.Name = "lblTotalPending";
-            this.lblTotalPending.Size = new System.Drawing.Size(38, 45);
+            this.lblTotalPending.Size = new System.Drawing.Size(46, 54);
             this.lblTotalPending.TabIndex = 2;
             this.lblTotalPending.Text = "0";
             // 
@@ -230,98 +337,12 @@
             // 
             this.labelPendingTitle.AutoSize = true;
             this.labelPendingTitle.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.labelPendingTitle.Location = new System.Drawing.Point(45, 14);
+            this.labelPendingTitle.Location = new System.Drawing.Point(60, 17);
+            this.labelPendingTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelPendingTitle.Name = "labelPendingTitle";
-            this.labelPendingTitle.Size = new System.Drawing.Size(73, 21);
+            this.labelPendingTitle.Size = new System.Drawing.Size(88, 28);
             this.labelPendingTitle.TabIndex = 2;
             this.labelPendingTitle.Text = "Pending";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.White;
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.lblTotalDisetujui);
-            this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(610, 69);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(185, 92);
-            this.panel2.TabIndex = 20;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.White;
-            this.pictureBox2.Image = global::simade_pbo.Properties.Resources.dipinjam;
-            this.pictureBox2.Location = new System.Drawing.Point(10, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(32, 25);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 10;
-            this.pictureBox2.TabStop = false;
-            // 
-            // lblTotalDisetujui
-            // 
-            this.lblTotalDisetujui.AutoSize = true;
-            this.lblTotalDisetujui.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTotalDisetujui.Location = new System.Drawing.Point(70, 37);
-            this.lblTotalDisetujui.Name = "lblTotalDisetujui";
-            this.lblTotalDisetujui.Size = new System.Drawing.Size(38, 45);
-            this.lblTotalDisetujui.TabIndex = 2;
-            this.lblTotalDisetujui.Text = "0";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label4.Location = new System.Drawing.Point(45, 14);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(73, 21);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Diterima";
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.White;
-            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.pictureBox3);
-            this.panel3.Controls.Add(this.lblTotalDitolak);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Location = new System.Drawing.Point(810, 69);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(185, 92);
-            this.panel3.TabIndex = 21;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.White;
-            this.pictureBox3.Image = global::simade_pbo.Properties.Resources.tersedia;
-            this.pictureBox3.Location = new System.Drawing.Point(10, 12);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(29, 25);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 11;
-            this.pictureBox3.TabStop = false;
-            // 
-            // lblTotalDitolak
-            // 
-            this.lblTotalDitolak.AutoSize = true;
-            this.lblTotalDitolak.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTotalDitolak.Location = new System.Drawing.Point(70, 37);
-            this.lblTotalDitolak.Name = "lblTotalDitolak";
-            this.lblTotalDitolak.Size = new System.Drawing.Size(38, 45);
-            this.lblTotalDitolak.TabIndex = 3;
-            this.lblTotalDitolak.Text = "0";
-            this.lblTotalDitolak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.label6.Location = new System.Drawing.Point(45, 14);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(65, 21);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Ditolak";
             // 
             // panel4
             // 
@@ -341,40 +362,45 @@
             this.panel4.Controls.Add(this.label3);
             this.panel4.Controls.Add(this.label1);
             this.panel4.Controls.Add(this.label7);
-            this.panel4.Location = new System.Drawing.Point(253, 346);
+            this.panel4.Location = new System.Drawing.Point(337, 426);
+            this.panel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(728, 192);
+            this.panel4.Size = new System.Drawing.Size(970, 236);
             this.panel4.TabIndex = 22;
             // 
             // txtTglKembali
             // 
-            this.txtTglKembali.Location = new System.Drawing.Point(334, 154);
+            this.txtTglKembali.Location = new System.Drawing.Point(445, 190);
+            this.txtTglKembali.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtTglKembali.Name = "txtTglKembali";
-            this.txtTglKembali.Size = new System.Drawing.Size(144, 20);
+            this.txtTglKembali.Size = new System.Drawing.Size(191, 22);
             this.txtTglKembali.TabIndex = 55;
             // 
             // txtTglPinjam
             // 
-            this.txtTglPinjam.Location = new System.Drawing.Point(97, 154);
+            this.txtTglPinjam.Location = new System.Drawing.Point(129, 190);
+            this.txtTglPinjam.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtTglPinjam.Name = "txtTglPinjam";
-            this.txtTglPinjam.Size = new System.Drawing.Size(144, 20);
+            this.txtTglPinjam.Size = new System.Drawing.Size(191, 22);
             this.txtTglPinjam.TabIndex = 54;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(247, 157);
+            this.label10.Location = new System.Drawing.Point(329, 193);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(86, 13);
+            this.label10.Size = new System.Drawing.Size(110, 16);
             this.label10.TabIndex = 53;
             this.label10.Text = "Tanggal Kembali";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(11, 157);
+            this.label11.Location = new System.Drawing.Point(15, 193);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(80, 13);
+            this.label11.Size = new System.Drawing.Size(102, 16);
             this.label11.TabIndex = 52;
             this.label11.Text = "Tanggal Pinjam";
             // 
@@ -384,9 +410,10 @@
             this.btnSimpan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSimpan.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.btnSimpan.ForeColor = System.Drawing.Color.White;
-            this.btnSimpan.Location = new System.Drawing.Point(618, 151);
+            this.btnSimpan.Location = new System.Drawing.Point(824, 186);
+            this.btnSimpan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSimpan.Name = "btnSimpan";
-            this.btnSimpan.Size = new System.Drawing.Size(99, 29);
+            this.btnSimpan.Size = new System.Drawing.Size(132, 36);
             this.btnSimpan.TabIndex = 47;
             this.btnSimpan.Text = "SIMPAN";
             this.btnSimpan.UseVisualStyleBackColor = false;
@@ -403,16 +430,19 @@
             this.jumlah_tersedia,
             this.status,
             this.keterangan});
-            this.dgvDetail.Location = new System.Drawing.Point(-1, 63);
+            this.dgvDetail.Location = new System.Drawing.Point(-1, 78);
+            this.dgvDetail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgvDetail.Name = "dgvDetail";
             this.dgvDetail.ReadOnly = true;
-            this.dgvDetail.Size = new System.Drawing.Size(728, 81);
+            this.dgvDetail.RowHeadersWidth = 51;
+            this.dgvDetail.Size = new System.Drawing.Size(971, 100);
             this.dgvDetail.TabIndex = 26;
             // 
             // nama_barang
             // 
             this.nama_barang.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.nama_barang.HeaderText = "Nama Barang";
+            this.nama_barang.MinimumWidth = 6;
             this.nama_barang.Name = "nama_barang";
             this.nama_barang.ReadOnly = true;
             // 
@@ -420,6 +450,7 @@
             // 
             this.id_kategori.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.id_kategori.HeaderText = "Kategori Barang";
+            this.id_kategori.MinimumWidth = 6;
             this.id_kategori.Name = "id_kategori";
             this.id_kategori.ReadOnly = true;
             // 
@@ -427,14 +458,17 @@
             // 
             this.jumlah_pinjam.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.jumlah_pinjam.HeaderText = "Jumlah Pinjam";
+            this.jumlah_pinjam.MinimumWidth = 6;
             this.jumlah_pinjam.Name = "jumlah_pinjam";
             this.jumlah_pinjam.ReadOnly = true;
             // 
             // jumlah_tersedia
             // 
             this.jumlah_tersedia.HeaderText = "Jumlah Tersedia";
+            this.jumlah_tersedia.MinimumWidth = 6;
             this.jumlah_tersedia.Name = "jumlah_tersedia";
             this.jumlah_tersedia.ReadOnly = true;
+            this.jumlah_tersedia.Width = 125;
             // 
             // status
             // 
@@ -444,6 +478,7 @@
             "Pending",
             "Disetujui",
             "Ditolak"});
+            this.status.MinimumWidth = 6;
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
@@ -451,6 +486,7 @@
             // 
             this.keterangan.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.keterangan.HeaderText = "Keterangan";
+            this.keterangan.MinimumWidth = 6;
             this.keterangan.Name = "keterangan";
             this.keterangan.ReadOnly = true;
             // 
@@ -460,58 +496,65 @@
             this.btnBatalDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBatalDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.btnBatalDetail.ForeColor = System.Drawing.Color.White;
-            this.btnBatalDetail.Location = new System.Drawing.Point(513, 152);
+            this.btnBatalDetail.Location = new System.Drawing.Point(684, 187);
+            this.btnBatalDetail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnBatalDetail.Name = "btnBatalDetail";
-            this.btnBatalDetail.Size = new System.Drawing.Size(99, 28);
+            this.btnBatalDetail.Size = new System.Drawing.Size(132, 34);
             this.btnBatalDetail.TabIndex = 25;
             this.btnBatalDetail.Text = "BATAL";
             this.btnBatalDetail.UseVisualStyleBackColor = false;
             // 
             // txtNoHp
             // 
-            this.txtNoHp.Location = new System.Drawing.Point(574, 33);
+            this.txtNoHp.Location = new System.Drawing.Point(765, 41);
+            this.txtNoHp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNoHp.Name = "txtNoHp";
-            this.txtNoHp.Size = new System.Drawing.Size(144, 20);
+            this.txtNoHp.Size = new System.Drawing.Size(191, 22);
             this.txtNoHp.TabIndex = 18;
             // 
             // txtAlamat
             // 
-            this.txtAlamat.Location = new System.Drawing.Point(332, 33);
+            this.txtAlamat.Location = new System.Drawing.Point(443, 41);
+            this.txtAlamat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtAlamat.Name = "txtAlamat";
-            this.txtAlamat.Size = new System.Drawing.Size(144, 20);
+            this.txtAlamat.Size = new System.Drawing.Size(191, 22);
             this.txtAlamat.TabIndex = 17;
             // 
             // txtNamaLengkap
             // 
-            this.txtNamaLengkap.Location = new System.Drawing.Point(97, 33);
+            this.txtNamaLengkap.Location = new System.Drawing.Point(129, 41);
+            this.txtNamaLengkap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNamaLengkap.Name = "txtNamaLengkap";
-            this.txtNamaLengkap.Size = new System.Drawing.Size(144, 20);
+            this.txtNamaLengkap.Size = new System.Drawing.Size(191, 22);
             this.txtNamaLengkap.TabIndex = 16;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(482, 36);
+            this.label5.Location = new System.Drawing.Point(643, 44);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 13);
+            this.label5.Size = new System.Drawing.Size(102, 16);
             this.label5.TabIndex = 9;
             this.label5.Text = "Nomor Telepon";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(247, 36);
+            this.label3.Location = new System.Drawing.Point(329, 44);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.Size = new System.Drawing.Size(49, 16);
             this.label3.TabIndex = 8;
             this.label3.Text = "Alamat";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 36);
+            this.label1.Location = new System.Drawing.Point(7, 44);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 13);
+            this.label1.Size = new System.Drawing.Size(107, 16);
             this.label1.TabIndex = 7;
             this.label1.Text = "Nama Peminjam";
             // 
@@ -519,26 +562,29 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label7.Location = new System.Drawing.Point(2, 2);
+            this.label7.Location = new System.Drawing.Point(3, 2);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(177, 25);
+            this.label7.Size = new System.Drawing.Size(229, 32);
             this.label7.TabIndex = 6;
             this.label7.Text = "Detail Peminjaman";
             // 
             // txtCari
             // 
-            this.txtCari.Location = new System.Drawing.Point(303, 173);
+            this.txtCari.Location = new System.Drawing.Point(404, 213);
+            this.txtCari.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtCari.Name = "txtCari";
-            this.txtCari.Size = new System.Drawing.Size(678, 20);
+            this.txtCari.Size = new System.Drawing.Size(903, 22);
             this.txtCari.TabIndex = 24;
             // 
             // lblCari
             // 
             this.lblCari.AutoSize = true;
             this.lblCari.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.lblCari.Location = new System.Drawing.Point(249, 170);
+            this.lblCari.Location = new System.Drawing.Point(332, 209);
+            this.lblCari.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCari.Name = "lblCari";
-            this.lblCari.Size = new System.Drawing.Size(40, 21);
+            this.lblCari.Size = new System.Drawing.Size(49, 28);
             this.lblCari.TabIndex = 23;
             this.lblCari.Text = "Cari";
             // 
@@ -549,9 +595,10 @@
             this.btnData_Kembali.FlatAppearance.BorderSize = 0;
             this.btnData_Kembali.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnData_Kembali.ForeColor = System.Drawing.Color.White;
-            this.btnData_Kembali.Location = new System.Drawing.Point(19, 223);
+            this.btnData_Kembali.Location = new System.Drawing.Point(25, 274);
+            this.btnData_Kembali.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnData_Kembali.Name = "btnData_Kembali";
-            this.btnData_Kembali.Size = new System.Drawing.Size(158, 37);
+            this.btnData_Kembali.Size = new System.Drawing.Size(211, 46);
             this.btnData_Kembali.TabIndex = 7;
             this.btnData_Kembali.Text = "Data Pengembalian";
             this.btnData_Kembali.UseVisualStyleBackColor = false;
@@ -563,9 +610,10 @@
             this.btnData_Pinjam.FlatAppearance.BorderSize = 0;
             this.btnData_Pinjam.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnData_Pinjam.ForeColor = System.Drawing.Color.White;
-            this.btnData_Pinjam.Location = new System.Drawing.Point(19, 120);
+            this.btnData_Pinjam.Location = new System.Drawing.Point(25, 148);
+            this.btnData_Pinjam.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnData_Pinjam.Name = "btnData_Pinjam";
-            this.btnData_Pinjam.Size = new System.Drawing.Size(158, 37);
+            this.btnData_Pinjam.Size = new System.Drawing.Size(211, 46);
             this.btnData_Pinjam.TabIndex = 6;
             this.btnData_Pinjam.Text = "Data Pinjam";
             this.btnData_Pinjam.UseVisualStyleBackColor = false;
@@ -577,9 +625,10 @@
             this.btnData_Barang.FlatAppearance.BorderSize = 0;
             this.btnData_Barang.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnData_Barang.ForeColor = System.Drawing.Color.White;
-            this.btnData_Barang.Location = new System.Drawing.Point(19, 69);
+            this.btnData_Barang.Location = new System.Drawing.Point(25, 85);
+            this.btnData_Barang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnData_Barang.Name = "btnData_Barang";
-            this.btnData_Barang.Size = new System.Drawing.Size(158, 37);
+            this.btnData_Barang.Size = new System.Drawing.Size(211, 46);
             this.btnData_Barang.TabIndex = 5;
             this.btnData_Barang.Text = "Data Barang";
             this.btnData_Barang.UseVisualStyleBackColor = false;
@@ -591,9 +640,10 @@
             this.btnData_Ambil.FlatAppearance.BorderSize = 0;
             this.btnData_Ambil.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnData_Ambil.ForeColor = System.Drawing.Color.White;
-            this.btnData_Ambil.Location = new System.Drawing.Point(19, 172);
+            this.btnData_Ambil.Location = new System.Drawing.Point(25, 212);
+            this.btnData_Ambil.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnData_Ambil.Name = "btnData_Ambil";
-            this.btnData_Ambil.Size = new System.Drawing.Size(158, 37);
+            this.btnData_Ambil.Size = new System.Drawing.Size(211, 46);
             this.btnData_Ambil.TabIndex = 4;
             this.btnData_Ambil.Text = "Data Pengambilan";
             this.btnData_Ambil.UseVisualStyleBackColor = false;
@@ -602,10 +652,9 @@
             // 
             this.lblNamaWarga.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblNamaWarga.ForeColor = System.Drawing.Color.White;
-            this.lblNamaWarga.Location = new System.Drawing.Point(8, 18);
-            this.lblNamaWarga.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblNamaWarga.Location = new System.Drawing.Point(11, 22);
             this.lblNamaWarga.Name = "lblNamaWarga";
-            this.lblNamaWarga.Size = new System.Drawing.Size(177, 23);
+            this.lblNamaWarga.Size = new System.Drawing.Size(236, 28);
             this.lblNamaWarga.TabIndex = 0;
             this.lblNamaWarga.Text = "Halo, Admin!";
             this.lblNamaWarga.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -614,13 +663,14 @@
             // 
             this.btnLogOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogOut.FlatAppearance.BorderSize = 0;
             this.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
-            this.btnLogOut.Location = new System.Drawing.Point(19, 501);
-            this.btnLogOut.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLogOut.Location = new System.Drawing.Point(25, 617);
+            this.btnLogOut.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnLogOut.Name = "btnLogOut";
-            this.btnLogOut.Size = new System.Drawing.Size(158, 37);
+            this.btnLogOut.Size = new System.Drawing.Size(211, 46);
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
@@ -637,9 +687,9 @@
             this.panelSidebar.Controls.Add(this.btnLogOut);
             this.panelSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelSidebar.Location = new System.Drawing.Point(0, 0);
-            this.panelSidebar.Margin = new System.Windows.Forms.Padding(2);
+            this.panelSidebar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelSidebar.Name = "panelSidebar";
-            this.panelSidebar.Size = new System.Drawing.Size(192, 589);
+            this.panelSidebar.Size = new System.Drawing.Size(256, 725);
             this.panelSidebar.TabIndex = 25;
             // 
             // btnTambah_Admin
@@ -649,9 +699,10 @@
             this.btnTambah_Admin.FlatAppearance.BorderSize = 0;
             this.btnTambah_Admin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTambah_Admin.ForeColor = System.Drawing.Color.White;
-            this.btnTambah_Admin.Location = new System.Drawing.Point(19, 276);
+            this.btnTambah_Admin.Location = new System.Drawing.Point(25, 340);
+            this.btnTambah_Admin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnTambah_Admin.Name = "btnTambah_Admin";
-            this.btnTambah_Admin.Size = new System.Drawing.Size(158, 37);
+            this.btnTambah_Admin.Size = new System.Drawing.Size(211, 46);
             this.btnTambah_Admin.TabIndex = 9;
             this.btnTambah_Admin.Text = "Tambah Admin";
             this.btnTambah_Admin.UseVisualStyleBackColor = false;
@@ -662,10 +713,10 @@
             this.btnExit.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.ForeColor = System.Drawing.Color.White;
-            this.btnExit.Location = new System.Drawing.Point(803, 16);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(2);
+            this.btnExit.Location = new System.Drawing.Point(1071, 20);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(34, 24);
+            this.btnExit.Size = new System.Drawing.Size(45, 30);
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
@@ -676,10 +727,10 @@
             this.panelHeader.Controls.Add(this.lblTitle);
             this.panelHeader.Controls.Add(this.btnExit);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(192, 0);
-            this.panelHeader.Margin = new System.Windows.Forms.Padding(2);
+            this.panelHeader.Location = new System.Drawing.Point(256, 0);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(854, 57);
+            this.panelHeader.Size = new System.Drawing.Size(1139, 70);
             this.panelHeader.TabIndex = 26;
             // 
             // lblTitle
@@ -687,18 +738,17 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            this.lblTitle.Location = new System.Drawing.Point(19, 13);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTitle.Location = new System.Drawing.Point(25, 16);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(232, 30);
+            this.lblTitle.Size = new System.Drawing.Size(302, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "SIMADE - Data Pinjam";
             // 
             // FormDataPinjam
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1046, 589);
+            this.ClientSize = new System.Drawing.Size(1395, 725);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.panelSidebar);
             this.Controls.Add(this.txtCari);
@@ -710,7 +760,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgvUtama);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FormDataPinjam";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form Data Pinjam Admin";

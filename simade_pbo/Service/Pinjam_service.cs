@@ -101,9 +101,6 @@ namespace simade_pbo.Service
 
         public int updateStokBarangKembali(int idDetailPeminjaman, int kondisiBagus, int kondisiRusak, string dikembalikanOleh)
         {
-            // 1. Ambil id_barang terlebih dahulu berdasarkan id_detail_peminjaman
-            // 2. Update status pengembalian di detail_peminjaman (kondisi_bagus, kondisi_rusak, denda, dll)
-            // 3. Update data inventaris di tabel barang (kurangi dipinjam, sesuaikan kondisi bagus & rusak)
             string query = $@"
         UPDATE detail_peminjaman dp
         INNER JOIN barang b ON dp.id_barang = b.id_barang

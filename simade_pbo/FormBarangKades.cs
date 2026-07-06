@@ -1,55 +1,99 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using simade_pbo.Service;
+using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
     public partial class FormBarangKades : Form
     {
         Barang_service barang = new Barang_service();
-
         DataTable dtBarang = new DataTable();
 
         public FormBarangKades()
         {
             InitializeComponent();
-
             this.StartPosition = FormStartPosition.CenterScreen;
 
             // Supaya kolom tidak double
             dgvBarang.AutoGenerateColumns = false;
 
-            // Mapping kolom DataGrid
+            // Mapping kolom DataGrid ke desainer visual C#
             this.colNama.DataPropertyName = "nama_barang";
             this.colKategori.DataPropertyName = "nama_kategori";
             this.colTotal.DataPropertyName = "jumlah_total";
             this.colDipinjam.DataPropertyName = "jumlah_dipinjam";
             this.colTersedia.DataPropertyName = "jumlah_tersedia";
 
-            tampilData();
-            isiKategori();
+            // Mendaftarkan event Load secara eksplisit
+            this.Load += new System.EventHandler(this.FormBarangKades_Load);
         }
 
-        // tampil semua data
+        private void FormBarangKades_Load(object sender, EventArgs e)
+        {
+            // AMAN: Handle window sudah dibuat oleh OS, thread UI siap mengeksekusi data
+            this.BeginInvoke(new MethodInvoker(tampilData));
+        }
+
+        // Tampil semua data dengan kalkulasi matematika inventaris yang benar (Anti-Minus)
         void tampilData()
         {
-            dtBarang = barang.tampilSemua();
+            string queryAkurat = @"
+                SELECT 
+                    b.nama_barang, 
+                    k.nama_kategori, 
+                    b.jumlah_barang AS jumlah_total,
+                    IFNULL(SUM(CASE WHEN p.status_peminjaman = 'dipinjam' THEN dp.jumlah_pinjam ELSE 0 END), 0) AS jumlah_dipinjam,
+                    (b.jumlah_barang - 
+                     IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)
+                    ) AS jumlah_tersedia
+                FROM barang b
+                INNER JOIN kategori k ON b.id_kategori = k.id_kategori
+                LEFT JOIN detail_peminjaman dp ON b.id_barang = dp.id_barang
+                LEFT JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                GROUP BY b.id_barang, b.nama_barang, k.nama_kategori, b.jumlah_barang
+                ORDER BY b.nama_barang ASC";
 
-            dgvBarang.DataSource = dtBarang;
+            dtBarang = new DataTable();
+            try
+            {
+                using (MySqlConnection conn = Koneksi.GetConn())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(queryAkurat, conn))
+                    {
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            da.Fill(dtBarang);
+                        }
+                    }
+                }
+
+                // Pengaman Logika: Jika ada anomali yang menghasilkan nilai di bawah 0, paksa set ke 0
+                foreach (DataRow row in dtBarang.Rows)
+                {
+                    if (Convert.ToInt32(row["jumlah_tersedia"]) < 0)
+                    {
+                        row["jumlah_tersedia"] = 0;
+                    }
+                }
+
+                dgvBarang.DataSource = dtBarang;
+                isiKategori();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal memuat log data aset desa: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // isi combobox kategori
+        // Isi combobox kategori secara dinamis dari data yang termuat
         void isiKategori()
         {
-            cmbKategori.Items.Clear();
+            if (dtBarang == null || dtBarang.Rows.Count == 0) return;
 
+            cmbKategori.Items.Clear();
             cmbKategori.Items.Add("Semua");
 
             foreach (DataRow row in dtBarang.Rows)
@@ -67,14 +111,15 @@ namespace simade_pbo
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin menutup aplikasi?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (konfirmasi == DialogResult.Yes) Application.Exit();
         }
 
         private void btnDashboard_Click_1(object sender, EventArgs e)
         {
             FormDashboardKades frm = new FormDashboardKades();
             frm.Show();
-            this.Hide();
+            this.Close(); // SINKRONISASI: Menggunakan .Close() menggantikan .Hide() demi efisiensi memori RAM
         }
 
         private void btnBarang_Click(object sender, EventArgs e)
@@ -86,7 +131,7 @@ namespace simade_pbo
         {
             FormRiwayat frm = new FormRiwayat();
             frm.Show();
-            this.Hide();
+            this.Close(); // SINKRONISASI: Menggunakan .Close() menggantikan .Hide() demi efisiensi memori RAM
         }
 
         private void btnLogout_Click_1(object sender, EventArgs e)
@@ -102,48 +147,40 @@ namespace simade_pbo
             {
                 FormLogin login = new FormLogin();
                 login.Show();
-                this.Hide();
+                this.Close();
             }
         }
 
-        // klik row dgv
+        // Klik row data grid view untuk memunculkan modal rincian informasi
         private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                string nama =
-                    dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
+                try
+                {
+                    string nama = dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
+                    string kategori = dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
+                    string total = dgvBarang.Rows[e.RowIndex].Cells["colTotal"].Value.ToString();
+                    string dipinjam = dgvBarang.Rows[e.RowIndex].Cells["colDipinjam"].Value.ToString();
+                    string tersedia = dgvBarang.Rows[e.RowIndex].Cells["colTersedia"].Value.ToString();
 
-                string kategori =
-                    dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
-
-                string total =
-                    dgvBarang.Rows[e.RowIndex].Cells["colTotal"].Value.ToString();
-
-                string dipinjam =
-                    dgvBarang.Rows[e.RowIndex].Cells["colDipinjam"].Value.ToString();
-
-                string tersedia =
-                    dgvBarang.Rows[e.RowIndex].Cells["colTersedia"].Value.ToString();
-
-                MessageBox.Show(
-                    this,
-                    "Nama Barang : " + nama +
-                    "\nKategori : " + kategori +
-                    "\nTotal : " + total +
-                    "\nDipinjam : " + dipinjam +
-                    "\nTersedia : " + tersedia,
-                    "Detail Barang",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
+                    MessageBox.Show(
+                        this,
+                        "Nama Barang : " + nama +
+                        "\nKategori : " + kategori +
+                        "\nTotal : " + total +
+                        "\nDipinjam : " + dipinjam +
+                        "\nTersedia : " + tersedia,
+                        "Detail Barang",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+                catch (Exception) { }
             }
         }
 
-        private void txtId_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        private void txtId_TextChanged(object sender, EventArgs e) { }
 
         // SEARCH REALTIME
         private void txtCari_TextChanged(object sender, EventArgs e)
@@ -151,10 +188,7 @@ namespace simade_pbo
             filterData();
         }
 
-        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
+        private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
         // FILTER KATEGORI
         private void cmbKategori_SelectedIndexChanged(object sender, EventArgs e)
@@ -162,24 +196,25 @@ namespace simade_pbo
             filterData();
         }
 
-        // fungsi filter
+        // Fungsi filter data pencarian lokal
         void filterData()
         {
-            DataView dv = dtBarang.DefaultView;
+            if (dtBarang == null || dtBarang.Rows.Count == 0) return;
 
-            string cari = txtCari.Text.Trim();
+            DataView dv = dtBarang.DefaultView;
+            string cari = txtCari.Text.Trim().Replace("'", "''"); // Pencegahan SQL Injection lokal string
             string kategori = cmbKategori.Text;
 
             string filter = "";
 
-            // search nama barang
-            if (cari != "")
+            // Search nama barang
+            if (!string.IsNullOrEmpty(cari))
             {
                 filter += $"nama_barang LIKE '%{cari}%'";
             }
 
-            // filter kategori
-            if (kategori != "Semua" && kategori != "")
+            // Filter kategori
+            if (kategori != "Semua" && !string.IsNullOrEmpty(kategori))
             {
                 if (filter != "")
                 {
@@ -190,7 +225,6 @@ namespace simade_pbo
             }
 
             dv.RowFilter = filter;
-
             dgvBarang.DataSource = dv;
         }
 

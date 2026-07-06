@@ -31,8 +31,6 @@
             this.btnExit = new System.Windows.Forms.Button();
             this.lblTabel = new System.Windows.Forms.Label();
             this.panelPinjam = new System.Windows.Forms.Panel();
-            this.dtpTanggalKembali = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnTambahKeList = new System.Windows.Forms.Button();
             this.dtpTanggalPinjam = new System.Windows.Forms.DateTimePicker();
             this.lblTglPinjam = new System.Windows.Forms.Label();
@@ -149,6 +147,7 @@
             // 
             this.btnLogOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnLogOut.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogOut.FlatAppearance.BorderSize = 0;
             this.btnLogOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
@@ -213,8 +212,6 @@
             // panelPinjam
             // 
             this.panelPinjam.BackColor = System.Drawing.Color.White;
-            this.panelPinjam.Controls.Add(this.dtpTanggalKembali);
-            this.panelPinjam.Controls.Add(this.label1);
             this.panelPinjam.Controls.Add(this.btnTambahKeList);
             this.panelPinjam.Controls.Add(this.dtpTanggalPinjam);
             this.panelPinjam.Controls.Add(this.lblTglPinjam);
@@ -229,28 +226,6 @@
             this.panelPinjam.Size = new System.Drawing.Size(304, 289);
             this.panelPinjam.TabIndex = 4;
             // 
-            // dtpTanggalKembali
-            // 
-            this.dtpTanggalKembali.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.dtpTanggalKembali.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpTanggalKembali.Location = new System.Drawing.Point(18, 217);
-            this.dtpTanggalKembali.Margin = new System.Windows.Forms.Padding(2);
-            this.dtpTanggalKembali.Name = "dtpTanggalKembali";
-            this.dtpTanggalKembali.Size = new System.Drawing.Size(267, 25);
-            this.dtpTanggalKembali.TabIndex = 11;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            this.label1.Location = new System.Drawing.Point(15, 197);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(111, 17);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Tanggal Kembali";
-            // 
             // btnTambahKeList
             // 
             this.btnTambahKeList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
@@ -258,7 +233,7 @@
             this.btnTambahKeList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTambahKeList.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnTambahKeList.ForeColor = System.Drawing.Color.White;
-            this.btnTambahKeList.Location = new System.Drawing.Point(19, 249);
+            this.btnTambahKeList.Location = new System.Drawing.Point(19, 215);
             this.btnTambahKeList.Margin = new System.Windows.Forms.Padding(2);
             this.btnTambahKeList.Name = "btnTambahKeList";
             this.btnTambahKeList.Size = new System.Drawing.Size(266, 32);
@@ -471,7 +446,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvBarang)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
@@ -501,8 +475,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCartQty;
         private System.Windows.Forms.Button btnKirimPengajuan;
         private System.Windows.Forms.Label lblCartTitle;
-        private System.Windows.Forms.DateTimePicker dtpTanggalKembali;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvBarang;
         private System.Windows.Forms.DataGridViewTextBoxColumn nama_barang;
         private System.Windows.Forms.DataGridViewTextBoxColumn id_kategori;

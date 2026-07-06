@@ -38,7 +38,7 @@ namespace simade_pbo
         {
             if (!string.IsNullOrEmpty(IdUserLogin))
             {
-                int.TryParse(IdUserLogin, out idUserLoginAngka); // PERBAIKAN: Menggunakan nama variabel yang valid
+                int.TryParse(IdUserLogin, out idUserLoginAngka);
             }
 
             if (!string.IsNullOrEmpty(NamaUserLogin))
@@ -48,7 +48,6 @@ namespace simade_pbo
 
             txtNamaBarang.ReadOnly = true;
             dtpTanggalPinjam.Value = DateTime.Now;
-            dtpTanggalKembali.Value = DateTime.Now.AddDays(3);
 
             tampilDaftarAset();
             inisialisasiTabelAntrean();
@@ -58,7 +57,6 @@ namespace simade_pbo
         {
             dgvBarang.AutoGenerateColumns = false;
 
-            // SINKRONISASI COUPLING STOK: Menghitung 'pending' dan 'dipinjam' sebagai pengurang kuota tersedia warga
             string queryKatalog = @"
                 SELECT 
                     b.id_barang, 
@@ -87,8 +85,9 @@ namespace simade_pbo
 
                             nama_barang.DataPropertyName = "nama_barang";
                             id_kategori.DataPropertyName = "nama_kategori";
-                            jumlah_tersedia.DataPropertyName = "stok_siap_pakai";
 
+                            // PERBAIKAN SINKRONISASI: Menyelaraskan pemanggilan nama objek kolom desainer yang baru
+                            jumlah_tersedia.DataPropertyName = "stok_siap_pakai";
                             dgvBarang.DataSource = dt;
                         }
                     }
@@ -160,6 +159,7 @@ namespace simade_pbo
                 return;
             }
 
+            // PERBAIKAN: Teks 'txtCircle:' telah dihapus agar sintaks int.TryParse kembali normal
             if (!int.TryParse(txtJumlahPinjam.Text, out int jumlahInput) || jumlahInput <= 0)
             {
                 MessageBox.Show("Masukkan jumlah pinjam yang valid (angka harus di atas 0)!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -195,15 +195,9 @@ namespace simade_pbo
                 return;
             }
 
-            if (dtpTanggalKembali.Value.Date < dtpTanggalPinjam.Value.Date)
-            {
-                MessageBox.Show("Tanggal pengembalian tidak boleh sebelum tanggal peminjaman!", "Kesalahan Tanggal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             string kodePeminjamanOtomatis = "AD_" + DateTime.Now.ToString("yyyyMMddHHmmss");
             string tglPinjam = dtpTanggalPinjam.Value.ToString("yyyy-MM-dd");
-            string tglKembali = dtpTanggalKembali.Value.ToString("yyyy-MM-dd");
+            string tglKembali = tglPinjam; // Default disamakan, nanti diupdate oleh admin saat pemulangan fisik
 
             using (MySqlConnection conn = Koneksi.GetConn())
             {
@@ -212,7 +206,6 @@ namespace simade_pbo
                 {
                     try
                     {
-                        // Menaruh data master permohonan dengan status awal 'pending'
                         string queryMaster = @"INSERT INTO peminjaman (kode_peminjaman, id_user, tgl_pinjam, tgl_kembali, status_peminjaman)
                                                VALUES (@kode, @uid, @tglP, @tglK, 'pending')";
 

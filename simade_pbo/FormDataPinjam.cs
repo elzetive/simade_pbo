@@ -57,10 +57,10 @@ namespace simade_pbo
             dgvUtama.AutoGenerateColumns = false;
 
             DataTable dtUtama = pinjamService.tampilSemuaPeminjaman();
+
             FormatDanTampilkanData(dtUtama);
             HitungKPIPeminjaman(dtUtama);
         }
-
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
             string kataKunci = txtCari.Text.Trim();
@@ -152,11 +152,32 @@ namespace simade_pbo
 
                         kodeNotaAktif = dr["kode_peminjaman"].ToString();
                         txtNamaLengkap.Text = dr["nama_lengkap"].ToString();
-                        txtTglPinjam.Text = dr["tgl_pinjam"].ToString();
 
+                        // PERBAIKAN FORMAT JAM: Memotong string jam pada Tanggal Pinjam
+                        if (dr["tgl_pinjam"] != DBNull.Value)
+                        {
+                            DateTime tglP = Convert.ToDateTime(dr["tgl_pinjam"]);
+                            txtTglPinjam.Text = tglP.ToString("dd/MM/yyyy");
+                        }
+                        else txtTglPinjam.Clear();
+
+                        // PERBAIKAN FORMAT JAM: Memotong string jam pada Tanggal Kembali atau mencetak strip jika kosong
                         if (dr["tgl_kembali"] != DBNull.Value)
                         {
-                            txtTglKembali.Text = dr["tgl_kembali"].ToString();
+                            string tglKembaliStr = dr["tgl_kembali"].ToString().Trim();
+                            if (tglKembaliStr.Contains("-") && tglKembaliStr.Length <= 5)
+                            {
+                                txtTglKembali.Text = "-";
+                            }
+                            else
+                            {
+                                DateTime tglK = Convert.ToDateTime(dr["tgl_kembali"]);
+                                // Jika tanggal pinjam dan tanggal kembali sama (default kosong dari warga), cetak strip
+                                if (dr["status_peminjaman"].ToString().ToLower() == "pending")
+                                    txtTglKembali.Text = "-";
+                                else
+                                    txtTglKembali.Text = tglK.ToString("dd/MM/yyyy");
+                            }
                         }
                         else
                         {
@@ -176,15 +197,17 @@ namespace simade_pbo
                         if (dtDetail.Rows.Count > 0)
                         {
                             txtAlamat.Text = dtDetail.Rows[0]["alamat"].ToString();
-                            txtNoHp.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
+
+                            if (dtDetail.Columns.Contains("nomor_telepon"))
+                                txtNoHp.Text = dtDetail.Rows[0]["nomor_telepon"].ToString();
+                            else if (dtDetail.Columns.Contains("no_hp"))
+                                txtNoHp.Text = dtDetail.Rows[0]["no_hp"].ToString();
 
                             foreach (DataRow rowDetail in dtDetail.Rows)
                             {
-                                // SOLUSI: Menggunakan nama_barang sebagai parameter pencari agar tidak crash mencari id_barang
                                 string namaBarangItem = rowDetail["nama_barang"].ToString();
                                 int sisaTersediaGudang = 0;
 
-                                // Mengarahkan query WHERE langsung ke b.nama_barang
                                 string queryRumusDashboard = @"
                                     SELECT (b.jumlah_barang - IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)) AS sisa
                                     FROM barang b
