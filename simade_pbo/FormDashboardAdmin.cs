@@ -24,22 +24,16 @@ namespace simade_pbo
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // SOLUSI SINKRONISASI RUNTIME EVENT:
-            // Mengikat semua event handler secara eksplisit agar form responsif dan data langsung muncul saat diklik
             this.Load += new System.EventHandler(this.FormDashboardAdmin_Load_1);
             this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
-
-            // Navigasi Sidebar Left
             this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
-            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click_1);
+            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
             this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
             this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-
-            // Operasi Form Kontrol
             this.btnTambah.Click += new System.EventHandler(this.btnTambah_Click);
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             this.btnHapus.Click += new System.EventHandler(this.btnHapus_Click);
@@ -47,12 +41,11 @@ namespace simade_pbo
             this.btnTambahKategori.Click += new System.EventHandler(this.btnTambahKategori_Click);
             this.btnBatalKategori.Click += new System.EventHandler(this.btnBatalKategori_Click);
             this.btnEditDetail.Click += new System.EventHandler(this.btnEditDetail_Click);
-            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click_1);
+            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
         }
 
         private void FormDashboardAdmin_Load_1(object sender, EventArgs e)
         {
-            // Memanfaatkan BeginInvoke untuk mencegah pembekuan UI thread saat form pertama kali dibuka
             this.BeginInvoke(new MethodInvoker(tampilGrid));
         }
 
@@ -88,8 +81,6 @@ namespace simade_pbo
 
         void tampilGrid()
         {
-            // PERBAIKAN QUERY: Menghitung dipinjam & tersedia berdasarkan relasi status_peminjaman di tabel induk 'peminjaman'
-            // status 'dipinjam' atau 'disetujui' dihitung sebagai aset keluar. Status 'dikembalikan' otomatis memulihkan stok tersedia.
             string queryDinamis = @"
         SELECT 
             b.id_barang,
@@ -165,7 +156,6 @@ namespace simade_pbo
 
             dgvBarang.DataSource = dt;
 
-            // Kalkulasi total card informasi di atas dashboard
             int totalBarangSemua = 0;
             int totalSedangDipinjam = 0;
             int totalSiapTersedia = 0;
@@ -352,7 +342,7 @@ namespace simade_pbo
             tampilGrid();
         }
 
-        private void btnData_Pinjam_Click_1(object sender, EventArgs e)
+        private void btnData_Pinjam_Click(object sender, EventArgs e)
         {
             FormDataPinjam frm = new FormDataPinjam();
             frm.Show();
@@ -380,7 +370,7 @@ namespace simade_pbo
             this.Close();
         }
 
-        private void btnBatalDetail_Click_1(object sender, EventArgs e) { bersihkan(); }
+        private void btnBatalDetail_Click(object sender, EventArgs e) { bersihkan(); }
 
         private void btnEditDetail_Click(object sender, EventArgs e)
         {

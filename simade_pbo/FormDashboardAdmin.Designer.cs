@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle57 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle58 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelSidebar = new System.Windows.Forms.Panel();
             this.btnTambah_Admin = new System.Windows.Forms.Button();
             this.btnData_Kembali = new System.Windows.Forms.Button();
@@ -132,6 +132,7 @@
             this.btnTambah_Admin.TabIndex = 9;
             this.btnTambah_Admin.Text = "Tambah Admin";
             this.btnTambah_Admin.UseVisualStyleBackColor = false;
+            this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             // 
             // btnData_Kembali
             // 
@@ -146,6 +147,7 @@
             this.btnData_Kembali.TabIndex = 7;
             this.btnData_Kembali.Text = "Data Pengembalian";
             this.btnData_Kembali.UseVisualStyleBackColor = false;
+            this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
             // 
             // btnData_Pinjam
             // 
@@ -160,6 +162,7 @@
             this.btnData_Pinjam.TabIndex = 6;
             this.btnData_Pinjam.Text = "Data Pinjam";
             this.btnData_Pinjam.UseVisualStyleBackColor = false;
+            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             // 
             // btnData_Barang
             // 
@@ -174,6 +177,7 @@
             this.btnData_Barang.TabIndex = 5;
             this.btnData_Barang.Text = "Data Barang";
             this.btnData_Barang.UseVisualStyleBackColor = false;
+            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             // 
             // btnData_Ambil
             // 
@@ -217,6 +221,7 @@
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // panelHeader
             // 
@@ -255,6 +260,7 @@
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "X";
             this.btnExit.UseVisualStyleBackColor = false;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // panel3
             // 
@@ -405,11 +411,12 @@
             this.dgvBarang.RowHeadersWidth = 51;
             this.dgvBarang.Size = new System.Drawing.Size(471, 165);
             this.dgvBarang.TabIndex = 12;
+            this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             // 
             // nama_barang
             // 
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle57.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nama_barang.DefaultCellStyle = dataGridViewCellStyle57;
             this.nama_barang.HeaderText = "Nama Barang";
             this.nama_barang.MinimumWidth = 6;
             this.nama_barang.Name = "nama_barang";
@@ -417,8 +424,8 @@
             // 
             // id_kategori
             // 
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle58.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.id_kategori.DefaultCellStyle = dataGridViewCellStyle58;
             this.id_kategori.HeaderText = "Kategori Barang";
             this.id_kategori.MinimumWidth = 6;
             this.id_kategori.Name = "id_kategori";
@@ -490,6 +497,7 @@
             this.btnBatal.TabIndex = 12;
             this.btnBatal.Text = "BATAL";
             this.btnBatal.UseVisualStyleBackColor = false;
+            this.btnBatal.Click += new System.EventHandler(this.btnBatal_Click);
             // 
             // btnHapus
             // 
@@ -503,6 +511,7 @@
             this.btnHapus.TabIndex = 11;
             this.btnHapus.Text = "HAPUS";
             this.btnHapus.UseVisualStyleBackColor = false;
+            this.btnHapus.Click += new System.EventHandler(this.btnHapus_Click);
             // 
             // btnEdit
             // 
@@ -516,6 +525,7 @@
             this.btnEdit.TabIndex = 10;
             this.btnEdit.Text = "EDIT";
             this.btnEdit.UseVisualStyleBackColor = false;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnTambah
             // 
@@ -529,6 +539,7 @@
             this.btnTambah.TabIndex = 9;
             this.btnTambah.Text = "TAMBAH";
             this.btnTambah.UseVisualStyleBackColor = false;
+            this.btnTambah.Click += new System.EventHandler(this.btnTambah_Click);
             // 
             // cmbKategoriBarang
             // 
@@ -611,6 +622,7 @@
             this.btnBatalKategori.TabIndex = 16;
             this.btnBatalKategori.Text = "BATAL";
             this.btnBatalKategori.UseVisualStyleBackColor = false;
+            this.btnBatalKategori.Click += new System.EventHandler(this.btnBatalKategori_Click);
             // 
             // btnTambahKategori
             // 
@@ -624,6 +636,7 @@
             this.btnTambahKategori.TabIndex = 15;
             this.btnTambahKategori.Text = "TAMBAH";
             this.btnTambahKategori.UseVisualStyleBackColor = false;
+            this.btnTambahKategori.Click += new System.EventHandler(this.btnTambahKategori_Click);
             // 
             // txtKategoriBarang
             // 
@@ -680,6 +693,7 @@
             this.btnEditDetail.TabIndex = 15;
             this.btnEditDetail.Text = "EDIT";
             this.btnEditDetail.UseVisualStyleBackColor = false;
+            this.btnEditDetail.Click += new System.EventHandler(this.btnEditDetail_Click);
             // 
             // txtKondisiBagus
             // 
@@ -727,6 +741,7 @@
             this.btnBatalDetail.TabIndex = 18;
             this.btnBatalDetail.Text = "BATAL";
             this.btnBatalDetail.UseVisualStyleBackColor = false;
+            this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
             // 
             // label11
             // 

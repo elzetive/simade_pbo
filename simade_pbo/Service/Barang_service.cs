@@ -8,18 +8,13 @@ namespace simade_pbo.Service
 {
     internal class Barang_service : Barang_cls
     {
-        // Variabel untuk menyimpan query SQL yang akan dijalankan
         string Query;
 
-        // Constructor
         public Barang_service()
         {
             Query = "";
         }
 
-        // ==========================================================
-        // METHOD MENJALANKAN QUERY INSERT, UPDATE DAN DELETE
-        // ==========================================================
         private int jalankanNonQuery(string query)
         {
             int retVal = -1;
@@ -28,51 +23,40 @@ namespace simade_pbo.Service
             {
                 try
                 {
-                    // Membuka koneksi ke database
                     conn.Open();
 
-                    // Menjalankan query Non Query
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
-                    // Mengembalikan jumlah baris yang berhasil diproses
                     retVal = cmd.ExecuteNonQuery();
                 }
                 catch (Exception)
                 {
-                    // Error diabaikan karena akan ditangani oleh method pemanggil
                 }
             }
 
             return retVal;
         }
 
-        // ==========================================================
-        // METHOD MENJALANKAN QUERY SELECT
-        // ==========================================================
         private DataTable jalankanQuery(string query)
         {
-            // Membuat objek DataTable sebagai penampung hasil query
             DataTable dt = new DataTable();
 
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
-                    // Membuka koneksi database
                     conn.Open();
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
-                            // Mengisi DataTable dengan hasil query
                             adapter.Fill(dt);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Menampilkan pesan apabila terjadi kesalahan koneksi
                     MessageBox.Show(
                         "Gagal mengambil data : " + ex.Message,
                         "ERROR DATABASE",
@@ -84,9 +68,6 @@ namespace simade_pbo.Service
             return dt;
         }
 
-        // ==========================================================
-        // METHOD CEK APAKAH BARANG SUDAH ADA
-        // ==========================================================
         public bool isExist(string nama_barang)
         {
             bool hasil = false;
@@ -109,13 +90,8 @@ namespace simade_pbo.Service
             return hasil;
         }
 
-        // ==========================================================
-        // METHOD MENYIMPAN DATA BARANG BARU
-        // ==========================================================
         public int simpan()
         {
-            // Saat barang pertama kali ditambahkan,
-            // seluruh barang dianggap masih dalam kondisi bagus
             Query =
                 "INSERT INTO barang " +
                 "(id_kategori, nama_barang, jumlah_barang, kondisi_bagus, kondisi_rusak) " +
@@ -128,13 +104,8 @@ namespace simade_pbo.Service
             return jalankanNonQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENAMPILKAN SELURUH DATA BARANG
-        // ==========================================================
         public DataTable tampilSemua()
         {
-            // Mengambil seluruh data barang beserta stok realtime
-            // Logika disamakan dengan Dashboard Admin
             Query = @"
             SELECT
                 b.id_barang,
@@ -177,13 +148,8 @@ namespace simade_pbo.Service
             return jalankanQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENCARI DATA BARANG BERDASARKAN NAMA
-        // ==========================================================
         public DataTable tampilByNama(string nama_barang)
         {
-            // Mengambil data barang berdasarkan nama
-            // dengan perhitungan stok yang sama seperti Dashboard
             Query = @"
             SELECT
                 b.id_barang,
@@ -228,17 +194,12 @@ namespace simade_pbo.Service
             return jalankanQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENGUBAH DATA BARANG
-        // ==========================================================
         public int ubah(int id)
         {
-            // Menyimpan kondisi barang lama
             int kondisiBagusLama = 0;
             int kondisiRusakLama = 0;
             int jumlahTotalLama = 0;
 
-            // Mengambil data barang yang akan diubah
             string queryCek = "SELECT jumlah_barang, kondisi_bagus, kondisi_rusak " +
                               "FROM barang WHERE id_barang = " + id;
 
@@ -251,18 +212,14 @@ namespace simade_pbo.Service
                 kondisiRusakLama = Convert.ToInt32(dtCek.Rows[0]["kondisi_rusak"]);
             }
 
-            // Menghitung selisih jumlah barang
             int selisih = this.Jumlah_barang - jumlahTotalLama;
-
             int kondisiBagusBaru = kondisiBagusLama;
             int kondisiRusakBaru = kondisiRusakLama;
 
-            // Jika stok bertambah maka seluruh tambahan dianggap kondisi bagus
             if (selisih > 0)
             {
                 kondisiBagusBaru += selisih;
             }
-            // Jika stok berkurang maka dikurangi dari kondisi bagus terlebih dahulu
             else if (selisih < 0)
             {
                 kondisiBagusBaru += selisih;
@@ -272,13 +229,11 @@ namespace simade_pbo.Service
                     kondisiRusakBaru += kondisiBagusBaru;
                     kondisiBagusBaru = 0;
 
-                    // Mencegah kondisi rusak menjadi negatif
                     if (kondisiRusakBaru < 0)
                         kondisiRusakBaru = 0;
                 }
             }
 
-            // Menyimpan perubahan ke database
             Query = @"
                 UPDATE barang SET
                     nama_barang = '" + this.Nama_barang + @"',
@@ -291,9 +246,6 @@ namespace simade_pbo.Service
             return jalankanNonQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENGHAPUS DATA BARANG
-        // ==========================================================
         public int hapus(int id_barang)
         {
             Query = "DELETE FROM barang WHERE id_barang = " + id_barang;
@@ -301,9 +253,6 @@ namespace simade_pbo.Service
             return jalankanNonQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENGAMBIL DETAIL KONDISI BARANG
-        // ==========================================================
         public DataTable DetailKondisi(string namaBarang)
         {
             Query = @"
@@ -317,12 +266,8 @@ namespace simade_pbo.Service
             return jalankanQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENGUBAH DETAIL KONDISI BARANG
-        // ==========================================================
         public int ubahDetailKondisi(int id, int bagus, int rusak)
         {
-            // Total stok merupakan penjumlahan kondisi bagus dan rusak
             int totalBaru = bagus + rusak;
 
             Query = @"
@@ -335,14 +280,10 @@ namespace simade_pbo.Service
             return jalankanNonQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENGHITUNG STATISTIK DASHBOARD
-        // ==========================================================
         public string hitungStatistik(string tipe)
         {
             string hasil = "0";
 
-            // Menghitung total seluruh barang
             if (tipe == "TOTAL")
             {
                 Query = @"
@@ -350,7 +291,6 @@ namespace simade_pbo.Service
                     FROM barang";
             }
 
-            // Menghitung jumlah barang yang sedang dipinjam
             else if (tipe == "DIPINJAM")
             {
                 Query = @"
@@ -362,8 +302,6 @@ namespace simade_pbo.Service
                         IN ('dipinjam','disetujui')";
             }
 
-            // Menghitung stok tersedia
-            // Barang tersedia hanya dihitung dari kondisi bagus
             else if (tipe == "TERSEDIA")
             {
                 Query = @"
@@ -394,9 +332,6 @@ namespace simade_pbo.Service
             return hasil;
         }
 
-        // ==========================================================
-        // METHOD DATA GRAFIK PEMINJAMAN PER BULAN
-        // ==========================================================
         public DataTable GrafikPeminjaman()
         {
             Query = @"
@@ -410,9 +345,6 @@ namespace simade_pbo.Service
             return jalankanQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD DATA BARANG PALING SERING DIPINJAM
-        // ==========================================================
         public DataTable GrafikBarangTerpinjam()
         {
             Query = @"
@@ -433,9 +365,6 @@ namespace simade_pbo.Service
             return jalankanQuery(Query);
         }
 
-        // ==========================================================
-        // METHOD MENAMPILKAN RIWAYAT PEMINJAMAN
-        // ==========================================================
         public DataTable tampilRiwayat()
         {
             Query = @"

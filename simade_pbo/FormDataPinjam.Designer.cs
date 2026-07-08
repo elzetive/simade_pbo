@@ -112,6 +112,8 @@
             this.dgvUtama.RowHeadersWidth = 51;
             this.dgvUtama.Size = new System.Drawing.Size(728, 132);
             this.dgvUtama.TabIndex = 18;
+            this.dgvUtama.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellClick);
+            this.dgvUtama.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellContentClick);
             // 
             // kode_peminjaman
             // 
@@ -345,6 +347,7 @@
             this.btnSimpan.TabIndex = 47;
             this.btnSimpan.Text = "SIMPAN";
             this.btnSimpan.UseVisualStyleBackColor = false;
+            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             // 
             // dgvDetail
             // 
@@ -364,6 +367,8 @@
             this.dgvDetail.RowHeadersWidth = 51;
             this.dgvDetail.Size = new System.Drawing.Size(728, 81);
             this.dgvDetail.TabIndex = 26;
+            this.dgvDetail.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvDetail_CellBeginEdit);
+            this.dgvDetail.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvDetail_CurrentCellDirtyStateChanged);
             // 
             // nama_barang
             // 
@@ -494,6 +499,7 @@
             this.txtCari.Name = "txtCari";
             this.txtCari.Size = new System.Drawing.Size(678, 20);
             this.txtCari.TabIndex = 24;
+            this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             // 
             // lblCari
             // 
@@ -518,6 +524,7 @@
             this.btnData_Kembali.TabIndex = 7;
             this.btnData_Kembali.Text = "Data Pengembalian";
             this.btnData_Kembali.UseVisualStyleBackColor = false;
+            this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
             // 
             // btnData_Pinjam
             // 
@@ -532,6 +539,7 @@
             this.btnData_Pinjam.TabIndex = 6;
             this.btnData_Pinjam.Text = "Data Pinjam";
             this.btnData_Pinjam.UseVisualStyleBackColor = false;
+            this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             // 
             // btnData_Barang
             // 
@@ -546,6 +554,7 @@
             this.btnData_Barang.TabIndex = 5;
             this.btnData_Barang.Text = "Data Barang";
             this.btnData_Barang.UseVisualStyleBackColor = false;
+            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             // 
             // btnData_Ambil
             // 
@@ -560,6 +569,7 @@
             this.btnData_Ambil.TabIndex = 4;
             this.btnData_Ambil.Text = "Data Pengambilan";
             this.btnData_Ambil.UseVisualStyleBackColor = false;
+            this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
             // 
             // lblNamaWarga
             // 
@@ -582,12 +592,13 @@
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
             this.btnLogOut.Location = new System.Drawing.Point(19, 501);
-            this.btnLogOut.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLogOut.Margin = new System.Windows.Forms.Padding(2);
             this.btnLogOut.Name = "btnLogOut";
             this.btnLogOut.Size = new System.Drawing.Size(158, 37);
             this.btnLogOut.TabIndex = 2;
             this.btnLogOut.Text = "Log Out";
             this.btnLogOut.UseVisualStyleBackColor = false;
+            this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             // 
             // panelSidebar
             // 
@@ -601,7 +612,7 @@
             this.panelSidebar.Controls.Add(this.btnLogOut);
             this.panelSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelSidebar.Location = new System.Drawing.Point(0, 0);
-            this.panelSidebar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelSidebar.Margin = new System.Windows.Forms.Padding(2);
             this.panelSidebar.Name = "panelSidebar";
             this.panelSidebar.Size = new System.Drawing.Size(192, 589);
             this.panelSidebar.TabIndex = 25;
@@ -619,6 +630,7 @@
             this.btnTambah_Admin.TabIndex = 9;
             this.btnTambah_Admin.Text = "Tambah Admin";
             this.btnTambah_Admin.UseVisualStyleBackColor = false;
+            this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             // 
             // btnExit
             // 
@@ -627,7 +639,7 @@
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.ForeColor = System.Drawing.Color.White;
             this.btnExit.Location = new System.Drawing.Point(803, 16);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(2);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(34, 24);
             this.btnExit.TabIndex = 1;
@@ -641,7 +653,7 @@
             this.panelHeader.Controls.Add(this.btnExit);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(192, 0);
-            this.panelHeader.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(2);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(848, 57);
             this.panelHeader.TabIndex = 26;
@@ -673,7 +685,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dgvUtama);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "FormDataPinjam";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form Data Pinjam Admin";

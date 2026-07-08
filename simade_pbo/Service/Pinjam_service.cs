@@ -22,10 +22,8 @@ namespace simade_pbo.Service
             return jalankanQuery(query);
         }
 
-        // --- 1. UNTUK FORM DATA PINJAM (MENAMPILKAN SEMUA STATUS: PENDING, DISETUJUI, DITOLAK) ---
         public DataTable tampilDetailBarang(string kodePeminjaman)
         {
-            // Tanpa filter status di akhir WHERE agar Microphone yang ditolak tetap terlihat utuh
             string query = @"
         SELECT 
             b.nama_barang, 
@@ -61,10 +59,8 @@ namespace simade_pbo.Service
             return dt;
         }
 
-        // --- 2. UNTUK FORM DATA PENGAMBILAN (HANYA MENAMPILKAN YANG DISETUJUI) ---
         public DataTable tampilDetailBarangDisetujuiSah(string kodePeminjaman)
         {
-            // Khusus disisipkan filter ketat status = 'disetujui' demi kelancaran serah terima fisik barang
             string query = @"
         SELECT 
             b.nama_barang, 

@@ -20,12 +20,8 @@ namespace simade_pbo
             this.Load += new System.EventHandler(this.FormDataPinjam_Load);
             this.dgvUtama.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellClick);
             this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
-
-            // Mendaftarkan event untuk mendeteksi perubahan ComboBox dan mengunci sel keterangan
             this.dgvDetail.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetail_CellValueChanged);
             this.dgvDetail.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvDetail_CurrentCellDirtyStateChanged);
-
-            // KUNCI UTAMA: Mencegah pengetikan di kolom keterangan sebelum proses edit dimulai
             this.dgvDetail.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dgvDetail_CellBeginEdit);
 
             if (this.txtCari != null)
@@ -33,7 +29,7 @@ namespace simade_pbo
                 this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             }
 
-            // Kunci Solusi Ringan Navigasi Sidebar Left
+            // Bagian Navigasi Sidebar Left
             this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
@@ -42,7 +38,7 @@ namespace simade_pbo
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
 
-            // Operasi Form Kontrol bawah
+            // Operasi Form Kontrol Bawah
             this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
 
@@ -64,13 +60,6 @@ namespace simade_pbo
             DataTable dtUtama = pinjamService.tampilSemuaPeminjaman();
             FormatDanTampilkanData(dtUtama);
             HitungKPIPeminjaman(dtUtama);
-        }
-
-        private void txtCari_TextChanged(object sender, EventArgs e)
-        {
-            string kataKunci = txtCari.Text.Trim();
-            DataTable dtHasil = string.IsNullOrEmpty(kataKunci) ? pinjamService.tampilSemuaPeminjaman() : pinjamService.cariPeminjaman(kataKunci);
-            FormatDanTampilkanData(dtHasil);
         }
 
         private void FormatDanTampilkanData(DataTable dt)
@@ -205,17 +194,13 @@ namespace simade_pbo
                         else
                         {
                             dgvDetail.ReadOnly = false;
+                            dgvDetail.Columns[0].ReadOnly = true;
+                            dgvDetail.Columns[1].ReadOnly = true;
+                            dgvDetail.Columns[3].ReadOnly = true;
+                            dgvDetail.Columns[2].ReadOnly = false;
+                            dgvDetail.Columns[4].ReadOnly = false;
+                            dgvDetail.Columns[5].ReadOnly = true;
 
-                            // Set dasar ReadOnly kolom bawaan
-                            dgvDetail.Columns[0].ReadOnly = true;  // Nama Barang LOCK
-                            dgvDetail.Columns[1].ReadOnly = true;  // Kategori LOCK (Sesuai database awal)
-                            dgvDetail.Columns[3].ReadOnly = true;  // Stok LOCK
-
-                            dgvDetail.Columns[2].ReadOnly = false; // Jumlah pinjam bisa diedit
-                            dgvDetail.Columns[4].ReadOnly = false; // Status ComboBox bisa diganti
-                            dgvDetail.Columns[5].ReadOnly = true;  // Keterangan LOCK awal (Nanti dibuka dinamis hanya jika Ditolak)
-
-                            // Jalankan penyesuaian visual dan sistem untuk kolom keterangan
                             UpdateVisualKolomKeterangan();
 
                             btnSimpan.Enabled = true;
@@ -234,14 +219,6 @@ namespace simade_pbo
             e.ThrowException = false;
         }
 
-        private void dgvDetail_CurrentCellDirtyStateChanged(object sender, EventArgs e)
-        {
-            if (dgvDetail.IsCurrentCellDirty)
-            {
-                dgvDetail.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            }
-        }
-
         private void dgvDetail_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.ColumnIndex == 4)
@@ -250,16 +227,13 @@ namespace simade_pbo
             }
         }
 
-        // KUNCI UTAMA: Memblokir pengetikan di kolom Keterangan (Indeks 5) jika statusnya bukan "Ditolak"
         private void dgvDetail_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            // Jika yang ingin diedit adalah Kolom Keterangan (Indeks 5)
             if (e.ColumnIndex == 5 && e.RowIndex >= 0)
             {
                 var row = dgvDetail.Rows[e.RowIndex];
                 string statusVal = row.Cells[4].Value?.ToString().ToLower().Trim() ?? "";
 
-                // JIKA STATUS BUKAN DITOLAK, BATALKAN EDIT SECARA TOTAL (DISABLE TOTAL KETIK)
                 if (statusVal != "ditolak")
                 {
                     e.Cancel = true;
@@ -267,7 +241,6 @@ namespace simade_pbo
             }
         }
 
-        // Fungsi pembantu untuk merubah status dan warna kolom keterangan (Indeks 5) secara dinamis
         private void UpdateVisualKolomKeterangan()
         {
             foreach (DataGridViewRow row in dgvDetail.Rows)
@@ -278,19 +251,36 @@ namespace simade_pbo
 
                     if (status == "ditolak")
                     {
-                        row.Cells[5].ReadOnly = false; // Enable secara sistem
-                        row.Cells[5].Style.BackColor = System.Drawing.Color.White; // Putih (Bisa diketik alasan penolakannya)
+                        row.Cells[5].ReadOnly = false;
+                        row.Cells[5].Style.BackColor = System.Drawing.Color.White;
                     }
                     else
                     {
-                        row.Cells[5].ReadOnly = true;  // Disable secara sistem
-                        row.Cells[5].Style.BackColor = System.Drawing.Color.FromArgb(240, 240, 240); // Abu-abu tanda mati
-
-                        // Opsional: hapus teks keterangan jika status diubah kembali ke pending/disetujui
-                        // row.Cells[5].Value = ""; 
+                        row.Cells[5].ReadOnly = true;
+                        row.Cells[5].Style.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+                        row.Cells[5].Value = "";
                     }
                 }
             }
+        }
+
+        // PERBAIKAN 1: Fitur Pencarian Realtime Berdasarkan Kata Kunci
+        private void txtCari_TextChanged(object sender, EventArgs e)
+        {
+            string kataKunci = txtCari.Text.Trim();
+            DataTable dtHasil;
+
+            if (string.IsNullOrEmpty(kataKunci))
+            {
+                dtHasil = pinjamService.tampilSemuaPeminjaman();
+            }
+            else
+            {
+                dtHasil = pinjamService.cariPeminjaman(kataKunci);
+            }
+
+            FormatDanTampilkanData(dtHasil);
+            HitungKPIPeminjaman(dtHasil);
         }
 
         private void btnSimpan_Click(object sender, EventArgs e)
@@ -317,7 +307,6 @@ namespace simade_pbo
                     int jumlahSedia = Convert.ToInt32(row.Cells[3].Value);
                     string statusValue = row.Cells[4].Value?.ToString() ?? "pending";
                     string keteranganValue = row.Cells[5].Value?.ToString() ?? "";
-
                     string statusCek = statusValue.ToLower().Trim();
 
                     if (statusCek == "disetujui" && jumlah > jumlahSedia)
@@ -329,7 +318,10 @@ namespace simade_pbo
 
                     pinjamService.ubahStatusDetailItem(idDetail, jumlah, statusCek, keteranganValue);
 
-                    if (statusCek == "disetujui") adaYangDisetujui = true;
+                    if (statusCek == "disetujui")
+                    {
+                        adaYangDisetujui = true;
+                    }
                 }
             }
 
@@ -337,9 +329,17 @@ namespace simade_pbo
 
             if (pinjamService.ubahStatusNotaInduk(kodeNotaAktif, statusNotaFinal) > 0)
             {
-                MessageBox.Show("Status verifikasi peminjaman berhasil disimpan!\nStatus Nota: " + statusNotaFinal.ToUpper() + "\n", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Status verifikasi peminjaman berhasil disimpan!\nStatus Nota: " + statusNotaFinal.ToUpper(), "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 SegarkanGridUtama();
                 BersihkanPanelDetail();
+            }
+        }
+
+        private void dgvDetail_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dgvDetail.IsCurrentCellDirty)
+            {
+                dgvDetail.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
         }
 
