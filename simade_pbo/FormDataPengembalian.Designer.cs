@@ -70,7 +70,6 @@
             this.kondisi_bagus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.kondisi_rusak = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.denda = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtTgl_Kembali = new System.Windows.Forms.TextBox();
             this.txtTgl_Pinjam = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -91,6 +90,7 @@
             this.dgv_KondisiBagus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_KondisiRusak = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgv_Denda = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dtpTgl_Kembali = new System.Windows.Forms.DateTimePicker();
             this.panelSidebar.SuspendLayout();
             this.panelHeader.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -129,7 +129,7 @@
             this.panelSidebar.Controls.Add(this.btnLogOut);
             this.panelSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelSidebar.Location = new System.Drawing.Point(0, 0);
-            this.panelSidebar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelSidebar.Margin = new System.Windows.Forms.Padding(2);
             this.panelSidebar.Name = "panelSidebar";
             this.panelSidebar.Size = new System.Drawing.Size(192, 589);
             this.panelSidebar.TabIndex = 27;
@@ -218,7 +218,7 @@
             this.btnLogOut.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnLogOut.ForeColor = System.Drawing.Color.White;
             this.btnLogOut.Location = new System.Drawing.Point(19, 501);
-            this.btnLogOut.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLogOut.Margin = new System.Windows.Forms.Padding(2);
             this.btnLogOut.Name = "btnLogOut";
             this.btnLogOut.Size = new System.Drawing.Size(158, 37);
             this.btnLogOut.TabIndex = 2;
@@ -233,7 +233,7 @@
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.ForeColor = System.Drawing.Color.White;
             this.btnExit.Location = new System.Drawing.Point(803, 16);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(2);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(34, 24);
             this.btnExit.TabIndex = 1;
@@ -248,7 +248,7 @@
             this.panelHeader.Controls.Add(this.btnExit);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(192, 0);
-            this.panelHeader.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelHeader.Margin = new System.Windows.Forms.Padding(2);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(848, 57);
             this.panelHeader.TabIndex = 28;
@@ -292,7 +292,7 @@
             // 
             this.lblJumlahKembali.AutoSize = true;
             this.lblJumlahKembali.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblJumlahKembali.Location = new System.Drawing.Point(89, 37);
+            this.lblJumlahKembali.Location = new System.Drawing.Point(90, 35);
             this.lblJumlahKembali.Name = "lblJumlahKembali";
             this.lblJumlahKembali.Size = new System.Drawing.Size(38, 45);
             this.lblJumlahKembali.TabIndex = 3;
@@ -336,7 +336,7 @@
             // 
             this.lblJumlahJatuhTempo.AutoSize = true;
             this.lblJumlahJatuhTempo.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblJumlahJatuhTempo.Location = new System.Drawing.Point(88, 37);
+            this.lblJumlahJatuhTempo.Location = new System.Drawing.Point(90, 35);
             this.lblJumlahJatuhTempo.Name = "lblJumlahJatuhTempo";
             this.lblJumlahJatuhTempo.Size = new System.Drawing.Size(38, 45);
             this.lblJumlahJatuhTempo.TabIndex = 2;
@@ -379,7 +379,7 @@
             // 
             this.lblJumlahPeminjaman.AutoSize = true;
             this.lblJumlahPeminjaman.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblJumlahPeminjaman.Location = new System.Drawing.Point(86, 37);
+            this.lblJumlahPeminjaman.Location = new System.Drawing.Point(90, 35);
             this.lblJumlahPeminjaman.Name = "lblJumlahPeminjaman";
             this.lblJumlahPeminjaman.Size = new System.Drawing.Size(38, 45);
             this.lblJumlahPeminjaman.TabIndex = 1;
@@ -481,8 +481,8 @@
             // 
             this.panel4.BackColor = System.Drawing.Color.White;
             this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.dtpTgl_Kembali);
             this.panel4.Controls.Add(this.dgvDetail);
-            this.panel4.Controls.Add(this.txtTgl_Kembali);
             this.panel4.Controls.Add(this.txtTgl_Pinjam);
             this.panel4.Controls.Add(this.label10);
             this.panel4.Controls.Add(this.label11);
@@ -588,13 +588,6 @@
             this.denda.Name = "denda";
             this.denda.ReadOnly = true;
             this.denda.Width = 125;
-            // 
-            // txtTgl_Kembali
-            // 
-            this.txtTgl_Kembali.Location = new System.Drawing.Point(334, 154);
-            this.txtTgl_Kembali.Name = "txtTgl_Kembali";
-            this.txtTgl_Kembali.Size = new System.Drawing.Size(144, 20);
-            this.txtTgl_Kembali.TabIndex = 51;
             // 
             // txtTgl_Pinjam
             // 
@@ -768,6 +761,16 @@
             this.dgv_Denda.Name = "dgv_Denda";
             this.dgv_Denda.Width = 125;
             // 
+            // dtpTgl_Kembali
+            // 
+            this.dtpTgl_Kembali.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.dtpTgl_Kembali.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpTgl_Kembali.Location = new System.Drawing.Point(332, 149);
+            this.dtpTgl_Kembali.Margin = new System.Windows.Forms.Padding(2);
+            this.dtpTgl_Kembali.Name = "dtpTgl_Kembali";
+            this.dtpTgl_Kembali.Size = new System.Drawing.Size(144, 25);
+            this.dtpTgl_Kembali.TabIndex = 53;
+            // 
             // FormDataPengembalian
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -843,7 +846,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox txtTgl_Kembali;
         private System.Windows.Forms.TextBox txtTgl_Pinjam;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
@@ -873,5 +875,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn kondisi_bagus;
         private System.Windows.Forms.DataGridViewTextBoxColumn kondisi_rusak;
         private System.Windows.Forms.DataGridViewTextBoxColumn denda;
+        private System.Windows.Forms.DateTimePicker dtpTgl_Kembali;
     }
 }

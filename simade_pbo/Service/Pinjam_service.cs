@@ -16,33 +16,27 @@ namespace simade_pbo.Service
             return jalankanQuery(query);
         }
 
+        // --- 1. UNTUK FORM DATA PINJAM (MENAMPILKAN SEMUA STATUS: PENDING, DISETUJUI, DITOLAK) ---
         public DataTable tampilDetailBarang(string kodePeminjaman)
         {
-            // RUMUS YANG DISINKRONKAN:
-            // Jumlah Tersedia = jumlah_barang - kondisi_rusak - SUM(jumlah_pinjam yang status detailnya 'disetujui')
+            // Tanpa filter status di akhir WHERE agar Microphone yang ditolak tetap terlihat utuh
             string query = @"
-            SELECT 
-                dp.id_detail_peminjaman,
-                dp.id_peminjaman,
-                dp.id_barang,
-                b.nama_barang,
-                k.nama_kategori,
-                dp.jumlah_pinjam,
-                u.alamat,
-                u.no_hp AS nomor_telepon,
-                dp.status,
-                dp.keterangan,
-                (b.jumlah_barang - IFNULL(b.kondisi_rusak, 0) - 
-                    IFNULL((SELECT SUM(x.jumlah_pinjam) 
-                            FROM detail_peminjaman x 
-                            WHERE x.id_barang = b.id_barang AND x.status = 'disetujui'), 0)
-                ) AS jumlah_tersedia_realtime
-            FROM detail_peminjaman dp
-            INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
-            INNER JOIN barang b ON dp.id_barang = b.id_barang
-            LEFT JOIN kategori k ON b.id_kategori = k.id_kategori
-            LEFT JOIN user u ON p.id_user = u.id_user
-            WHERE p.kode_peminjaman = @kode";
+        SELECT 
+            b.nama_barang, 
+            k.nama_kategori, 
+            dp.jumlah_pinjam, 
+            b.kondisi_bagus AS jumlah_tersedia_realtime, 
+            dp.status, 
+            dp.keterangan,
+            dp.id_detail_peminjaman,
+            u.alamat,          
+            u.no_hp AS nomor_telepon 
+        FROM detail_peminjaman dp
+        JOIN barang b ON dp.id_barang = b.id_barang
+        JOIN kategori k ON b.id_kategori = k.id_kategori
+        JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+        JOIN user u ON p.id_user = u.id_user 
+        WHERE p.kode_peminjaman = @kodePeminjaman";
 
             DataTable dt = new DataTable();
             using (MySqlConnection conn = Koneksi.GetConn())
@@ -52,17 +46,51 @@ namespace simade_pbo.Service
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@kode", kodePeminjaman);
-                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
-                        {
-                            adapter.Fill(dt);
-                        }
+                        cmd.Parameters.AddWithValue("@kodePeminjaman", kodePeminjaman);
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd)) { adapter.Fill(dt); }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception ex) { MessageBox.Show("Gagal: " + ex.Message); }
+            }
+            return dt;
+        }
+
+        // --- 2. UNTUK FORM DATA PENGAMBILAN (HANYA MENAMPILKAN YANG DISETUJUI) ---
+        public DataTable tampilDetailBarangDisetujuiSah(string kodePeminjaman)
+        {
+            // Khusus disisipkan filter ketat status = 'disetujui' demi kelancaran serah terima fisik barang
+            string query = @"
+        SELECT 
+            b.nama_barang, 
+            k.nama_kategori, 
+            dp.jumlah_pinjam, 
+            b.kondisi_bagus AS jumlah_tersedia_realtime, 
+            dp.status, 
+            dp.keterangan,
+            dp.id_detail_peminjaman,
+            u.alamat,          
+            u.no_hp AS nomor_telepon 
+        FROM detail_peminjaman dp
+        JOIN barang b ON dp.id_barang = b.id_barang
+        JOIN kategori k ON b.id_kategori = k.id_kategori
+        JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+        JOIN user u ON p.id_user = u.id_user 
+        WHERE p.kode_peminjaman = @kodePeminjaman 
+          AND dp.status = 'disetujui'";
+
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = Koneksi.GetConn())
+            {
+                try
                 {
-                    MessageBox.Show("Gagal mengambil detail barang peminjaman: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@kodePeminjaman", kodePeminjaman);
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd)) { adapter.Fill(dt); }
+                    }
                 }
+                catch (Exception ex) { MessageBox.Show("Gagal: " + ex.Message); }
             }
             return dt;
         }

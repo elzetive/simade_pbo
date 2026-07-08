@@ -58,19 +58,25 @@ namespace simade_pbo
         {
             dgvBarang.AutoGenerateColumns = false;
 
+            // QUERY REVISI: Menggunakan Subquery terisolasi agar hitungan SUM tidak menggandakan baris
+            // Menyaring semua status peminjaman yang menahan/membawa fisik barang
             string queryKatalog = @"
-                SELECT 
-                    b.id_barang, 
-                    b.nama_barang, 
-                    k.nama_kategori, 
-                    (b.kondisi_bagus - IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)) AS stok_siap_pakai
-                FROM barang b
-                INNER JOIN kategori k ON b.id_kategori = k.id_kategori
-                LEFT JOIN detail_peminjaman dp ON b.id_barang = dp.id_barang
-                LEFT JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
-                GROUP BY b.id_barang, b.nama_barang, k.nama_kategori, b.kondisi_bagus
-                HAVING stok_siap_pakai > 0
-                ORDER BY b.nama_barang ASC";
+            SELECT 
+                b.id_barang, 
+                b.nama_barang, 
+                k.nama_kategori, 
+                (b.kondisi_bagus - IFNULL(peminjaman_aktif.total_terpinjam, 0)) AS stok_siap_pakai
+            FROM barang b
+            INNER JOIN kategori k ON b.id_kategori = k.id_kategori
+            LEFT JOIN (
+                SELECT dp.id_barang, SUM(dp.jumlah_pinjam) AS total_terpinjam
+                FROM detail_peminjaman dp
+                INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                WHERE p.status_peminjaman IN ('pending', 'dipinjam', 'disetujui', 'Disetujui (Siap Ambil)')
+                GROUP BY dp.id_barang
+            ) peminjaman_aktif ON b.id_barang = peminjaman_aktif.id_barang
+            WHERE (b.kondisi_bagus - IFNULL(peminjaman_aktif.total_terpinjam, 0)) > 0
+            ORDER BY b.nama_barang ASC";
 
             try
             {
@@ -86,9 +92,8 @@ namespace simade_pbo
 
                             nama_barang.DataPropertyName = "nama_barang";
                             id_kategori.DataPropertyName = "nama_kategori";
-
-                            // PERBAIKAN SINKRONISASI: Menyelaraskan pemanggilan nama objek kolom desainer yang baru
                             jumlah_tersedia.DataPropertyName = "stok_siap_pakai";
+
                             dgvBarang.DataSource = dt;
                         }
                     }

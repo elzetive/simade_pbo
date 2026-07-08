@@ -88,8 +88,8 @@ namespace simade_pbo
 
         void tampilGrid()
         {
-            // QUERY YANG DISINKRONKAN: Menghitung dipinjam berdasarkan dp.status = 'disetujui'
-            // Dan menghitung jumlah_tersedia = kondisi_bagus - jumlah_dipinjam
+            // PERBAIKAN QUERY: Menghitung dipinjam & tersedia berdasarkan relasi status_peminjaman di tabel induk 'peminjaman'
+            // status 'dipinjam' atau 'disetujui' dihitung sebagai aset keluar. Status 'dikembalikan' otomatis memulihkan stok tersedia.
             string queryDinamis = @"
         SELECT 
             b.id_barang,
@@ -99,9 +99,27 @@ namespace simade_pbo
             b.jumlah_barang AS jumlah_total,
             b.kondisi_bagus,
             b.kondisi_rusak,
-            IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0) AS jumlah_dipinjam,
-            IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'pending'), 0) AS jumlah_booking,
-            (b.kondisi_bagus - IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0)) AS jumlah_tersedia
+            IFNULL((
+                SELECT SUM(dp.jumlah_pinjam) 
+                FROM detail_peminjaman dp 
+                INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                WHERE dp.id_barang = b.id_barang 
+                AND LOWER(p.status_peminjaman) IN ('dipinjam', 'disetujui')
+            ), 0) AS jumlah_dipinjam,
+            IFNULL((
+                SELECT SUM(dp.jumlah_pinjam) 
+                FROM detail_peminjaman dp 
+                INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                WHERE dp.id_barang = b.id_barang 
+                AND LOWER(p.status_peminjaman) = 'pending'
+            ), 0) AS jumlah_booking,
+            (b.kondisi_bagus - IFNULL((
+                SELECT SUM(dp.jumlah_pinjam) 
+                FROM detail_peminjaman dp 
+                INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                WHERE dp.id_barang = b.id_barang 
+                AND LOWER(p.status_peminjaman) IN ('dipinjam', 'disetujui')
+            ), 0)) AS jumlah_tersedia
         FROM barang b
         INNER JOIN kategori k ON b.id_kategori = k.id_kategori";
 
@@ -150,20 +168,17 @@ namespace simade_pbo
             // Kalkulasi total card informasi di atas dashboard
             int totalBarangSemua = 0;
             int totalSedangDipinjam = 0;
-            int totalMenungguPersetujuan = 0;
             int totalSiapTersedia = 0;
 
             foreach (DataRow row in dt.Rows)
             {
                 if (row["jumlah_total"] != DBNull.Value) totalBarangSemua += Convert.ToInt32(row["jumlah_total"]);
                 if (row["jumlah_dipinjam"] != DBNull.Value) totalSedangDipinjam += Convert.ToInt32(row["jumlah_dipinjam"]);
-                if (row["jumlah_booking"] != DBNull.Value) totalMenungguPersetujuan += Convert.ToInt32(row["jumlah_booking"]);
                 if (row["jumlah_tersedia"] != DBNull.Value) totalSiapTersedia += Convert.ToInt32(row["jumlah_tersedia"]);
             }
 
             lblTotal.Text = totalBarangSemua.ToString();
             lblDipinjam.Text = totalSedangDipinjam.ToString();
-            lblMenunggu.Text = totalMenungguPersetujuan.ToString();
             lblTersedia.Text = totalSiapTersedia.ToString();
 
             muatKategori();

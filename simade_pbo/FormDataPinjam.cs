@@ -16,8 +16,8 @@ namespace simade_pbo
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Mendaftarkan event utama secara aman agar siklus UI lancar
-            this.Load += new System.EventHandler(this.FormDataPinjam_Load);
+            // Mendaftarkan event utama secara aman agar siklus UI lancar
+            this.Load += new System.EventHandler(this.FormDataPinjam_Load);
             this.dgvUtama.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellClick);
             this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
 
@@ -26,8 +26,8 @@ namespace simade_pbo
                 this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             }
 
-            // Kunci Solusi Ringan Navigasi Sidebar Left
-            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
+            // Kunci Solusi Ringan Navigasi Sidebar Left
+            this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
             this.btnData_Kembali.Click += new System.EventHandler(this.btnData_Kembali_Click);
@@ -35,8 +35,8 @@ namespace simade_pbo
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
 
-            // Operasi Form Kontrol bawah
-            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
+            // Operasi Form Kontrol bawah
+            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
 
             txtNamaLengkap.ReadOnly = true;
@@ -48,8 +48,8 @@ namespace simade_pbo
 
         private void FormDataPinjam_Load(object sender, EventArgs e)
         {
-            // Gunakan BeginInvoke agar kompilasi data KPI tidak mengunci Thread UI saat berpindah form
-            this.BeginInvoke(new MethodInvoker(SegarkanGridUtama));
+            // Gunakan BeginInvoke agar kompilasi data KPI tidak mengunci Thread UI saat berpindah form
+            this.BeginInvoke(new MethodInvoker(SegarkanGridUtama));
         }
 
         private void SegarkanGridUtama()
@@ -120,7 +120,6 @@ namespace simade_pbo
                 }
             }
 
-            if (lblTotalPending != null) lblTotalPending.Text = totalPending.ToString();
             if (lblTotalDisetujui != null) lblTotalDisetujui.Text = totalDisetujui.ToString();
             if (lblTotalDitolak != null) lblTotalDitolak.Text = totalDitolak.ToString();
 
@@ -153,17 +152,17 @@ namespace simade_pbo
                         kodeNotaAktif = dr["kode_peminjaman"].ToString();
                         txtNamaLengkap.Text = dr["nama_lengkap"].ToString();
 
-                        // 1. FORMAT TANGGAL PINJAM
-                        if (dr["tgl_pinjam"] != DBNull.Value)
+                        // 1. FORMAT TANGGAL PINJAM
+                        if (dr["tgl_pinjam"] != DBNull.Value)
                         {
                             DateTime tglP = Convert.ToDateTime(dr["tgl_pinjam"]);
                             txtTglPinjam.Text = tglP.ToString("dd/MM/yyyy");
                         }
                         else txtTglPinjam.Clear();
 
-                        // 2. PERBAIKAN TANGGAL KEMBALI: Ambil nilai asli dari kolom tgl_kembali database 
-                        // tanpa memaksa menjadi "-" hanya karena statusnya masih pending
-                        if (dr["tgl_kembali"] != DBNull.Value)
+                        // 2. PERBAIKAN TANGGAL KEMBALI: Ambil nilai asli dari kolom tgl_kembali database 
+                        // tanpa memaksa menjadi "-" hanya karena statusnya masih pending
+                        if (dr["tgl_kembali"] != DBNull.Value)
                         {
                             string tglKembaliStr = dr["tgl_kembali"].ToString().Trim();
                             if (tglKembaliStr.Contains("-") && tglKembaliStr.Length <= 5)
@@ -194,8 +193,8 @@ namespace simade_pbo
                             else if (dtDetail.Columns.Contains("no_hp"))
                                 txtNoHp.Text = dtDetail.Rows[0]["no_hp"].ToString();
 
-                            // FORMATTING STATUS UNTUK TAMPILAN GRID VIEW COMBOBOX
-                            foreach (DataRow rowDetail in dtDetail.Rows)
+                            // FORMATTING STATUS UNTUK TAMPILAN GRID VIEW COMBOBOX
+                            foreach (DataRow rowDetail in dtDetail.Rows)
                             {
                                 if (rowDetail["status"] != DBNull.Value)
                                 {
@@ -219,7 +218,7 @@ namespace simade_pbo
                         dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
                         dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
                         dgvDetail.Columns[3].DataPropertyName = "jumlah_tersedia_realtime"; // Mengikat langsung ke hasil query service
-                        dgvDetail.Columns[4].DataPropertyName = "status";
+                        dgvDetail.Columns[4].DataPropertyName = "status";
                         dgvDetail.Columns[5].DataPropertyName = "keterangan";
 
                         dgvDetail.DataSource = dtDetail;
@@ -380,3 +379,4 @@ namespace simade_pbo
         }
     }
 }
+
