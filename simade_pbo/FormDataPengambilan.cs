@@ -61,8 +61,18 @@ namespace simade_pbo
         {
             dataGridView1.AutoGenerateColumns = false;
 
-            // Mengambil data peminjaman dari service
-            DataTable dtMentah = pinjamService.tampilSemuaPeminjaman();
+            // PERBAIKAN FITUR PENCARIAN: Deteksi apakah kolom pencarian diisi atau tidak
+            DataTable dtMentah;
+            string kataKunci = txtCari != null ? txtCari.Text.Trim() : "";
+
+            if (!string.IsNullOrEmpty(kataKunci))
+            {
+                dtMentah = pinjamService.cariPeminjaman(kataKunci);
+            }
+            else
+            {
+                dtMentah = pinjamService.tampilSemuaPeminjaman();
+            }
 
             if (dtMentah == null) return;
 
@@ -104,7 +114,6 @@ namespace simade_pbo
                 else if (statusReal == "dipinjam")
                 {
                     hitungDiambil++;
-                    // Sengaja dilewatkan (tidak di-`dtFiltered.Rows.Add`) agar hilang dari antrean tabel setelah di-simpan
                 }
             }
 
@@ -156,7 +165,7 @@ namespace simade_pbo
                         kodeNotaAktif = dr["kode_peminjaman"].ToString();
                         txtNamaPeminjam.Text = dr["nama_lengkap"].ToString();
 
-                        // PERBAIKAN FORMAT: Memotong jam 00:00:00 murni menjadi Tanggal saja (dd/MM/yyyy)
+                        // FORMAT TANGGAL PINJAM
                         if (dr["tgl_pinjam"] != DBNull.Value)
                         {
                             DateTime tPinjam = Convert.ToDateTime(dr["tgl_pinjam"]);
@@ -167,7 +176,16 @@ namespace simade_pbo
                             txtTglPinjam.Clear();
                         }
 
-                        txtTglKembali.Text = "-";
+                        // PERBAIKAN: FORMAT TANGGAL KEMBALI (Mengambil data asli dari database, bukan "-" lagi)
+                        if (dr["tgl_kembali"] != DBNull.Value)
+                        {
+                            DateTime tKembali = Convert.ToDateTime(dr["tgl_kembali"]);
+                            txtTglKembali.Text = tKembali.ToString("dd/MM/yyyy");
+                        }
+                        else
+                        {
+                            txtTglKembali.Text = "-";
+                        }
 
                         DataTable dtDetail = pinjamService.tampilDetailBarang(kodeNotaAktif);
 
@@ -239,6 +257,9 @@ namespace simade_pbo
                 txtDiambilOleh.Focus();
                 return;
             }
+
+            // OPTIMASI AMAN: Paksa DataGridView untuk mengakhiri mode edit agar ketikan deskripsi terakhir tersimpan sempurna
+            dgvDetail.EndEdit();
 
             string namaPenerima = txtDiambilOleh != null ? txtDiambilOleh.Text.Trim() : txtNamaPeminjam.Text;
 
