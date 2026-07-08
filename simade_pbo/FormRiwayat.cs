@@ -21,6 +21,9 @@ namespace simade_pbo
             this.StartPosition = FormStartPosition.CenterScreen;
 
             tampilRiwayat();
+
+            // Event klik baris untuk melihat detail
+            dgvRiwayat.CellClick += dgvRiwayat_CellClick;
         }
 
         void tampilRiwayat()
@@ -142,6 +145,40 @@ namespace simade_pbo
 
         }
 
+        // ==========================
+        // DETAIL RIWAYAT PEMINJAMAN
+        // ==========================
+        private void dgvRiwayat_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                try
+                {
+                    string barang = dgvRiwayat.Rows[e.RowIndex].Cells["colNama"].Value?.ToString();
+                    string peminjam = dgvRiwayat.Rows[e.RowIndex].Cells["colPeminjam"].Value?.ToString();
+                    string tglPinjam = dgvRiwayat.Rows[e.RowIndex].Cells["colTanggalPinjam"].Value?.ToString();
+                    string tglKembali = dgvRiwayat.Rows[e.RowIndex].Cells["colTanggalKembali"].Value?.ToString();
+                    string status = dgvRiwayat.Rows[e.RowIndex].Cells["colStatus"].Value?.ToString();
+
+                    MessageBox.Show(
+                        this,
+                        "Nama Barang : " + barang +
+                        "\nPeminjam : " + peminjam +
+                        "\nTanggal Pinjam : " + tglPinjam +
+                        "\nTanggal Kembali : " + tglKembali +
+                        "\nStatus : " + status,
+                        "Detail Riwayat Peminjaman",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
         // WARNA STATUS
         private void dgvRiwayat_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -168,6 +205,45 @@ namespace simade_pbo
                     }
                 }
             }
+        }
+
+        private void txtCari_TextChanged_1(object sender, EventArgs e)
+        {
+            filterData();
+        }
+
+        // Tombol Detail (opsional)
+        private void btnDetail_Click(object sender, EventArgs e)
+        {
+            if (dgvRiwayat.SelectedRows.Count == 0)
+            {
+                MessageBox.Show(
+                    "Silakan pilih salah satu data riwayat terlebih dahulu.",
+                    "Informasi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            int row = dgvRiwayat.SelectedRows[0].Index;
+
+            string barang = dgvRiwayat.Rows[row].Cells["colNama"].Value?.ToString();
+            string peminjam = dgvRiwayat.Rows[row].Cells["colPeminjam"].Value?.ToString();
+            string tglPinjam = dgvRiwayat.Rows[row].Cells["colTanggalPinjam"].Value?.ToString();
+            string tglKembali = dgvRiwayat.Rows[row].Cells["colTanggalKembali"].Value?.ToString();
+            string status = dgvRiwayat.Rows[row].Cells["colStatus"].Value?.ToString();
+
+            MessageBox.Show(
+                this,
+                "Nama Barang : " + barang +
+                "\nPeminjam : " + peminjam +
+                "\nTanggal Pinjam : " + tglPinjam +
+                "\nTanggal Kembali : " + tglKembali +
+                "\nStatus : " + status,
+                "Detail Riwayat Peminjaman",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
         }
     }
 }
