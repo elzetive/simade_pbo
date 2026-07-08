@@ -231,9 +231,9 @@
             this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.label4.Location = new System.Drawing.Point(82, 14);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 21);
+            this.label4.Size = new System.Drawing.Size(79, 21);
             this.label4.TabIndex = 2;
-            this.label4.Text = "Diterima";
+            this.label4.Text = "Disetujui";
             // 
             // panel1
             // 

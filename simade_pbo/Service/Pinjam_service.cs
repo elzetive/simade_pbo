@@ -10,9 +10,15 @@ namespace simade_pbo.Service
     {
         public DataTable tampilSemuaPeminjaman()
         {
-            string query = @"SELECT p.kode_peminjaman, u.nama_lengkap, p.tgl_pinjam, p.tgl_kembali, p.status_peminjaman 
-                    FROM peminjaman p 
-                    INNER JOIN user u ON p.id_user = u.id_user";
+            string query = @"SELECT 
+                            p.kode_peminjaman, 
+                            u.nama_lengkap, 
+                            p.tgl_pinjam, 
+                            p.tgl_kembali, 
+                            dp.status AS status_peminjaman -- Mengambil kolom status dari tabel detail_peminjaman
+                        FROM peminjaman p 
+                        INNER JOIN user u ON p.id_user = u.id_user
+                        INNER JOIN detail_peminjaman dp ON p.id_peminjaman = dp.id_peminjaman -- Menghubungkan ke tabel detail";
             return jalankanQuery(query);
         }
 
