@@ -7,8 +7,7 @@ namespace simade_pbo
 {
     class Koneksi
     {
-        private static string connString = "server=localhost;port=3306;username=root;password=;database=simade_pbo;";
-
+        private static string connString = "server=192.168.19.95;port=3306;username=simade_team;password=fjrc5-]nemQlV[pb;database=simade_pbo;";
         public static MySqlConnection GetConn()
         {
             MySqlConnection conn = new MySqlConnection(connString);

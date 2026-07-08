@@ -1,4 +1,9 @@
-﻿namespace simade_pbo
+﻿using System;
+using System.Data;
+using MySql.Data.MySqlClient;
+using System.Windows.Forms;
+
+namespace simade_pbo
 {
     partial class FormDashboardWarga
     {
@@ -34,6 +39,9 @@
             this.btnTambahKeList = new System.Windows.Forms.Button();
             this.dtpTanggalPinjam = new System.Windows.Forms.DateTimePicker();
             this.lblTglPinjam = new System.Windows.Forms.Label();
+            // BARU: Inisialisasi Tanggal Kembali
+            this.dtpTanggalKembali = new System.Windows.Forms.DateTimePicker();
+            this.lblTglKembali = new System.Windows.Forms.Label();
             this.txtJumlahPinjam = new System.Windows.Forms.TextBox();
             this.lblJumlah = new System.Windows.Forms.Label();
             this.txtNamaBarang = new System.Windows.Forms.TextBox();
@@ -215,6 +223,9 @@
             this.panelPinjam.Controls.Add(this.btnTambahKeList);
             this.panelPinjam.Controls.Add(this.dtpTanggalPinjam);
             this.panelPinjam.Controls.Add(this.lblTglPinjam);
+            // BARU: Menambahkan kontrol Tanggal Kembali ke layout form
+            this.panelPinjam.Controls.Add(this.dtpTanggalKembali);
+            this.panelPinjam.Controls.Add(this.lblTglKembali);
             this.panelPinjam.Controls.Add(this.txtJumlahPinjam);
             this.panelPinjam.Controls.Add(this.lblJumlah);
             this.panelPinjam.Controls.Add(this.txtNamaBarang);
@@ -223,7 +234,8 @@
             this.panelPinjam.Location = new System.Drawing.Point(724, 114);
             this.panelPinjam.Margin = new System.Windows.Forms.Padding(2);
             this.panelPinjam.Name = "panelPinjam";
-            this.panelPinjam.Size = new System.Drawing.Size(304, 289);
+            // MODIFIKASI: Ukuran panel diperpanjang sedikit ke bawah agar muat input baru
+            this.panelPinjam.Size = new System.Drawing.Size(304, 335);
             this.panelPinjam.TabIndex = 4;
             // 
             // btnTambahKeList
@@ -233,7 +245,8 @@
             this.btnTambahKeList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTambahKeList.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnTambahKeList.ForeColor = System.Drawing.Color.White;
-            this.btnTambahKeList.Location = new System.Drawing.Point(19, 215);
+            // MODIFIKASI: Posisi tombol diturunkan ke bawah agar tidak bertabrakan
+            this.btnTambahKeList.Location = new System.Drawing.Point(19, 275);
             this.btnTambahKeList.Margin = new System.Windows.Forms.Padding(2);
             this.btnTambahKeList.Name = "btnTambahKeList";
             this.btnTambahKeList.Size = new System.Drawing.Size(266, 32);
@@ -262,6 +275,28 @@
             this.lblTglPinjam.Size = new System.Drawing.Size(104, 17);
             this.lblTglPinjam.TabIndex = 5;
             this.lblTglPinjam.Text = "Tanggal Pinjam";
+            // 
+            // dtpTanggalKembali
+            // 
+            this.dtpTanggalKembali.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.dtpTanggalKembali.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.dtpTanggalKembali.Location = new System.Drawing.Point(19, 222);
+            this.dtpTanggalKembali.Margin = new System.Windows.Forms.Padding(2);
+            this.dtpTanggalKembali.Name = "dtpTanggalKembali";
+            this.dtpTanggalKembali.Size = new System.Drawing.Size(267, 25);
+            this.dtpTanggalKembali.TabIndex = 8;
+            // 
+            // lblTglKembali
+            // 
+            this.lblTglKembali.AutoSize = true;
+            this.lblTglKembali.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
+            this.lblTglKembali.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            this.lblTglKembali.Location = new System.Drawing.Point(16, 202);
+            this.lblTglKembali.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTglKembali.Name = "lblTglKembali";
+            this.lblTglKembali.Size = new System.Drawing.Size(111, 17);
+            this.lblTglKembali.TabIndex = 7;
+            this.lblTglKembali.Text = "Tanggal Kembali";
             // 
             // txtJumlahPinjam
             // 
@@ -328,11 +363,12 @@
             this.dgvAntrean.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colCartNama,
             this.colCartQty});
-            this.dgvAntrean.Location = new System.Drawing.Point(724, 427);
+            // MODIFIKASI: Posisi dgvAntrean diturunkan sedikit agar layout seimbang
+            this.dgvAntrean.Location = new System.Drawing.Point(724, 465);
             this.dgvAntrean.Name = "dgvAntrean";
             this.dgvAntrean.ReadOnly = true;
             this.dgvAntrean.RowHeadersVisible = false;
-            this.dgvAntrean.Size = new System.Drawing.Size(304, 86);
+            this.dgvAntrean.Size = new System.Drawing.Size(304, 75);
             this.dgvAntrean.TabIndex = 5;
             // 
             // colCartNama
@@ -355,7 +391,8 @@
             this.btnKirimPengajuan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnKirimPengajuan.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnKirimPengajuan.ForeColor = System.Drawing.Color.White;
-            this.btnKirimPengajuan.Location = new System.Drawing.Point(724, 519);
+            // MODIFIKASI: Menyesuaikan letak tombol kirim akhir di paling bawah
+            this.btnKirimPengajuan.Location = new System.Drawing.Point(724, 546);
             this.btnKirimPengajuan.Name = "btnKirimPengajuan";
             this.btnKirimPengajuan.Size = new System.Drawing.Size(304, 37);
             this.btnKirimPengajuan.TabIndex = 6;
@@ -367,7 +404,8 @@
             this.lblCartTitle.AutoSize = true;
             this.lblCartTitle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblCartTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            this.lblCartTitle.Location = new System.Drawing.Point(721, 405);
+            // MODIFIKASI: Menurunkan label title antrean
+            this.lblCartTitle.Location = new System.Drawing.Point(721, 451);
             this.lblCartTitle.Name = "lblCartTitle";
             this.lblCartTitle.Size = new System.Drawing.Size(179, 19);
             this.lblCartTitle.TabIndex = 7;
@@ -469,6 +507,10 @@
         private System.Windows.Forms.Label lblJumlah;
         private System.Windows.Forms.DateTimePicker dtpTanggalPinjam;
         private System.Windows.Forms.Label lblTglPinjam;
+
+        private System.Windows.Forms.DateTimePicker dtpTanggalKembali;
+        private System.Windows.Forms.Label lblTglKembali;
+
         private System.Windows.Forms.Button btnTambahKeList;
         private System.Windows.Forms.DataGridView dgvAntrean;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCartNama;
