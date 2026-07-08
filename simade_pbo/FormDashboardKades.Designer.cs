@@ -53,7 +53,7 @@
             this.panelHeader = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartPeminjaman = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelSidebar.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -63,7 +63,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panelHeader.SuspendLayout();
             this.panel4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPeminjaman)).BeginInit();
             this.SuspendLayout();
             // 
             // panelSidebar
@@ -211,6 +211,7 @@
             this.lblPinjam.Size = new System.Drawing.Size(56, 45);
             this.lblPinjam.TabIndex = 2;
             this.lblPinjam.Text = "25";
+            this.lblPinjam.Click += new System.EventHandler(this.lblPinjam_Click);
             // 
             // label4
             // 
@@ -326,23 +327,23 @@
             this.label1.TabIndex = 2;
             this.label1.Text = " GRAFIK PEMINJAMAN PER BULAN";
             // 
-            // chart1
+            // chartPeminjaman
             // 
             chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
+            this.chartPeminjaman.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(229, 326);
-            this.chart1.Name = "chart1";
+            this.chartPeminjaman.Legends.Add(legend1);
+            this.chartPeminjaman.Location = new System.Drawing.Point(229, 326);
+            this.chartPeminjaman.Name = "chartPeminjaman";
             series1.ChartArea = "ChartArea1";
             series1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series1.Legend = "Legend1";
             series1.Name = "Jumlah Peminjaman";
-            this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(779, 242);
-            this.chart1.TabIndex = 11;
-            this.chart1.Text = "Top Branag";
-            this.chart1.Click += new System.EventHandler(this.chart1_Click);
+            this.chartPeminjaman.Series.Add(series1);
+            this.chartPeminjaman.Size = new System.Drawing.Size(779, 242);
+            this.chartPeminjaman.TabIndex = 11;
+            this.chartPeminjaman.Text = "Top Branag";
+            this.chartPeminjaman.Click += new System.EventHandler(this.chart1_Click);
             // 
             // FormDashboardKades
             // 
@@ -350,7 +351,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(245)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1046, 589);
-            this.Controls.Add(this.chart1);
+            this.Controls.Add(this.chartPeminjaman);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.panel3);
@@ -376,7 +377,7 @@
             this.panelHeader.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPeminjaman)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -405,6 +406,6 @@
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartPeminjaman;
     }
 }

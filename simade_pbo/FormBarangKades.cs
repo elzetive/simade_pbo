@@ -8,37 +8,52 @@ namespace simade_pbo
 {
     public partial class FormBarangKades : Form
     {
+        // Membuat objek Barang_service untuk mengambil data barang dari database
         Barang_service barang = new Barang_service();
+
+        // DataTable sebagai tempat menyimpan data barang yang diambil dari database
         DataTable dtBarang = new DataTable();
 
+        // Constructor FormBarangKades
         public FormBarangKades()
         {
+            // Menginisialisasi seluruh komponen pada form
             InitializeComponent();
+
+            // Mengatur posisi form agar muncul di tengah layar
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Supaya kolom tidak double
+            // Menonaktifkan pembuatan kolom otomatis
+            // karena kolom sudah dibuat melalui Designer Visual Studio
             dgvBarang.AutoGenerateColumns = false;
 
-            // Mapping kolom DataGrid ke desainer visual C#
+            // Menghubungkan setiap kolom DataGridView dengan field pada database
             this.colNama.DataPropertyName = "nama_barang";
             this.colKategori.DataPropertyName = "nama_kategori";
             this.colTotal.DataPropertyName = "jumlah_total";
             this.colDipinjam.DataPropertyName = "jumlah_dipinjam";
             this.colTersedia.DataPropertyName = "jumlah_tersedia";
 
-            // Mendaftarkan event Load secara eksplisit
+            // Mendaftarkan event Load secara manual
+            // agar method FormBarangKades_Load dijalankan saat form dibuka
             this.Load += new System.EventHandler(this.FormBarangKades_Load);
         }
 
+        // Event yang dijalankan ketika Form pertama kali dibuka
         private void FormBarangKades_Load(object sender, EventArgs e)
         {
-            // AMAN: Handle window sudah dibuat oleh OS, thread UI siap mengeksekusi data
+            // BeginInvoke digunakan agar proses pengambilan data dilakukan
+            // setelah form selesai dimuat sehingga tampilan tidak terasa lambat
             this.BeginInvoke(new MethodInvoker(tampilData));
         }
 
-        // Tampil semua data dengan kalkulasi matematika inventaris yang benar (Anti-Minus)
+        // Method untuk menampilkan seluruh data barang beserta stoknya
         void tampilData()
         {
+            // Query SQL untuk menghitung:
+            // - Total stok barang
+            // - Jumlah barang yang sedang dipinjam
+            // - Jumlah barang yang masih tersedia
             string queryAkurat = @"
                 SELECT 
                     b.nama_barang, 
@@ -55,14 +70,20 @@ namespace simade_pbo
                 GROUP BY b.id_barang, b.nama_barang, k.nama_kategori, b.jumlah_barang
                 ORDER BY b.nama_barang ASC";
 
+            // Membuat DataTable baru
             dtBarang = new DataTable();
+
             try
             {
+                // Membuka koneksi ke database
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
                     conn.Open();
+
+                    // Menjalankan query SQL
                     using (MySqlCommand cmd = new MySqlCommand(queryAkurat, conn))
                     {
+                        // Mengambil hasil query ke dalam DataTable
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             da.Fill(dtBarang);
@@ -70,7 +91,8 @@ namespace simade_pbo
                     }
                 }
 
-                // Pengaman Logika: Jika ada anomali yang menghasilkan nilai di bawah 0, paksa set ke 0
+                // Mengecek apakah ada stok tersedia yang bernilai negatif
+                // Jika ada, nilainya dipaksa menjadi 0
                 foreach (DataRow row in dtBarang.Rows)
                 {
                     if (Convert.ToInt32(row["jumlah_tersedia"]) < 0)
@@ -79,63 +101,99 @@ namespace simade_pbo
                     }
                 }
 
+                // Menampilkan data ke DataGridView
                 dgvBarang.DataSource = dtBarang;
+
+                // Mengisi ComboBox kategori
                 isiKategori();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal memuat log data aset desa: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Menampilkan pesan apabila terjadi kesalahan saat mengambil data
+                MessageBox.Show(
+                    "Gagal memuat log data aset desa: " + ex.Message,
+                    "Error Database",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
-        // Isi combobox kategori secara dinamis dari data yang termuat
+        // Method untuk mengisi daftar kategori pada ComboBox
         void isiKategori()
         {
-            if (dtBarang == null || dtBarang.Rows.Count == 0) return;
+            // Jika data kosong maka proses dihentikan
+            if (dtBarang == null || dtBarang.Rows.Count == 0)
+                return;
 
+            // Menghapus isi ComboBox terlebih dahulu
             cmbKategori.Items.Clear();
+
+            // Menambahkan pilihan "Semua"
             cmbKategori.Items.Add("Semua");
 
+            // Mengambil seluruh kategori dari DataTable
             foreach (DataRow row in dtBarang.Rows)
             {
                 string kategori = row["nama_kategori"].ToString();
 
+                // Menambahkan kategori hanya jika belum ada
                 if (!cmbKategori.Items.Contains(kategori))
                 {
                     cmbKategori.Items.Add(kategori);
                 }
             }
 
+            // Menjadikan "Semua" sebagai pilihan awal
             cmbKategori.SelectedIndex = 0;
         }
 
+        // Tombol keluar aplikasi
         private void btnExit_Click(object sender, EventArgs e)
         {
-            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin menutup aplikasi?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (konfirmasi == DialogResult.Yes) Application.Exit();
+            // Menampilkan konfirmasi sebelum aplikasi ditutup
+            DialogResult konfirmasi = MessageBox.Show(
+                "Apakah Anda yakin ingin menutup aplikasi?",
+                "Konfirmasi Keluar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            // Jika memilih Yes maka aplikasi ditutup
+            if (konfirmasi == DialogResult.Yes)
+                Application.Exit();
         }
 
+        // Tombol menuju Dashboard
         private void btnDashboard_Click_1(object sender, EventArgs e)
         {
+            // Membuka Form Dashboard
             FormDashboardKades frm = new FormDashboardKades();
             frm.Show();
-            this.Close(); // SINKRONISASI: Menggunakan .Close() menggantikan .Hide() demi efisiensi memori RAM
+
+            // Menutup Form Barang agar penggunaan memori lebih efisien
+            this.Close();
         }
 
+        // Tombol Barang
         private void btnBarang_Click(object sender, EventArgs e)
         {
-            // Sudah di halaman ini
+            // Tidak melakukan apa-apa karena pengguna sudah berada di halaman Barang
         }
 
+        // Tombol menuju Riwayat
         private void btnRiwayat_Click_1(object sender, EventArgs e)
         {
+            // Membuka Form Riwayat
             FormRiwayat frm = new FormRiwayat();
             frm.Show();
-            this.Close(); // SINKRONISASI: Menggunakan .Close() menggantikan .Hide() demi efisiensi memori RAM
+
+            // Menutup form saat ini
+            this.Close();
         }
 
+        // Tombol Logout
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
+            // Menampilkan konfirmasi logout
             DialogResult konfirmasi = MessageBox.Show(
                 "Apakah Anda yakin ingin Log Out?",
                 "Konfirmasi Log Out",
@@ -143,27 +201,32 @@ namespace simade_pbo
                 MessageBoxIcon.Question
             );
 
+            // Jika memilih Yes maka kembali ke halaman Login
             if (konfirmasi == DialogResult.Yes)
             {
                 FormLogin login = new FormLogin();
                 login.Show();
+
                 this.Close();
             }
         }
 
-        // Klik row data grid view untuk memunculkan modal rincian informasi
+        // Event ketika salah satu baris DataGridView diklik
         private void dgvBarang_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            // Memastikan yang dipilih adalah baris data
             if (e.RowIndex >= 0)
             {
                 try
                 {
+                    // Mengambil data dari baris yang dipilih
                     string nama = dgvBarang.Rows[e.RowIndex].Cells["colNama"].Value.ToString();
                     string kategori = dgvBarang.Rows[e.RowIndex].Cells["colKategori"].Value.ToString();
                     string total = dgvBarang.Rows[e.RowIndex].Cells["colTotal"].Value.ToString();
                     string dipinjam = dgvBarang.Rows[e.RowIndex].Cells["colDipinjam"].Value.ToString();
                     string tersedia = dgvBarang.Rows[e.RowIndex].Cells["colTersedia"].Value.ToString();
 
+                    // Menampilkan informasi detail barang
                     MessageBox.Show(
                         this,
                         "Nama Barang : " + nama +
@@ -176,44 +239,58 @@ namespace simade_pbo
                         MessageBoxIcon.Information
                     );
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    // Mengabaikan error apabila data kosong atau tidak dapat dibaca
+                }
             }
         }
 
+        // Event bawaan Visual Studio (belum digunakan)
         private void txtId_TextChanged(object sender, EventArgs e) { }
 
-        // SEARCH REALTIME
+        // Event pencarian secara realtime ketika isi TextBox berubah
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
             filterData();
         }
 
+        // Event bawaan Visual Studio (belum digunakan)
         private void dgvBarang_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
-        // FILTER KATEGORI
+        // Event ketika kategori dipilih
         private void cmbKategori_SelectedIndexChanged(object sender, EventArgs e)
         {
             filterData();
         }
 
-        // Fungsi filter data pencarian lokal
+        // Method untuk melakukan pencarian dan filter data
         void filterData()
         {
-            if (dtBarang == null || dtBarang.Rows.Count == 0) return;
+            // Jika DataTable kosong maka proses dihentikan
+            if (dtBarang == null || dtBarang.Rows.Count == 0)
+                return;
 
+            // Mengambil DataView dari DataTable
             DataView dv = dtBarang.DefaultView;
-            string cari = txtCari.Text.Trim().Replace("'", "''"); // Pencegahan SQL Injection lokal string
+
+            // Mengambil teks pencarian
+            // Replace digunakan untuk menghindari karakter petik tunggal yang dapat menyebabkan error filter
+            string cari = txtCari.Text.Trim().Replace("'", "''");
+
+            // Mengambil kategori yang dipilih
             string kategori = cmbKategori.Text;
 
+            // Variabel untuk menyimpan filter
             string filter = "";
 
-            // Search nama barang
+            // Filter berdasarkan nama barang
             if (!string.IsNullOrEmpty(cari))
             {
                 filter += $"nama_barang LIKE '%{cari}%'";
             }
 
-            // Filter kategori
+            // Filter berdasarkan kategori
             if (kategori != "Semua" && !string.IsNullOrEmpty(kategori))
             {
                 if (filter != "")
@@ -224,12 +301,17 @@ namespace simade_pbo
                 filter += $"nama_kategori = '{kategori}'";
             }
 
+            // Menampilkan hasil filter
             dv.RowFilter = filter;
+
+            // Menampilkan hasil ke DataGridView
             dgvBarang.DataSource = dv;
         }
 
+        // Tombol Detail
         private void btnDetail_Click(object sender, EventArgs e)
         {
+            // Memberikan informasi kepada pengguna
             MessageBox.Show(
                 "Silakan klik salah satu barang pada tabel untuk melihat detail.",
                 "Informasi"

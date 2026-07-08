@@ -10,28 +10,46 @@ namespace simade_pbo
 {
     public partial class FormDashboardKades : Form
     {
+        // Membuat objek Barang_service agar dapat memanggil fungsi-fungsi yang berhubungan dengan data barang
         Barang_service barang = new Barang_service();
 
+        // Constructor FormDashboardKades
         public FormDashboardKades()
         {
+            // Menginisialisasi seluruh komponen yang ada pada Form
             InitializeComponent();
+
+            // Mengatur agar form muncul di tengah layar
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
+        // Event yang dijalankan ketika Form pertama kali dibuka
         private void FormDashboardKades_Load(object sender, EventArgs e)
         {
-            // Menggunakan BeginInvoke agar form terbuka sangat ringan tanpa lag UI
+            // BeginInvoke digunakan agar proses perhitungan dijalankan setelah form selesai dimuat
+            // sehingga tampilan form tidak terasa lag atau freeze
             this.BeginInvoke(new MethodInvoker(HitungStatistikRealtime));
+
+            // Memanggil method untuk menampilkan grafik peminjaman barang
             LoadChart();
         }
 
+        // Method untuk menghitung statistik barang secara realtime
         private void HitungStatistikRealtime()
         {
+            // Variabel untuk menyimpan total seluruh barang
             int totalBarangSemua = 0;
+
+            // Variabel untuk menyimpan jumlah barang yang sedang dipinjam
             int totalSedangDipinjam = 0;
+
+            // Variabel untuk menyimpan jumlah barang yang masih tersedia
             int totalSiapTersedia = 0;
 
-            // Kueri Cerdas: Mengalkulasi sirkulasi riil di RAM agar sinkron di semua Role (Admin & Kades)
+            // Query SQL untuk menghitung:
+            // 1. Total seluruh barang
+            // 2. Total barang yang sedang dipinjam
+            // 3. Total barang yang masih berstatus pending (booking)
             string queryDinamis = @"
                 SELECT 
                     IFNULL(SUM(b.jumlah_barang), 0) AS total,
@@ -43,33 +61,46 @@ namespace simade_pbo
 
             try
             {
+                // Membuka koneksi ke database
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
                     conn.Open();
+
+                    // Menjalankan query yang telah dibuat
                     using (MySqlCommand cmd = new MySqlCommand(queryDinamis, conn))
                     {
+                        // Membaca hasil query
                         using (MySqlDataReader dr = cmd.ExecuteReader())
                         {
                             if (dr.Read())
                             {
-                                // Ambil data master total dari database schema
+                                // Query khusus untuk mengambil total stok asli dari tabel barang
                                 string queryTotalMurni = "SELECT IFNULL(SUM(jumlah_barang), 0) FROM barang";
-                                dr.Close(); // Tutup reader pertama untuk eksekusi skalar master
 
+                                // Reader harus ditutup terlebih dahulu sebelum menjalankan query lain
+                                dr.Close();
+
+                                // Menjalankan query total stok
                                 using (MySqlCommand cmdTotal = new MySqlCommand(queryTotalMurni, conn))
                                 {
+                                    // Menyimpan total stok barang
                                     totalBarangSemua = Convert.ToInt32(cmdTotal.ExecuteScalar());
                                 }
 
-                                // Jalankan ulang untuk hitung sisa sirkulasi warga
+                                // Menjalankan kembali query pertama
                                 using (MySqlDataReader dr2 = cmd.ExecuteReader())
                                 {
                                     if (dr2.Read())
                                     {
+                                        // Mengambil jumlah barang yang sedang dipinjam
                                         totalSedangDipinjam = Convert.ToInt32(dr2["dipinjam"]);
+
+                                        // Mengambil jumlah barang yang masih pending
                                         int totalBooking = Convert.ToInt32(dr2["booking"]);
 
-                                        // RUMUS EMAS: Total barang dikurangi yang dipinjam dan yang di-booking warga
+                                        // Menghitung stok yang masih tersedia
+                                        // Rumus:
+                                        // Total Barang - (Barang Dipinjam + Barang Pending)
                                         totalSiapTersedia = totalBarangSemua - (totalSedangDipinjam + totalBooking);
                                     }
                                 }
@@ -78,92 +109,146 @@ namespace simade_pbo
                     }
                 }
 
-                // Menghindari nilai negatif palsu jika ada anomali input data
-                if (totalSiapTersedia < 0) totalSiapTersedia = 0;
+                // Jika hasil perhitungan negatif, ubah menjadi 0
+                // Hal ini untuk menghindari kesalahan data pada database
+                if (totalSiapTersedia < 0)
+                    totalSiapTersedia = 0;
 
-                // Tampilkan ke Label Dashboard Pak Kades
+                // Menampilkan hasil perhitungan ke Label Dashboard
                 lblTotal.Text = totalBarangSemua.ToString();
                 lblPinjam.Text = totalSedangDipinjam.ToString();
                 lblTersedia.Text = totalSiapTersedia.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal mengalkulasi KPI statistik Kepala Desa: " + ex.Message, "Error Database Dashboard");
+                // Menampilkan pesan error apabila terjadi kesalahan koneksi/database
+                MessageBox.Show(
+                    "Gagal mengalkulasi KPI statistik Kepala Desa: " + ex.Message,
+                    "Error Database Dashboard");
             }
         }
 
+        // Method untuk menampilkan grafik barang yang paling sering dipinjam
         private void LoadChart()
         {
-            chart1.Series.Clear();
-            chart1.Titles.Clear();
+            // Menghapus data grafik sebelumnya agar tidak terjadi data ganda
+            chartPeminjaman.Series.Clear();
+            chartPeminjaman.Titles.Clear();
 
-            chart1.Titles.Add("Barang yang Paling Sering Dipinjam");
+            // Memberikan judul pada grafik
+            chartPeminjaman.Titles.Add("Barang yang Paling Sering Dipinjam");
 
-            ChartArea area = chart1.ChartAreas[0];
+            // Mengambil area chart yang pertama
+            ChartArea area = chartPeminjaman.ChartAreas[0];
 
+            // Mengatur tampilan garis pada sumbu X
             area.AxisX.MajorGrid.LineColor = Color.LightGray;
+
+            // Menonaktifkan garis pada sumbu Y agar grafik lebih rapi
             area.AxisY.MajorGrid.Enabled = false;
 
+            // Mengambil data grafik dari Barang_service
             DataTable dt = barang.GrafikBarangTerpinjam();
 
+            // Membuat objek series baru
             Series series = new Series();
+
+            // Mengatur jenis grafik menjadi Bar (batang horizontal)
             series.ChartType = SeriesChartType.Bar;
+
+            // Mengatur warna batang grafik
             series.Color = Color.RoyalBlue;
+
+            // Menampilkan nilai pada setiap batang
             series.IsValueShownAsLabel = true;
+
+            // Mengatur font angka pada batang grafik
             series.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
-            chart1.Series.Add(series);
+            // Menambahkan series ke dalam chart
+            chartPeminjaman.Series.Add(series);
 
-            // HILANGKAN tulisan "Jumlah Dipinjam" agar chart bersih
-            chart1.Legends.Clear();
+            // Menghilangkan legend karena hanya ada satu data
+            chartPeminjaman.Legends.Clear();
 
+            // Memastikan data tidak kosong
             if (dt != null)
             {
+                // Melakukan perulangan setiap baris data
                 foreach (DataRow row in dt.Rows)
                 {
+                    // Mengambil nama barang
                     string namaBarang = row["nama_barang"].ToString();
+
+                    // Mengambil jumlah peminjaman barang
                     int jumlah = Convert.ToInt32(row["jumlah"]);
 
+                    // Menambahkan data ke grafik
                     series.Points.AddXY(namaBarang, jumlah);
                 }
             }
         }
 
+        // Tombol Dashboard
         private void btnDashboard_Click(object sender, EventArgs e)
         {
-            // Sudah berada di Dashboard
+            // Tidak melakukan apa-apa karena pengguna sudah berada di halaman Dashboard
         }
 
+        // Tombol menuju halaman Data Barang
         private void btnBarang_Click(object sender, EventArgs e)
         {
+            // Membuka FormBarangKades
             FormBarangKades frm = new FormBarangKades();
             frm.Show();
-            this.Close(); // Menggunakan .Close() agar memori laptop enteng
-        }
 
-        private void btnRiwayat_Click(object sender, EventArgs e)
-        {
-            FormRiwayat frm = new FormRiwayat();
-            frm.Show();
-            this.Close(); // Menggunakan .Close() agar memori laptop enteng
-        }
-
-        private void btnLogout_Click_1(object sender, EventArgs e)
-        {
-            FormLogin login = new FormLogin();
-            login.Show();
+            // Menutup form dashboard agar memori lebih ringan
             this.Close();
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
+        // Tombol menuju halaman Riwayat Peminjaman
+        private void btnRiwayat_Click(object sender, EventArgs e)
         {
-            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (konfirmasi == DialogResult.Yes) Application.Exit();
+            // Membuka FormRiwayat
+            FormRiwayat frm = new FormRiwayat();
+            frm.Show();
+
+            // Menutup form dashboard
+            this.Close();
         }
 
+        // Tombol Logout
+        private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            // Kembali ke halaman Login
+            FormLogin login = new FormLogin();
+            login.Show();
+
+            // Menutup dashboard
+            this.Close();
+        }
+
+        // Tombol Keluar Aplikasi
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            // Menampilkan konfirmasi sebelum aplikasi ditutup
+            DialogResult konfirmasi = MessageBox.Show(
+                "Apakah Anda yakin ingin keluar?",
+                "Konfirmasi Keluar",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            // Jika pengguna memilih Yes maka aplikasi ditutup
+            if (konfirmasi == DialogResult.Yes)
+                Application.Exit();
+        }
+
+        // Event-event berikut dibuat otomatis oleh Visual Studio
+        // dan saat ini belum digunakan
         private void label1_Click(object sender, EventArgs e) { }
         private void lblTotal_Click(object sender, EventArgs e) { }
         private void lblTersedia_Click(object sender, EventArgs e) { }
         private void chart1_Click(object sender, EventArgs e) { }
+        private void lblPinjam_Click(object sender, EventArgs e) { }
     }
 }
