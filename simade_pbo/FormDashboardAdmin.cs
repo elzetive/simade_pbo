@@ -88,30 +88,29 @@ namespace simade_pbo
 
         void tampilGrid()
         {
+            // QUERY YANG DISINKRONKAN: Menghitung dipinjam berdasarkan dp.status = 'disetujui'
+            // Dan menghitung jumlah_tersedia = kondisi_bagus - jumlah_dipinjam
             string queryDinamis = @"
-                SELECT 
-                    b.id_barang,
-                    b.nama_barang,
-                    b.id_kategori,
-                    k.nama_kategori,
-                    b.jumlah_barang AS jumlah_total,
-                    b.kondisi_bagus,
-                    b.kondisi_rusak,
-                    IFNULL(SUM(CASE WHEN p.status_peminjaman = 'dipinjam' THEN dp.jumlah_pinjam ELSE 0 END), 0) AS jumlah_dipinjam,
-                    IFNULL(SUM(CASE WHEN p.status_peminjaman = 'pending' THEN dp.jumlah_pinjam ELSE 0 END), 0) AS jumlah_booking,
-                    (b.jumlah_barang - IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)) AS jumlah_tersedia
-                FROM barang b
-                INNER JOIN kategori k ON b.id_kategori = k.id_kategori
-                LEFT JOIN detail_peminjaman dp ON b.id_barang = dp.id_barang
-                LEFT JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman ";
+        SELECT 
+            b.id_barang,
+            b.nama_barang,
+            b.id_kategori,
+            k.nama_kategori,
+            b.jumlah_barang AS jumlah_total,
+            b.kondisi_bagus,
+            b.kondisi_rusak,
+            IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0) AS jumlah_dipinjam,
+            IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'pending'), 0) AS jumlah_booking,
+            (b.kondisi_bagus - IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp WHERE dp.id_barang = b.id_barang AND dp.status = 'disetujui'), 0)) AS jumlah_tersedia
+        FROM barang b
+        INNER JOIN kategori k ON b.id_kategori = k.id_kategori";
 
             if (txtCari.Text.Length > 0)
             {
                 queryDinamis += " WHERE b.nama_barang LIKE @cari ";
             }
 
-            queryDinamis += @" GROUP BY b.id_barang, b.nama_barang, b.id_kategori, k.nama_kategori, b.jumlah_barang, b.kondisi_bagus, b.kondisi_rusak
-                               ORDER BY b.nama_barang ASC";
+            queryDinamis += " ORDER BY b.nama_barang ASC";
 
             DataTable dt = new DataTable();
 
@@ -148,6 +147,7 @@ namespace simade_pbo
 
             dgvBarang.DataSource = dt;
 
+            // Kalkulasi total card informasi di atas dashboard
             int totalBarangSemua = 0;
             int totalSedangDipinjam = 0;
             int totalMenungguPersetujuan = 0;
@@ -398,7 +398,7 @@ namespace simade_pbo
                 return;
             }
 
-            string queryUpdateDetail = "UPDATE barang SET kondisi_bagus = @bagus, condition_rusak = @rusak WHERE id_barang = @id";
+            string queryUpdateDetail = "UPDATE barang SET kondisi_bagus = @bagus, kondisi_rusak = @rusak WHERE id_barang = @id";
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try

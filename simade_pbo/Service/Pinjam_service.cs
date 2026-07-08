@@ -18,23 +18,53 @@ namespace simade_pbo.Service
 
         public DataTable tampilDetailBarang(string kodePeminjaman)
         {
-            string query = @"SELECT dp.id_detail_peminjaman AS id_detail_peminjaman, 
-                            b.nama_barang AS nama_barang, 
-                            k.nama_kategori AS nama_kategori, 
-                            dp.jumlah_pinjam AS jumlah_pinjam, 
-                            dp.status AS status, 
-                            dp.keterangan AS keterangan,
-                            u.alamat AS alamat,
-                            u.no_hp AS nomor_telepon,
-                            (b.kondisi_bagus - IFNULL((SELECT SUM(jumlah_pinjam) FROM detail_peminjaman WHERE id_barang = b.id_barang AND status = 'disetujui'), 0)) AS jumlah_tersedia
-                     FROM detail_peminjaman dp 
-                     INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman 
-                     INNER JOIN user u ON p.id_user = u.id_user 
-                     INNER JOIN barang b ON dp.id_barang = b.id_barang 
-                     INNER JOIN kategori k ON b.id_kategori = k.id_kategori 
-                     WHERE p.kode_peminjaman = '" + kodePeminjaman + "'";
+            // RUMUS YANG DISINKRONKAN:
+            // Jumlah Tersedia = jumlah_barang - kondisi_rusak - SUM(jumlah_pinjam yang status detailnya 'disetujui')
+            string query = @"
+            SELECT 
+                dp.id_detail_peminjaman,
+                dp.id_peminjaman,
+                dp.id_barang,
+                b.nama_barang,
+                k.nama_kategori,
+                dp.jumlah_pinjam,
+                u.alamat,
+                u.no_hp AS nomor_telepon,
+                dp.status,
+                dp.keterangan,
+                (b.jumlah_barang - IFNULL(b.kondisi_rusak, 0) - 
+                    IFNULL((SELECT SUM(x.jumlah_pinjam) 
+                            FROM detail_peminjaman x 
+                            WHERE x.id_barang = b.id_barang AND x.status = 'disetujui'), 0)
+                ) AS jumlah_tersedia_realtime
+            FROM detail_peminjaman dp
+            INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+            INNER JOIN barang b ON dp.id_barang = b.id_barang
+            LEFT JOIN kategori k ON b.id_kategori = k.id_kategori
+            LEFT JOIN user u ON p.id_user = u.id_user
+            WHERE p.kode_peminjaman = @kode";
 
-            return jalankanQuery(query);
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = Koneksi.GetConn())
+            {
+                try
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@kode", kodePeminjaman);
+                        using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
+                        {
+                            adapter.Fill(dt);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Gagal mengambil detail barang peminjaman: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            return dt;
         }
 
         public int ubahStatusDetailItem(int idDetail, int jumlah, string status, string keterangan)

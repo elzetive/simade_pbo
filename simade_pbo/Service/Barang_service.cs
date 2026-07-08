@@ -194,11 +194,20 @@ namespace simade_pbo.Service
         {
             string hasil = "0";
             if (tipe == "TOTAL")
+            {
                 Query = "SELECT IFNULL(SUM(jumlah_barang), 0) FROM barang";
+            }
             else if (tipe == "DIPINJAM")
+            {
                 Query = "SELECT IFNULL(SUM(jumlah_pinjam), 0) FROM detail_peminjaman WHERE status = 'disetujui'";
+            }
             else if (tipe == "TERSEDIA")
-                Query = "SELECT (IFNULL(SUM(kondisi_bagus), 0) - IFNULL((SELECT SUM(jumlah_pinjam) FROM detail_peminjaman WHERE status = 'disetujui'), 0)) FROM barang";
+            {
+                // PERBAIKAN: Jumlah Tersedia secara akumulatif adalah Total Kondisi Bagus dikurangi Semua yang disetujui
+                Query = @"SELECT (IFNULL(SUM(kondisi_bagus), 0) - 
+                          IFNULL((SELECT SUM(jumlah_pinjam) FROM detail_peminjaman WHERE status = 'disetujui'), 0)) 
+                  FROM barang";
+            }
 
             DataTable dt = jalankanQuery(Query);
             if (dt != null && dt.Rows.Count > 0)

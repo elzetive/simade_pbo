@@ -153,7 +153,7 @@ namespace simade_pbo
                         kodeNotaAktif = dr["kode_peminjaman"].ToString();
                         txtNamaLengkap.Text = dr["nama_lengkap"].ToString();
 
-                        // PERBAIKAN FORMAT JAM: Memotong string jam pada Tanggal Pinjam
+                        // 1. FORMAT TANGGAL PINJAM
                         if (dr["tgl_pinjam"] != DBNull.Value)
                         {
                             DateTime tglP = Convert.ToDateTime(dr["tgl_pinjam"]);
@@ -161,7 +161,8 @@ namespace simade_pbo
                         }
                         else txtTglPinjam.Clear();
 
-                        // PERBAIKAN FORMAT JAM: Memotong string jam pada Tanggal Kembali atau mencetak strip jika kosong
+                        // 2. PERBAIKAN TANGGAL KEMBALI: Ambil nilai asli dari kolom tgl_kembali database 
+                        // tanpa memaksa menjadi "-" hanya karena statusnya masih pending
                         if (dr["tgl_kembali"] != DBNull.Value)
                         {
                             string tglKembaliStr = dr["tgl_kembali"].ToString().Trim();
@@ -172,11 +173,7 @@ namespace simade_pbo
                             else
                             {
                                 DateTime tglK = Convert.ToDateTime(dr["tgl_kembali"]);
-                                // Jika tanggal pinjam dan tanggal kembali sama (default kosong dari warga), cetak strip
-                                if (dr["status_peminjaman"].ToString().ToLower() == "pending")
-                                    txtTglKembali.Text = "-";
-                                else
-                                    txtTglKembali.Text = tglK.ToString("dd/MM/yyyy");
+                                txtTglKembali.Text = tglK.ToString("dd/MM/yyyy");
                             }
                         }
                         else
@@ -188,12 +185,6 @@ namespace simade_pbo
 
                         DataTable dtDetail = pinjamService.tampilDetailBarang(kodeNotaAktif);
 
-                        // Pembuatan kolom hitung kuota virtual agar nilainya klop dinamis
-                        if (!dtDetail.Columns.Contains("jumlah_tersedia_realtime"))
-                        {
-                            dtDetail.Columns.Add("jumlah_tersedia_realtime", typeof(int));
-                        }
-
                         if (dtDetail.Rows.Count > 0)
                         {
                             txtAlamat.Text = dtDetail.Rows[0]["alamat"].ToString();
@@ -203,40 +194,9 @@ namespace simade_pbo
                             else if (dtDetail.Columns.Contains("no_hp"))
                                 txtNoHp.Text = dtDetail.Rows[0]["no_hp"].ToString();
 
+                            // FORMATTING STATUS UNTUK TAMPILAN GRID VIEW COMBOBOX
                             foreach (DataRow rowDetail in dtDetail.Rows)
                             {
-                                string namaBarangItem = rowDetail["nama_barang"].ToString();
-                                int sisaTersediaGudang = 0;
-
-                                string queryRumusDashboard = @"
-                                    SELECT (b.jumlah_barang - IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)) AS sisa
-                                    FROM barang b
-                                    LEFT JOIN detail_peminjaman dp ON b.id_barang = dp.id_barang
-                                    LEFT JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
-                                    WHERE b.nama_barang = @namaB
-                                    GROUP BY b.jumlah_barang";
-
-                                using (MySqlConnection conn = Koneksi.GetConn())
-                                {
-                                    conn.Open();
-                                    using (MySqlCommand cmdHitung = new MySqlCommand(queryRumusDashboard, conn))
-                                    {
-                                        cmdHitung.Parameters.AddWithValue("@namaB", namaBarangItem);
-                                        object res = cmdHitung.ExecuteScalar();
-                                        if (res != null) sisaTersediaGudang = Convert.ToInt32(res);
-                                    }
-                                }
-
-                                if (statusNotaUtama == "pending")
-                                {
-                                    int kuotaBookingNotaIni = Convert.ToInt32(rowDetail["jumlah_pinjam"]);
-                                    rowDetail["jumlah_tersedia_realtime"] = sisaTersediaGudang + kuotaBookingNotaIni;
-                                }
-                                else
-                                {
-                                    rowDetail["jumlah_tersedia_realtime"] = sisaTersediaGudang;
-                                }
-
                                 if (rowDetail["status"] != DBNull.Value)
                                 {
                                     string st = rowDetail["status"].ToString().ToLower().Trim();
@@ -258,7 +218,7 @@ namespace simade_pbo
                         dgvDetail.Columns[0].DataPropertyName = "nama_barang";
                         dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
                         dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
-                        dgvDetail.Columns[3].DataPropertyName = "jumlah_tersedia_realtime";
+                        dgvDetail.Columns[3].DataPropertyName = "jumlah_tersedia_realtime"; // Mengikat langsung ke hasil query service
                         dgvDetail.Columns[4].DataPropertyName = "status";
                         dgvDetail.Columns[5].DataPropertyName = "keterangan";
 

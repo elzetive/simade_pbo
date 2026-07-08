@@ -48,6 +48,7 @@ namespace simade_pbo
 
             txtNamaBarang.ReadOnly = true;
             dtpTanggalPinjam.Value = DateTime.Now;
+            dtpTanggalKembali.Value = DateTime.Now;
 
             tampilDaftarAset();
             inisialisasiTabelAntrean();
@@ -195,9 +196,20 @@ namespace simade_pbo
                 return;
             }
 
-            string kodePeminjamanOtomatis = "AD_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            // Ambil nilai tanggal dari masing-masing DateTimePicker secara independen
             string tglPinjam = dtpTanggalPinjam.Value.ToString("yyyy-MM-dd");
-            string tglKembali = tglPinjam; // Default disamakan, nanti diupdate oleh admin saat pemulangan fisik
+
+            // PERBAIKAN: Mengambil nilai asli dari DateTimePicker Tanggal Kembali (misal: dtpTanggalKembali)
+            string tglKembali = dtpTanggalKembali.Value.ToString("yyyy-MM-dd");
+
+            // Validasi logis: Mencegah warga memilih tanggal kembali yang lebih lampau daripada tanggal pinjam
+            if (dtpTanggalKembali.Value.Date < dtpTanggalPinjam.Value.Date)
+            {
+                MessageBox.Show("Tanggal kembali tidak boleh lebih awal dari tanggal pinjam!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string kodePeminjamanOtomatis = "AD_" + DateTime.Now.ToString("yyyyMMddHHmmss");
 
             using (MySqlConnection conn = Koneksi.GetConn())
             {
@@ -207,7 +219,7 @@ namespace simade_pbo
                     try
                     {
                         string queryMaster = @"INSERT INTO peminjaman (kode_peminjaman, id_user, tgl_pinjam, tgl_kembali, status_peminjaman)
-                                               VALUES (@kode, @uid, @tglP, @tglK, 'pending')";
+                                       VALUES (@kode, @uid, @tglP, @tglK, 'pending')";
 
                         long idPeminjamanTerbuat = 0;
                         using (MySqlCommand cmdMaster = new MySqlCommand(queryMaster, conn, tr))
@@ -215,7 +227,7 @@ namespace simade_pbo
                             cmdMaster.Parameters.AddWithValue("@kode", kodePeminjamanOtomatis);
                             cmdMaster.Parameters.AddWithValue("@uid", idUserLoginAngka);
                             cmdMaster.Parameters.AddWithValue("@tglP", tglPinjam);
-                            cmdMaster.Parameters.AddWithValue("@tglK", tglKembali);
+                            cmdMaster.Parameters.AddWithValue("@tglK", tglKembali); // Sekarang membawa tanggal yang tepat (misal tanggal 9)
                             cmdMaster.ExecuteNonQuery();
 
                             idPeminjamanTerbuat = cmdMaster.LastInsertedId;
@@ -228,7 +240,7 @@ namespace simade_pbo
                             int qtyPinjam = Convert.ToInt32(barisAntrean["jumlah_pinjam"]);
 
                             string queryDetail = @"INSERT INTO detail_peminjaman (id_peminjaman, id_barang, jumlah_pinjam, status, keterangan) 
-                                                   VALUES (@idMaster, @idBarang, @qty, 'pending', '-')";
+                                           VALUES (@idMaster, @idBarang, @qty, 'pending', '-')";
 
                             using (MySqlCommand cmdDetail = new MySqlCommand(queryDetail, conn, tr))
                             {
