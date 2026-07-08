@@ -50,25 +50,43 @@ namespace simade_pbo
         // Method untuk menampilkan seluruh data barang beserta stoknya
         void tampilData()
         {
-            // Query SQL untuk menghitung:
-            // - Total stok barang
-            // - Jumlah barang yang sedang dipinjam
-            // - Jumlah barang yang masih tersedia
+            // Query SQL untuk menghitung stok barang secara realtime
+            // Barang tersedia dihitung dari kondisi_bagus sehingga barang rusak
+            // tidak ikut dianggap sebagai stok yang masih bisa dipinjam
             string queryAkurat = @"
-                SELECT 
-                    b.nama_barang, 
-                    k.nama_kategori, 
-                    b.jumlah_barang AS jumlah_total,
-                    IFNULL(SUM(CASE WHEN p.status_peminjaman = 'dipinjam' THEN dp.jumlah_pinjam ELSE 0 END), 0) AS jumlah_dipinjam,
-                    (b.jumlah_barang - 
-                     IFNULL(SUM(CASE WHEN p.status_peminjaman IN ('pending', 'dipinjam') THEN dp.jumlah_pinjam ELSE 0 END), 0)
-                    ) AS jumlah_tersedia
-                FROM barang b
-                INNER JOIN kategori k ON b.id_kategori = k.id_kategori
-                LEFT JOIN detail_peminjaman dp ON b.id_barang = dp.id_barang
-                LEFT JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
-                GROUP BY b.id_barang, b.nama_barang, k.nama_kategori, b.jumlah_barang
-                ORDER BY b.nama_barang ASC";
+            SELECT
+                b.id_barang,
+                b.nama_barang,
+                k.nama_kategori,
+
+                b.jumlah_barang AS jumlah_total,
+
+                IFNULL((
+                    SELECT SUM(dp.jumlah_pinjam)
+                    FROM detail_peminjaman dp
+                    INNER JOIN peminjaman p
+                        ON dp.id_peminjaman = p.id_peminjaman
+                    WHERE dp.id_barang = b.id_barang
+                    AND LOWER(p.status_peminjaman) IN ('dipinjam','disetujui')
+                ),0) AS jumlah_dipinjam,
+
+                (
+                    b.kondisi_bagus -
+                    IFNULL((
+                        SELECT SUM(dp.jumlah_pinjam)
+                        FROM detail_peminjaman dp
+                        INNER JOIN peminjaman p
+                            ON dp.id_peminjaman = p.id_peminjaman
+                        WHERE dp.id_barang = b.id_barang
+                        AND LOWER(p.status_peminjaman) IN ('dipinjam','disetujui')
+                    ),0)
+                ) AS jumlah_tersedia
+
+            FROM barang b
+            INNER JOIN kategori k
+                ON b.id_kategori = k.id_kategori
+
+            ORDER BY b.nama_barang ASC";
 
             // Membuat DataTable baru
             dtBarang = new DataTable();
@@ -91,11 +109,12 @@ namespace simade_pbo
                     }
                 }
 
-                // Mengecek apakah ada stok tersedia yang bernilai negatif
-                // Jika ada, nilainya dipaksa menjadi 0
+                // Memastikan stok tersedia tidak bernilai negatif
                 foreach (DataRow row in dtBarang.Rows)
                 {
-                    if (Convert.ToInt32(row["jumlah_tersedia"]) < 0)
+                    int tersedia = Convert.ToInt32(row["jumlah_tersedia"]);
+
+                    if (tersedia < 0)
                     {
                         row["jumlah_tersedia"] = 0;
                     }
