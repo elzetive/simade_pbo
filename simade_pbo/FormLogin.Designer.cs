@@ -81,7 +81,6 @@
             this.label4.Size = new System.Drawing.Size(156, 25);
             this.label4.TabIndex = 4;
             this.label4.Text = "Username/Email";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // label5
             // 
@@ -103,7 +102,6 @@
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(579, 34);
             this.txtUsername.TabIndex = 7;
-            this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
             // 
             // txtPassword
             // 
@@ -114,7 +112,6 @@
             this.txtPassword.PasswordChar = '●';
             this.txtPassword.Size = new System.Drawing.Size(579, 34);
             this.txtPassword.TabIndex = 8;
-            this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // btnLogin
             // 
@@ -180,7 +177,6 @@
             this.judul.Size = new System.Drawing.Size(206, 62);
             this.judul.TabIndex = 0;
             this.judul.Text = "SIMADE";
-            this.judul.Click += new System.EventHandler(this.judul_Click);
             // 
             // button1
             // 

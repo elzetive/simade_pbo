@@ -11,16 +11,19 @@ namespace simade_pbo.Service
 {
     internal class Kategori_service
     {
+        //atribut untuk menyimpan perintah SQL
         string Query;
 
+        //constructor
         public Kategori_service()
         {
             Query = "";
         }
 
+        //method untuk menghubah kondisi data di database
         private int jalankanNonQuery(string query)
         {
-            int retVal = -1;
+            int retVal = -1; //untuk mengembalikan nilai -1 jika operasi gagal
             using (MySql.Data.MySqlClient.MySqlConnection conn = Koneksi.GetConn())
             {
                 try
@@ -28,17 +31,18 @@ namespace simade_pbo.Service
                     conn.Open();
                     using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn))
                     {
-                        retVal = cmd.ExecuteNonQuery();
+                        retVal = cmd.ExecuteNonQuery(); //untuk menjalankan query apabila operasi sukses
                     }
                 }
-                catch (Exception ) { }
+                catch (Exception) { }
             }
             return retVal;
         }
 
+        //method untuk meminta dan melihat data dari database
         private DataTable jalankanQuery(string query)
         {
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable(); //wadah kosong
             using (MySql.Data.MySqlClient.MySqlConnection conn = Koneksi.GetConn())
             {
                 try
@@ -46,35 +50,38 @@ namespace simade_pbo.Service
                     conn.Open();
                     using (MySql.Data.MySqlClient.MySqlCommand cmd = new MySql.Data.MySqlClient.MySqlCommand(query, conn))
                     {
-                        using (MySql.Data.MySqlClient.MySqlDataAdapter adapter = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd))
+                        using (MySql.Data.MySqlClient.MySqlDataAdapter adapter = new MySql.Data.MySqlClient.MySqlDataAdapter(cmd)) //untuk mengambil data berupa tabel
                         {
-                            adapter.Fill(dt);
+                            adapter.Fill(dt); //mengambil hasil query dan mengisi baris-baris data ke dalam wadah kosong (dt)
                         }
                     }
                 }
                 catch (Exception ) { }
             }
-            return dt;
+            return dt; //menampilkan datatable yang sudah terisi atau wadah kosong
         }
 
+        //method untuk mengecek atau memvalidasi apakah sudah ada nama kategori yang diinputkan di database atau belum
         public bool isExist(string nama_kategori)
         {
-            bool cek = false;
+            bool cek = false; //status awalnya data belum ada
             Query = "SELECT * FROM kategori WHERE nama_kategori = '" + nama_kategori + "'";
 
-            if (jalankanQuery(Query).Rows.Count > 0)
+            if (jalankanQuery(Query).Rows.Count > 0) //jika data dengan nama yang diinputkan lebih dari 0
             {
-                cek = true;
+                cek = true; //status datanya ada
             }
             return cek;
         }
 
+        //method untuk menyimpan kategori ke dalam database
         public int simpanKategori(string nama_kategori)
         {
             Query = "INSERT INTO kategori (nama_kategori) VALUES ('" + nama_kategori + "')";
             return jalankanNonQuery(Query);
         }
 
+        //method untuk menampilkan kategori dari database
         public DataTable tampilSemuaKategori()
         {
             Query = "SELECT * FROM kategori";
@@ -82,3 +89,5 @@ namespace simade_pbo.Service
         }
     }
 }
+
+//FormDataBarang menggunakan semua method

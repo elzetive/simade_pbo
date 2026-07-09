@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace simade_pbo.Model
 {
+    //class
     internal class Barang_cls
     {
+        //enkapsulasi data sama seperti Kategori_cls.cs
         private int _id_barang;
         private string _nama_barang;
-        private int _id_kategori;
+        private int _id_kategori; //karena ia merupakan foreign key
         private int _jumlah_barang;
         private int _kondisi_bagus;
         private int _kondisi_rusak;
         private string _status;
 
+        // constructor
         public Barang_cls()
         {
             _id_barang = 0;
@@ -27,6 +30,9 @@ namespace simade_pbo.Model
             _status= "";
         }
 
+        //property
+        //get untuk membaca nilai atribut tersebut agar bisa digunakan oleh komponen lain
+        //set untuk untuk menerima data baru dari luar
         public int Id_barang
         {
             get { return _id_barang; }
