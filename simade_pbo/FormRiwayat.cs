@@ -6,48 +6,34 @@ using System.Windows.Forms;
 
 namespace simade_pbo
 {
+    // Form untuk menampilkan riwayat peminjaman barang
     public partial class FormRiwayat : Form
     {
-        // Object Barang_service digunakan untuk mengambil data
-        // riwayat peminjaman dari database
+        // Service untuk mengambil data riwayat dari database
         Barang_service barang = new Barang_service();
 
-        // Menyimpan data riwayat sementara sebelum ditampilkan
-        // ke dalam DataGridView
+        // Menyimpan data riwayat sementara
         DataTable dtRiwayat = new DataTable();
 
-        // ==========================================================
-        // CONSTRUCTOR
-        // Dijalankan saat Form Riwayat pertama kali dibuka
-        // ==========================================================
+        // Inisialisasi form dan memuat data riwayat
         public FormRiwayat()
         {
-            // Menginisialisasi seluruh komponen pada Form
             InitializeComponent();
-
-            // Menampilkan Form di tengah layar
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Mengambil dan menampilkan data riwayat peminjaman
             tampilRiwayat();
 
-            // Menambahkan event klik agar pengguna dapat melihat
-            // detail riwayat saat memilih salah satu baris
+            // Event ketika baris DataGridView dipilih
             dgvRiwayat.CellClick += dgvRiwayat_CellClick;
         }
 
-        // ==========================================================
-        // Menampilkan seluruh data riwayat peminjaman
-        // ==========================================================
+        // Menampilkan seluruh data riwayat
         void tampilRiwayat()
         {
-            // Mengambil data riwayat melalui Barang_service
+            // Mengambil data dari service
             dtRiwayat = barang.tampilRiwayat();
 
-            // Menggunakan kolom DataGridView yang sudah dibuat
-            dgvRiwayat.AutoGenerateColumns = false;
-
-            // Menghubungkan kolom DataGridView dengan field database
+            // Menghubungkan kolom DataGridView dengan database
             colNama.DataPropertyName = "nama_barang";
             colPeminjam.DataPropertyName = "username";
             colTanggalPinjam.DataPropertyName = "tgl_pinjam";
@@ -66,10 +52,8 @@ namespace simade_pbo
         // ==========================================================
         void isiStatus()
         {
-            // Menghapus daftar sebelumnya
             cmbStatus.Items.Clear();
 
-            // Menambahkan seluruh pilihan status
             cmbStatus.Items.Add("Semua");
             cmbStatus.Items.Add("Pending");
             cmbStatus.Items.Add("Disetujui");
@@ -78,7 +62,6 @@ namespace simade_pbo
             cmbStatus.Items.Add("Ditolak");
             cmbStatus.Items.Add("Hangus");
 
-            // Menjadikan "Semua" sebagai pilihan awal
             cmbStatus.SelectedIndex = 0;
         }
 
