@@ -57,6 +57,7 @@ namespace simade_pbo
             dgvDetailBarang.AutoGenerateColumns = false;
             colDetailNama.DataPropertyName = "nama_aset";
             colDetailJumlah.DataPropertyName = "jumlah";
+            //tambahin status
 
             tampilDataSelesai();
         }
