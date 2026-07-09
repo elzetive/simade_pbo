@@ -16,7 +16,7 @@ namespace simade_pbo
     public partial class FormDashboardAdmin : Form
     {
         // Membuat objek instansiasi dari Barang_service untuk mengelola data barang
-        Barang_service barangService = new Barang_service();
+        Barang_service barangService = new Barang_service(); //enkapsulasi
         // Membuat objek instansiasi dari Kategori_service untuk mengelola data kategori
         Kategori_service kategoriService = new Kategori_service();
 
@@ -50,7 +50,7 @@ namespace simade_pbo
         }
 
         // Method event ketika form pertama kali terbuka di layar
-        private void FormDashboardAdmin_Load_1(object sender, EventArgs e)
+        private void FormDashboardAdmin_Load_1(object sender, EventArgs e) //enkapsulasi
         {
             // Memanggil method tampilGrid() secara asinkron agar UI tidak membeku saat memuat data database
             this.BeginInvoke(new MethodInvoker(tampilGrid));
@@ -73,13 +73,9 @@ namespace simade_pbo
                 return;
             }
 
-            // Mengatur teks yang akan ditampilkan ke pengguna (Nama Kategori)
             cmbKategoriBarang.DisplayMember = "nama_kategori";
-            // Mengatur nilai data di latar belakang program (ID Kategori berbasis angka)
             cmbKategoriBarang.ValueMember = "id_kategori";
-            // Memasukkan tabel data (DataTable) sebagai sumber data ComboBox
             cmbKategoriBarang.DataSource = dt;
-            // Mengatur agar dropdown tidak otomatis memilih item apa pun saat pertama muncul (-1 = kosong)
             cmbKategoriBarang.SelectedIndex = -1;
         }
 
@@ -179,17 +175,11 @@ namespace simade_pbo
                 }
             }
 
-            // Mematikan pembuatan kolom otomatis pada komponen DataGridView agar tata letak tidak berantakan
             dgvBarang.AutoGenerateColumns = false;
-            // Memetakan kolom ke-1 di UI DataGridView ke kolom "nama_barang" hasil kueri SQL
             dgvBarang.Columns[0].DataPropertyName = "nama_barang";
-            // Memetakan kolom ke-2 di UI DataGridView ke kolom "nama_kategori" hasil kueri SQL
             dgvBarang.Columns[1].DataPropertyName = "nama_kategori";
-            // Memetakan kolom ke-3 di UI DataGridView ke kolom "jumlah_total" hasil kueri SQL
             dgvBarang.Columns[2].DataPropertyName = "jumlah_total";
-            // Memetakan kolom ke-4 di UI DataGridView ke kolom "jumlah_tersedia" hasil kueri SQL
             dgvBarang.Columns[3].DataPropertyName = "jumlah_tersedia";
-            // Memetakan kolom ke-5 di UI DataGridView ke kolom "jumlah_dipinjam" hasil kueri SQL
             dgvBarang.Columns[4].DataPropertyName = "jumlah_dipinjam";
 
             // Menjadikan DataTable (dt) sebagai sumber pasokan data utama tabel visual (DataGridView) di layar
@@ -355,10 +345,10 @@ namespace simade_pbo
         }
 
         // Method event ketika tombol batal diklik oleh admin
-        private void btnBatal_Click(object sender, EventArgs e) { bersihkan(); } // Langsung memicu pembersihan total kolom inputan
+        private void btnBatal_Click(object sender, EventArgs e) { bersihkan(); }
 
         // Method event ketika admin mengetikkan sesuatu kata kunci di kolom pencarian barang
-        private void txtCari_TextChanged(object sender, EventArgs e) { tampilGrid(); } // Membaca ulang isi grid tabel secara dinamis setiap ada ketikan huruf baru
+        private void txtCari_TextChanged(object sender, EventArgs e) { tampilGrid(); }
 
         // Method event untuk memproses penambahan kategori barang baru dari sub-fitur mini-input kategori
         private void btnTambahKategori_Click(object sender, EventArgs e)
@@ -423,55 +413,49 @@ namespace simade_pbo
             }
         }
 
-        // Method event ketika tombol LogOut diklik oleh pengguna admin
         private void btnLogOut_Click(object sender, EventArgs e)
         {
-            FormLogin login = new FormLogin(); // Menciptakan instansiasi form halaman login baru
-            login.Show(); // Menampilkan form login baru tersebut ke layar monitor
-            this.Close(); // Menutup dan mematikan form dashboard admin yang sedang aktif saat ini
+            FormLogin login = new FormLogin();
+            login.Show();
+            this.Close();
         }
 
-        // Method event navigasi: Klik menu data barang untuk membersihkan dan me-refresh ulang halaman dashboard barang
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
             bersihkan();
             tampilGrid();
         }
 
-        // Method event navigasi: Menutup dashboard dan mengalihkan admin ke Halaman Transaksi Data Peminjaman
         private void btnData_Pinjam_Click(object sender, EventArgs e)
         {
-            FormDataPinjam frm = new FormDataPinjam(); // Membuat objek halaman transaksi peminjaman
-            frm.Show(); // Tampilkan halaman baru ke layar
-            this.Close(); // Tutup halaman dashboard ini
+            FormDataPinjam frm = new FormDataPinjam();
+            frm.Show();
+            this.Close();
         }
 
-        // Method event navigasi: Menutup dashboard dan mengalihkan admin ke Halaman Transaksi Serah Terima Pengambilan Barang
         private void btnData_Ambil_Click(object sender, EventArgs e)
         {
-            FormDataPengambilan frm = new FormDataPengambilan(); // Membuat objek halaman serah terima ambil
-            frm.Show(); // Tampilkan ke layar
-            this.Close(); // Tutup halaman dashboard ini
+            FormDataPengambilan frm = new FormDataPengambilan();
+            frm.Show();
+            this.Close();
         }
 
-        // Method event navigasi: Menutup dashboard dan mengalihkan admin ke Halaman Transaksi Pengembalian Logistik
         private void btnData_Kembali_Click(object sender, EventArgs e)
         {
-            FormDataPengembalian frm = new FormDataPengembalian(); // Membuat objek halaman logistik pengembalian
-            frm.Show(); // Tampilkan ke layar
-            this.Close(); // Tutup halaman dashboard ini
+            FormDataPengembalian frm = new FormDataPengembalian(); 
+            frm.Show();
+            this.Close();
         }
 
-        // Method event navigasi: Menutup dashboard dan membuka form pendaftaran akun admin baru (Form Register)
         private void btnTambah_Admin_Click(object sender, EventArgs e)
         {
             FormRegisterAdmin frm = new FormRegisterAdmin(); // Membuat objek halaman registrasi admin baru
-            frm.Show(); // Tampilkan ke layar
-            this.Close(); // Tutup halaman dashboard ini
+            frm.Show();
+            this.Close();
         }
 
         // Method event ketika admin membatalkan pengeditan nilai di form rincian kondisi barang bagus/rusak
-        private void btnBatalDetail_Click(object sender, EventArgs e) { bersihkan(); } // Menghapus seluruh kolom inputan log di layar
+        private void btnBatalDetail_Click(object sender, EventArgs e) { bersihkan(); }
 
         // Method event VALIDASI KRITIS: Memproses pembaruan rincian jumlah barang kondisi bagus vs rusak (Tombol Simpan Kondisi)
         private void btnEditDetail_Click(object sender, EventArgs e)

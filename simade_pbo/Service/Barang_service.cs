@@ -7,18 +7,18 @@ using System.Windows.Forms;
 namespace simade_pbo.Service
 {
     // Class untuk mengelola seluruh proses pengambilan, penyimpanan, perubahan, dan penghapusan data barang
-    internal class Barang_service : Barang_cls
+    internal class Barang_service : Barang_cls //inheritance
     {
         string Query; // Menyimpan perintah SQL
 
-        // Constructor
+        // Constructor (OOP)
         public Barang_service()
         {
             Query = ""; // Memberi pengaturan awal pada variabel query
         }
 
         // Method untuk menjalankan query INSERT, UPDATE, dan DELETE
-        private int jalankanNonQuery(string query)
+        private int jalankanNonQuery(string query) //enkapsulasi
         {
             int retVal = -1; // Variabel untuk menyimpan hasil eksekusi query
 
@@ -39,7 +39,7 @@ namespace simade_pbo.Service
         }
 
         // Method untuk menjalankan query SELECT dan mengembalikan hasil dalam bentuk DataTable
-        private DataTable jalankanQuery(string query)
+        private DataTable jalankanQuery(string query) //enkapsulasi
         {
             DataTable dt = new DataTable(); // Wadah kosong untuk menyimpan hasil query
 

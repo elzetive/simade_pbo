@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace simade_pbo.Model
 {
-    //class
+    //class (OOP)
     internal class Barang_cls
     {
         //enkapsulasi data sama seperti Kategori_cls.cs
@@ -18,7 +18,7 @@ namespace simade_pbo.Model
         private int _kondisi_rusak;
         private string _status;
 
-        // constructor
+        // constructor (OOP)
         public Barang_cls()
         {
             _id_barang = 0;

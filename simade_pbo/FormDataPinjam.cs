@@ -9,9 +9,9 @@ namespace simade_pbo
     public partial class FormDataPinjam : Form
     {
         // Instansiasi objek layanan pinjam untuk menghubungkan form dengan database
-        Pinjam_service pinjamService = new Pinjam_service();
+        Pinjam_service pinjamService = new Pinjam_service(); //inheritance
         // Variabel global untuk merekam nomor kode nota peminjaman yang sedang dipilih/diklik
-        string kodeNotaAktif = "";
+        string kodeNotaAktif = ""; //inheritance
 
         // Method Constructor: Inisialisasi awal saat form dimuat ke memori berkas
         public FormDataPinjam()

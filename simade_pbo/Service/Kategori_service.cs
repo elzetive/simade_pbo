@@ -9,19 +9,19 @@ using simade_pbo.Model;
 
 namespace simade_pbo.Service
 {
-    internal class Kategori_service
+    internal class Kategori_service //(OOP)
     {
         //atribut untuk menyimpan perintah SQL
-        string Query;
+        string Query; //enkapsulasi
 
-        //constructor
+        //constructor (OOP)
         public Kategori_service()
         {
             Query = "";
         }
 
         //method untuk menghubah kondisi data di database
-        private int jalankanNonQuery(string query)
+        private int jalankanNonQuery(string query) //enkapsulasi
         {
             int retVal = -1; //untuk mengembalikan nilai -1 jika operasi gagal
             using (MySql.Data.MySqlClient.MySqlConnection conn = Koneksi.GetConn())
@@ -40,7 +40,7 @@ namespace simade_pbo.Service
         }
 
         //method untuk meminta dan melihat data dari database
-        private DataTable jalankanQuery(string query)
+        private DataTable jalankanQuery(string query) //enkapsulasi
         {
             DataTable dt = new DataTable(); //wadah kosong
             using (MySql.Data.MySqlClient.MySqlConnection conn = Koneksi.GetConn())
@@ -62,7 +62,7 @@ namespace simade_pbo.Service
         }
 
         //method untuk mengecek atau memvalidasi apakah sudah ada nama kategori yang diinputkan di database atau belum
-        public bool isExist(string nama_kategori)
+        public bool isExist(string nama_kategori) //enkapsulaso
         {
             bool cek = false; //status awalnya data belum ada
             Query = "SELECT * FROM kategori WHERE nama_kategori = '" + nama_kategori + "'";
@@ -75,14 +75,14 @@ namespace simade_pbo.Service
         }
 
         //method untuk menyimpan kategori ke dalam database
-        public int simpanKategori(string nama_kategori)
+        public int simpanKategori(string nama_kategori) //enkapsulasi
         {
             Query = "INSERT INTO kategori (nama_kategori) VALUES ('" + nama_kategori + "')";
             return jalankanNonQuery(Query);
         }
 
         //method untuk menampilkan kategori dari database
-        public DataTable tampilSemuaKategori()
+        public DataTable tampilSemuaKategori() //enkapsulasi
         {
             Query = "SELECT * FROM kategori";
             return jalankanQuery(Query);

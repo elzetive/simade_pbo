@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace simade_pbo.Service
 {
-    public class Pinjam_service
+    public class Pinjam_service //OOP
     {
         // Method untuk mengambil daftar seluruh nota induk peminjaman dari database
         public DataTable tampilSemuaPeminjaman()
@@ -132,7 +132,7 @@ namespace simade_pbo.Service
         }
 
         // Method privat pembantu untuk mengeksekusi kueri SELECT (Mengambil data masukan)
-        private DataTable jalankanQuery(string query)
+        private DataTable jalankanQuery(string query) //enkapsulasi
         {
             DataTable dt = new DataTable(); // Menyiapkan objek penampung tabel data
             try
@@ -154,7 +154,7 @@ namespace simade_pbo.Service
         }
 
         // Method privat pembantu untuk mengeksekusi kueri manipulasi data (INSERT, UPDATE, DELETE)
-        private int jalankanNonQuery(string query)
+        private int jalankanNonQuery(string query) //enkapsulasi
         {
             int result = 0; // Menyiapkan variabel penanda sukses (menyimpan jumlah baris yang berubah)
             try
