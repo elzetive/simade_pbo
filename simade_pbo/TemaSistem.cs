@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace simade_pbo
 {
+    //abstraksi class : untuk mengatur tema sistem agar konsisten
     class TemaSistem
     {
         public static Color WarnaBackgroundForm = Color.FromArgb(245, 247, 250);
@@ -15,13 +16,14 @@ namespace simade_pbo
         {
             frm.SuspendLayout();
 
+            //oop : menggunakan reflection untuk mengakses properti protected DoubleBuffered dari Form dan Panel
             typeof(Form).InvokeMember("DoubleBuffered",
                 BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
                 null, frm, new object[] { true });
 
             frm.BackColor = WarnaBackgroundForm;
-            frm.FormBorderStyle = FormBorderStyle.None;
-            frm.StartPosition = FormStartPosition.CenterScreen;
+            frm.FormBorderStyle = FormBorderStyle.None; // Menghilangkan border default OS agar tampilan modern custom
+            frm.StartPosition = FormStartPosition.CenterScreen; // Memastikan form selalu muncul di tengah layar
 
             if (overlayPanel != null)
             {
@@ -35,8 +37,8 @@ namespace simade_pbo
             {
                 btnUtama.BackColor = WarnaTombolBiru;
                 btnUtama.ForeColor = Color.White;
-                btnUtama.FlatStyle = FlatStyle.Flat;
-                btnUtama.Cursor = Cursors.Hand;
+                btnUtama.FlatStyle = FlatStyle.Flat; // Menghilangkan efek 3D jadul tombol bawaan Windows
+                btnUtama.Cursor = Cursors.Hand; // Mengubah kursor menjadi ikon tangan interaktif
             }
 
             if (btnClose != null)

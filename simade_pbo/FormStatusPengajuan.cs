@@ -6,12 +6,14 @@ using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
+    //inheritance : mewarisi class form dari .net framework
     public partial class FormStatusPengajuan : Form
     {
+        //enkapsulasi data agar tidak bisa diakses langsung dari luar class
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
-        private int idUserWargaFix = 4;
+        private int idUserWargaFix = 4; // Atribut private pelindung data internal class.
 
         public FormStatusPengajuan()
         {
@@ -43,30 +45,34 @@ namespace simade_pbo
             dgvPengajuan.ReadOnly = true;
             dgvDetailBarang.ReadOnly = true;
 
+            //memastikan kolom DataGridView tidak dibuat otomatis, melainkan diatur secara manual.
             dgvPengajuan.AutoGenerateColumns = false;
             colNo.DataPropertyName = "no_urut";
             colIdPinjam.DataPropertyName = "kode_peminjaman";
             colTglPinjam.DataPropertyName = "tgl_pinjam";
             colStatusUtama.DataPropertyName = "status";
 
+            //memastikan kolom DataGridView detail barang tidak dibuat otomatis, melainkan diatur secara manual.
             dgvDetailBarang.AutoGenerateColumns = false;
             colDetailNama.DataPropertyName = "nama_aset";
             colDetailJumlah.DataPropertyName = "jumlah";
 
-            // PERBAIKAN: Kosongkan tulisan status bawaan desainer saat halaman pertama kali dibuka
             lblStatusBadge.Text = "";
             lblStatusBadge.BackColor = Color.Transparent;
 
             LoadPermohonanBerjalan();
         }
 
+        //read data dari database ke DataGridView
         private void LoadPermohonanBerjalan()
         {
+            //abstraksi koneksi database MySQL menggunakan class Koneksi untuk mengelola koneksi.
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
                     conn.Open();
+                    //memfilter data peminjaman berdasarkan id_user dan status_peminjaman tertentu, diurutkan dari yang terbaru.
                     string query = @"SELECT kode_peminjaman, 
                                             DATE_FORMAT(tgl_pinjam, '%d/%m/%Y') AS tgl_pinjam, 
                                             status_peminjaman AS status
@@ -76,13 +82,14 @@ namespace simade_pbo
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        //mencegah SQL Injection dengan parameterized query untuk idUser.
                         cmd.Parameters.AddWithValue("@idUser", idUserWargaFix);
-                        using (MySqlConnection da = new MySqlConnection()) // fallback check
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
                             adapter.Fill(dt);
 
+                            //logika untuk menambahkan kolom nomor urut ke DataTable agar bisa ditampilkan di DataGridView.
                             dt.Columns.Add("no_urut", typeof(int));
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
@@ -100,6 +107,7 @@ namespace simade_pbo
             }
         }
 
+        //menampilkan detail barang dari peminjaman yang dipilih di DataGridView detail barang.
         private void dgvPengajuan_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -110,7 +118,7 @@ namespace simade_pbo
                     string kodeNotaTerpilih = dtHeader.Rows[e.RowIndex]["kode_peminjaman"].ToString();
                     string statusTeks = dtHeader.Rows[e.RowIndex]["status"].ToString().ToUpper();
 
-                    // Tulisan status dan warna latar belakang baru akan muncul secara dinamis mengikuti baris data yang diklik warga
+                    //mengubah teks dan warna badge status sesuai dengan status peminjaman yang dipilih.
                     lblStatusBadge.Text = statusTeks;
 
                     if (statusTeks == "PENDING") lblStatusBadge.BackColor = Color.Orange;
@@ -120,6 +128,7 @@ namespace simade_pbo
                     using (MySqlConnection conn = Koneksi.GetConn())
                     {
                         conn.Open();
+                        //mengambil detail barang yang terkait dengan kode peminjaman yang dipilih, termasuk nama barang dan jumlah yang dipinjam.
                         string queryDetail = @"SELECT b.nama_barang AS nama_aset, 
                                                       dp.jumlah_pinjam AS jumlah
                                                FROM peminjaman p
@@ -146,6 +155,7 @@ namespace simade_pbo
             }
         }
 
+        //menavigasi ke form dashboard warga
         private void btnMenuDashboard_Click(object sender, EventArgs e)
         {
             FormDashboardWarga frm = new FormDashboardWarga();
@@ -155,9 +165,9 @@ namespace simade_pbo
             this.Close();
         }
 
+        //menavigasi ke form status pengajuan warga
         private void btnMenuStatus_Click(object sender, EventArgs e)
         {
-            // Reset status badge ketika menu disegarkan kembali
             lblStatusBadge.Text = "";
             lblStatusBadge.BackColor = Color.Transparent;
             dgvDetailBarang.DataSource = null;
@@ -165,6 +175,7 @@ namespace simade_pbo
             LoadPermohonanBerjalan();
         }
 
+        //menavigasi ke form riwayat warga
         private void btnMenuRiwayat_Click(object sender, EventArgs e)
         {
             FormRiwayatWarga frm = new FormRiwayatWarga();
@@ -174,6 +185,7 @@ namespace simade_pbo
             this.Close();
         }
 
+        //menavigasi ke form login dan menutup form status pengajuan
         private void btnLogOut_Click(object sender, EventArgs e)
         {
             FormLogin l = new FormLogin();
@@ -181,6 +193,7 @@ namespace simade_pbo
             this.Close();
         }
 
+        //menutup aplikasi saat tombol exit diklik
         private void btnExit_Click(object sender, EventArgs e) { Application.Exit(); }
     }
 }

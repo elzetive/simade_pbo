@@ -118,6 +118,7 @@ namespace simade_pbo.Service
             return jalankanQuery(Query);
         }
 
+
         // Method untuk mengambil data 5 barang yang paling sering dipinjam
         public DataTable GrafikBarangTerpinjam()
         {
