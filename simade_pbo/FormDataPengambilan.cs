@@ -10,8 +10,6 @@ namespace simade_pbo
     {
         Pinjam_service pinjamService = new Pinjam_service();
         string kodeNotaAktif = "";
-
-        // Menetapkan variabel tanggal hari ini sesuai dengan waktu sistem
         DateTime hariIni = DateTime.Now;
 
         public FormDataPengambilan()
@@ -19,7 +17,6 @@ namespace simade_pbo
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Mengikat semua event handler secara eksplisit agar bebas bug navigasi berat
             this.Load += new System.EventHandler(this.FormDataPengambilan_Load);
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
@@ -29,7 +26,6 @@ namespace simade_pbo
                 this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             }
 
-            // Hubungkan event klik tombol sidebar left admin
             this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
@@ -38,7 +34,6 @@ namespace simade_pbo
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
 
-            // Operasi Kontrol Form Bawah (Disesuaikan ke nama tombol asli: btnBatal)
             this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             if (this.btnBatal != null)
             {
@@ -53,7 +48,6 @@ namespace simade_pbo
 
         private void FormDataPengambilan_Load(object sender, EventArgs e)
         {
-            // KUNCI RINGAN: Gunakan BeginInvoke agar perpindahan menu sidebar langsung melesat cepat tanpa lag
             this.BeginInvoke(new MethodInvoker(InitDataDanKPI));
         }
 
@@ -63,7 +57,6 @@ namespace simade_pbo
             SegarkanGridUtama();
         }
 
-        // PERBAIKAN 1: Menangani nama kolom dinamis ('status') dan mengisi akumulasi counter KPI secara benar
         private void HitungKPIGlobalMurni()
         {
             DataTable dtSemua = pinjamService.tampilSemuaPeminjaman();
@@ -79,7 +72,6 @@ namespace simade_pbo
                 {
                     string statusReal = "";
 
-                    // Deteksi nama kolom secara aman agar terhindar dari ArgumentException
                     if (dtSemua.Columns.Contains("status"))
                     {
                         statusReal = row["status"].ToString().ToLower().Trim();
@@ -89,12 +81,10 @@ namespace simade_pbo
                         statusReal = row["status_peminjaman"].ToString().ToLower().Trim();
                     }
 
-                    // Akumulasi angka KPI berdasarkan status real data logistik
                     if (statusReal == "disetujui" || statusReal == "pending")
                     {
                         hitungAntrean++;
 
-                        // Cek apakah tanggal pengambilan jatuh pada hari ini
                         if (dtSemua.Columns.Contains("tgl_pinjam") && row["tgl_pinjam"] != DBNull.Value)
                         {
                             DateTime tglPinjam = Convert.ToDateTime(row["tgl_pinjam"]);
@@ -121,7 +111,6 @@ namespace simade_pbo
             if (lblHangus != null) lblHangus.Text = hitungHangus.ToString();
         }
 
-        // PERBAIKAN 2: Menggunakan satu method bersih (Duplikasi ambigu dihilangkan) & Filter status yang aman
         private void SegarkanGridUtama()
         {
             dataGridView1.AutoGenerateColumns = false;
@@ -163,13 +152,11 @@ namespace simade_pbo
                     statusReal = row["status_peminjaman"].ToString().ToLower().Trim();
                 }
 
-                // Menampilkan data antrean yang relevan ke dalam halaman pengambilan fisik
                 if (statusReal == "disetujui" || statusReal == "pending" || statusReal == "diambil" || statusReal == "dipinjam" || statusReal == "hangus")
                 {
                     DataRow newRow = dtFiltered.NewRow();
                     newRow.ItemArray = row.ItemArray;
 
-                    // Merapikan format teks status untuk User Interface (UI)
                     if (!string.IsNullOrEmpty(statusReal))
                     {
                         newRow["status_tampilan"] = char.ToUpper(statusReal[0]) + statusReal.Substring(1);
@@ -352,7 +339,6 @@ namespace simade_pbo
 
                 if (suksesUpdateDeskripsi)
                 {
-                    // Menyesuaikan pemanggilan parameter tipe data string/int sesuai struktur Service Anda
                     if (pinjamService.ubahStatusNotaInduk(kodeNotaAktif, "dipinjam") > 0)
                     {
                         MessageBox.Show("Sukses! Fisik barang resmi diserahkan.\nStatus Nota diperbarui menjadi 'DIPINJAM'.", "Selesai", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -385,7 +371,6 @@ namespace simade_pbo
             dgvDetail.DataSource = null;
         }
 
-        // --- SIDEBAR NAVIGASI LINKING ADMIN ---
         private void btnData_Barang_Click(object sender, EventArgs e)
         {
             FormDashboardAdmin frm = new FormDashboardAdmin();
