@@ -327,19 +327,20 @@ namespace simade_pbo.Service
         // Method untuk mengambil data grafik jumlah peminjaman setiap bulan
         public DataTable GrafikPeminjaman()
         {
-            // Query menghitung jumlah transaksi peminjaman berdasarkan bulan
             Query = @"
-                SELECT
-                    MONTH(tgl_pinjam) AS bulan,
-                    COUNT(*) AS jumlah
-                FROM peminjaman
-                GROUP BY MONTH(tgl_pinjam)
-                ORDER BY MONTH(tgl_pinjam)";
+        SELECT
+            MONTH(p.tgl_pinjam) AS bulan,
+            SUM(dp.jumlah_pinjam) AS jumlah
+        FROM peminjaman p
+        INNER JOIN detail_peminjaman dp
+            ON p.id_peminjaman = dp.id_peminjaman
+        WHERE LOWER(p.status_peminjaman)
+            IN ('disetujui','dipinjam','dikembalikan')
+        GROUP BY MONTH(p.tgl_pinjam)
+        ORDER BY MONTH(p.tgl_pinjam)";
 
-            // Mengembalikan hasil query dalam bentuk DataTable
             return jalankanQuery(Query);
         }
-
 
         // Method untuk mengambil data 5 barang yang paling sering dipinjam
         public DataTable GrafikBarangTerpinjam()

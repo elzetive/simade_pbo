@@ -37,7 +37,7 @@ namespace simade_pbo
             // setelah seluruh komponen Form selesai dimuat
             this.BeginInvoke(new MethodInvoker(HitungStatistikRealtime));
 
-            // Menampilkan grafik barang yang paling sering dipinjam
+            // Menampilkan grafik jumlah peminjaman barang per bulan
             LoadChart();
         }
 
@@ -141,65 +141,57 @@ namespace simade_pbo
         }
 
         // ==========================================================
-        // Menampilkan grafik barang yang paling sering dipinjam
+        // // Menampilkan grafik jumlah peminjaman barang per bulan
         // ==========================================================
         private void LoadChart()
         {
-            // Menghapus data grafik sebelumnya
             chartPeminjaman.Series.Clear();
             chartPeminjaman.Titles.Clear();
 
-            // Memberikan judul grafik
-            chartPeminjaman.Titles.Add("Barang yang Paling Sering Dipinjam");
+            chartPeminjaman.Titles.Add("Grafik Peminjaman Barang per Bulan");
 
-            // Mengambil area Chart
             ChartArea area = chartPeminjaman.ChartAreas[0];
 
-            // Mengatur tampilan garis bantu sumbu X
-            area.AxisX.MajorGrid.LineColor = Color.LightGray;
+            area.AxisX.Title = "Bulan";
+            area.AxisY.Title = "Jumlah Barang Dipinjam";
 
-            // Menonaktifkan garis bantu sumbu Y
-            area.AxisY.MajorGrid.Enabled = false;
+            area.AxisX.MajorGrid.Enabled = false;
+            area.AxisY.MajorGrid.LineColor = Color.LightGray;
 
-            // Mengambil data grafik dari Barang_service
-            DataTable dt = barang.GrafikBarangTerpinjam();
-
-            // Membuat objek Series baru
             Series series = new Series();
 
-            // Mengatur jenis grafik menjadi Bar Horizontal
-            series.ChartType = SeriesChartType.Bar;
-
-            // Memberikan warna batang grafik
+            series.ChartType = SeriesChartType.Column;
             series.Color = Color.RoyalBlue;
-
-            // Menampilkan nilai pada setiap batang grafik
             series.IsValueShownAsLabel = true;
 
-            // Mengatur jenis dan ukuran font
-            series.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            // Menambahkan Series ke Chart
             chartPeminjaman.Series.Add(series);
 
-            // Menghilangkan Legend karena hanya menggunakan satu Series
-            chartPeminjaman.Legends.Clear();
+            DataTable dt = barang.GrafikPeminjaman();
 
-            // Memastikan data tidak kosong
-            if (dt != null)
+            foreach (DataRow row in dt.Rows)
             {
-                // Menampilkan seluruh data ke dalam grafik
-                foreach (DataRow row in dt.Rows)
+                int bulan = Convert.ToInt32(row["bulan"]);
+                int jumlah = Convert.ToInt32(row["jumlah"]);
+
+                string namaBulan = "";
+
+                switch (bulan)
                 {
-                    // Mengambil nama barang
-                    string namaBarang = row["nama_barang"].ToString();
-
-                    // Mengambil jumlah peminjaman
-                    int jumlah = Convert.ToInt32(row["jumlah"]);
-
-                    // Menambahkan data ke grafik
-                    series.Points.AddXY(namaBarang, jumlah);
+                    case 1: namaBulan = "Jan"; break;
+                    case 2: namaBulan = "Feb"; break;
+                    case 3: namaBulan = "Mar"; break;
+                    case 4: namaBulan = "Apr"; break;
+                    case 5: namaBulan = "Mei"; break;
+                    case 6: namaBulan = "Jun"; break;
+                    case 7: namaBulan = "Jul"; break;
+                    case 8: namaBulan = "Agu"; break;
+                    case 9: namaBulan = "Sep"; break;
+                    case 10: namaBulan = "Okt"; break;
+                    case 11: namaBulan = "Nov"; break;
+                    case 12: namaBulan = "Des"; break;
                 }
+
+                series.Points.AddXY(namaBulan, jumlah);
             }
         }
 
