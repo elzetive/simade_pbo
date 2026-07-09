@@ -1,6 +1,4 @@
-﻿using Org.BouncyCastle.Asn1.Cmp;
-using Org.BouncyCastle.Asn1.Ocsp;
-using simade_pbo.Service;
+﻿using simade_pbo.Service;
 using System;
 using System.Data;
 using System.Drawing;
@@ -10,59 +8,68 @@ namespace simade_pbo
 {
     public partial class FormRiwayat : Form
     {
-        // Membuat objek Barang_service untuk mengambil data riwayat dari database
+        // Object Barang_service digunakan untuk mengambil data
+        // riwayat peminjaman dari database
         Barang_service barang = new Barang_service();
 
-        // Menyimpan seluruh data riwayat peminjaman
+        // Menyimpan data riwayat sementara sebelum ditampilkan
+        // ke dalam DataGridView
         DataTable dtRiwayat = new DataTable();
 
-        // Constructor FormRiwayat
+        // ==========================================================
+        // CONSTRUCTOR
+        // Dijalankan saat Form Riwayat pertama kali dibuka
+        // ==========================================================
         public FormRiwayat()
         {
-            // Menginisialisasi seluruh komponen pada form
+            // Menginisialisasi seluruh komponen pada Form
             InitializeComponent();
 
-            // Mengatur posisi form agar muncul di tengah layar
+            // Menampilkan Form di tengah layar
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Menampilkan data riwayat saat form pertama kali dibuka
+            // Mengambil dan menampilkan data riwayat peminjaman
             tampilRiwayat();
 
-            // Menambahkan event klik pada DataGridView
-            // sehingga ketika baris dipilih akan muncul detail peminjaman
+            // Menambahkan event klik agar pengguna dapat melihat
+            // detail riwayat saat memilih salah satu baris
             dgvRiwayat.CellClick += dgvRiwayat_CellClick;
         }
 
-        // Method untuk menampilkan seluruh data riwayat peminjaman
+        // ==========================================================
+        // Menampilkan seluruh data riwayat peminjaman
+        // ==========================================================
         void tampilRiwayat()
         {
-            // Mengambil data riwayat dari database melalui Barang_service
+            // Mengambil data riwayat melalui Barang_service
             dtRiwayat = barang.tampilRiwayat();
 
-            // Menggunakan kolom yang sudah dibuat pada DataGridView Designer
+            // Menggunakan kolom DataGridView yang sudah dibuat
             dgvRiwayat.AutoGenerateColumns = false;
 
-            // Menghubungkan kolom DataGridView dengan nama field pada database
+            // Menghubungkan kolom DataGridView dengan field database
             colNama.DataPropertyName = "nama_barang";
             colPeminjam.DataPropertyName = "username";
             colTanggalPinjam.DataPropertyName = "tgl_pinjam";
             colTanggalKembali.DataPropertyName = "tgl_kembali";
-
-            // Status yang ditampilkan berasal dari status_peminjaman
             colStatus.DataPropertyName = "status_peminjaman";
 
             // Menampilkan data ke DataGridView
             dgvRiwayat.DataSource = dtRiwayat;
 
-            // Mengisi pilihan ComboBox status
+            // Mengisi daftar status pada ComboBox
             isiStatus();
         }
 
-        // Mengisi ComboBox sesuai status_peminjaman pada database
+        // ==========================================================
+        // Mengisi pilihan status peminjaman pada ComboBox
+        // ==========================================================
         void isiStatus()
         {
+            // Menghapus daftar sebelumnya
             cmbStatus.Items.Clear();
 
+            // Menambahkan seluruh pilihan status
             cmbStatus.Items.Add("Semua");
             cmbStatus.Items.Add("Pending");
             cmbStatus.Items.Add("Disetujui");
@@ -71,21 +78,25 @@ namespace simade_pbo
             cmbStatus.Items.Add("Ditolak");
             cmbStatus.Items.Add("Hangus");
 
+            // Menjadikan "Semua" sebagai pilihan awal
             cmbStatus.SelectedIndex = 0;
         }
 
-        // Method untuk melakukan pencarian dan filter data
+        // ==========================================================
+        // Melakukan pencarian dan filter data
+        // ==========================================================
         void filterData()
         {
-            // Mengambil DataView dari DataTable
+            // Mengambil data sementara dalam bentuk DataView
             DataView dv = dtRiwayat.DefaultView;
 
-            // Mengambil teks pencarian
+            // Mengambil kata kunci pencarian
             string cari = txtCari.Text.Trim().Replace("'", "''");
 
-            // Mengambil status dari ComboBox
+            // Mengambil status yang dipilih pengguna
             string status = cmbStatus.Text.ToLower();
 
+            // Menyimpan filter yang akan diterapkan
             string filter = "";
 
             // Filter berdasarkan nama barang
@@ -105,45 +116,62 @@ namespace simade_pbo
                 filter += $"status_peminjaman = '{status}'";
             }
 
-            // Menampilkan hasil filter
+            // Menerapkan filter ke DataView
             dv.RowFilter = filter;
 
+            // Menampilkan hasil filter ke DataGridView
             dgvRiwayat.DataSource = dv;
         }
 
-        // Tombol keluar dari Form Riwayat
+        // ==========================================================
+        // Tombol Keluar
+        // Menutup halaman Riwayat
+        // ==========================================================
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        // Tombol menuju Dashboard
+        // ==========================================================
+        // Tombol Dashboard
+        // Berpindah ke halaman Dashboard Kepala Desa
+        // ==========================================================
         private void btnDashboard_Click_1(object sender, EventArgs e)
         {
             FormDashboardKades frm = new FormDashboardKades();
             frm.Show();
 
-            // Menyembunyikan form saat ini
+            // Menyembunyikan Form Riwayat
             this.Hide();
         }
 
-        // Tombol menuju halaman Data Barang
+        // ==========================================================
+        // Tombol Data Barang
+        // Berpindah ke halaman Data Barang
+        // ==========================================================
         private void btnBarang_Click_1(object sender, EventArgs e)
         {
             FormBarangKades frm = new FormBarangKades();
             frm.Show();
 
-            // Menyembunyikan form saat ini
+            // Menyembunyikan Form Riwayat
             this.Hide();
         }
 
+        // ==========================================================
         // Tombol Riwayat
+        // Tidak melakukan proses karena pengguna sedang
+        // berada di halaman Riwayat
+        // ==========================================================
         private void btnRiwayat_Click(object sender, EventArgs e)
         {
-            // Tidak melakukan apa-apa karena pengguna sudah berada di halaman Riwayat
+
         }
 
+        // ==========================================================
         // Tombol Logout
+        // Keluar dari akun dan kembali ke halaman Login
+        // ==========================================================
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
             // Menampilkan konfirmasi sebelum logout
@@ -154,7 +182,7 @@ namespace simade_pbo
                 MessageBoxIcon.Question
             );
 
-            // Jika memilih Yes maka kembali ke halaman Login
+            // Jika memilih Ya maka kembali ke Form Login
             if (konfirmasi == DialogResult.Yes)
             {
                 FormLogin login = new FormLogin();
@@ -164,30 +192,40 @@ namespace simade_pbo
             }
         }
 
-        // Event pencarian secara realtime ketika isi TextBox berubah
+        // ==========================================================
+        // Event TextBox Pencarian
+        // Menjalankan proses filter setiap kali pengguna mengetik
+        // ==========================================================
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
             filterData();
         }
 
-        // Event ketika ComboBox status berubah
+        // ==========================================================
+        // Event ComboBox Status
+        // Menampilkan data sesuai status yang dipilih
+        // ==========================================================
         private void cmbStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
             filterData();
         }
 
-        // Event bawaan Visual Studio (belum digunakan)
+        // ==========================================================
+        // Event bawaan DataGridView
+        // Belum digunakan
+        // ==========================================================
         private void dgvRiwayat_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
 
-        // ==================================================
-        // Menampilkan detail riwayat ketika baris diklik
-        // ==================================================
+        // ==========================================================
+        // Menampilkan detail riwayat peminjaman
+        // ketika salah satu baris dipilih
+        // ==========================================================
         private void dgvRiwayat_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Memastikan baris yang dipilih adalah data, bukan header
+            // Memastikan pengguna memilih baris data
             if (e.RowIndex >= 0)
             {
                 try
@@ -199,7 +237,7 @@ namespace simade_pbo
                     string tglKembali = dgvRiwayat.Rows[e.RowIndex].Cells["colTanggalKembali"].Value?.ToString();
                     string status = dgvRiwayat.Rows[e.RowIndex].Cells["colStatus"].Value?.ToString();
 
-                    // Menampilkan detail riwayat peminjaman
+                    // Menampilkan informasi detail peminjaman
                     MessageBox.Show(
                         this,
                         "Nama Barang : " + barang +
@@ -214,38 +252,44 @@ namespace simade_pbo
                 }
                 catch (Exception)
                 {
-                    // Mengabaikan error apabila data kosong
+                    // Mengabaikan error apabila data tidak dapat dibaca
                 }
             }
         }
 
+        // ==========================================================
         // Memberikan warna pada kolom Status
+        // agar setiap status mudah dibedakan oleh pengguna
+        // ==========================================================
         private void dgvRiwayat_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             // Hanya diterapkan pada kolom Status
             if (dgvRiwayat.Columns[e.ColumnIndex].Name == "colStatus")
             {
+                // Memastikan nilai status tidak kosong
                 if (e.Value != null)
                 {
+                    // Mengambil nilai status kemudian diubah menjadi huruf kecil
                     string status = e.Value.ToString().ToLower();
 
-                    // Warna default
+                    // Warna tulisan default
                     e.CellStyle.ForeColor = Color.Black;
                     e.CellStyle.SelectionForeColor = Color.Black;
 
+                    // Memberikan warna sesuai status peminjaman
                     switch (status)
                     {
-                        // Pengajuan masih diproses
+                        // Pengajuan masih menunggu persetujuan Admin
                         case "pending":
                             e.CellStyle.BackColor = Color.Khaki;
                             break;
 
-                        // Pengajuan sudah disetujui admin
+                        // Pengajuan telah disetujui Admin
                         case "disetujui":
                             e.CellStyle.BackColor = Color.LightSkyBlue;
                             break;
 
-                        // Barang sedang dipinjam
+                        // Barang sedang dipinjam oleh Warga
                         case "dipinjam":
                             e.CellStyle.BackColor = Color.Orange;
                             break;
@@ -255,17 +299,17 @@ namespace simade_pbo
                             e.CellStyle.BackColor = Color.LightGreen;
                             break;
 
-                        // Pengajuan ditolak
+                        // Pengajuan ditolak Admin
                         case "ditolak":
                             e.CellStyle.BackColor = Color.LightCoral;
                             break;
 
-                        // Pengajuan hangus
+                        // Pengajuan hangus karena melewati batas waktu
                         case "hangus":
                             e.CellStyle.BackColor = Color.LightGray;
                             break;
 
-                        // Status lainnya
+                        // Status selain yang telah ditentukan
                         default:
                             e.CellStyle.BackColor = Color.White;
                             break;
@@ -274,16 +318,23 @@ namespace simade_pbo
             }
         }
 
-        // Event pencarian kedua (jika TextBox memiliki dua event)
+        // ==========================================================
+        // Event pencarian kedua
+        // Tetap menjalankan proses filter data
+        // ==========================================================
         private void txtCari_TextChanged_1(object sender, EventArgs e)
         {
             filterData();
         }
 
+        // ==========================================================
         // Tombol Detail
+        // Menampilkan informasi lengkap dari riwayat
+        // yang sedang dipilih pengguna
+        // ==========================================================
         private void btnDetail_Click(object sender, EventArgs e)
         {
-            // Memastikan pengguna telah memilih salah satu baris
+            // Memastikan pengguna sudah memilih salah satu data
             if (dgvRiwayat.SelectedRows.Count == 0)
             {
                 MessageBox.Show(
@@ -298,7 +349,7 @@ namespace simade_pbo
             // Mengambil index baris yang dipilih
             int row = dgvRiwayat.SelectedRows[0].Index;
 
-            // Mengambil data dari DataGridView
+            // Mengambil informasi dari DataGridView
             string barang = dgvRiwayat.Rows[row].Cells["colNama"].Value?.ToString();
             string peminjam = dgvRiwayat.Rows[row].Cells["colPeminjam"].Value?.ToString();
             string tglPinjam = dgvRiwayat.Rows[row].Cells["colTanggalPinjam"].Value?.ToString();

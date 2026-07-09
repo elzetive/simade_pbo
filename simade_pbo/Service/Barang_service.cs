@@ -6,57 +6,83 @@ using System.Windows.Forms;
 
 namespace simade_pbo.Service
 {
+    // Class service yang digunakan untuk mengelola seluruh proses
+    // pengambilan, penyimpanan, perubahan, dan penghapusan data barang
     internal class Barang_service : Barang_cls
     {
+        // Menyimpan query SQL yang akan dijalankan
         string Query;
 
+        // Constructor Barang_service
         public Barang_service()
         {
+            // Menginisialisasi variabel query
             Query = "";
         }
 
+        // ==========================================================
+        // Method untuk menjalankan query INSERT, UPDATE, dan DELETE
+        // ==========================================================
         private int jalankanNonQuery(string query)
         {
+            // Variabel untuk menyimpan hasil eksekusi query
             int retVal = -1;
 
+            // Membuka koneksi ke database
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
+                    // Membuka koneksi MySQL
                     conn.Open();
 
+                    // Membuat objek command menggunakan query yang diterima
                     MySqlCommand cmd = new MySqlCommand(query, conn);
 
+                    // Menjalankan query dan mengembalikan jumlah baris yang terpengaruh
                     retVal = cmd.ExecuteNonQuery();
                 }
                 catch (Exception)
                 {
+                    // Error diabaikan karena nilai gagal sudah diwakili oleh retVal = -1
                 }
             }
 
+            // Mengembalikan hasil eksekusi query
             return retVal;
         }
 
+        // ==========================================================
+        // Method untuk menjalankan query SELECT
+        // dan mengembalikan hasil dalam bentuk DataTable
+        // ==========================================================
         private DataTable jalankanQuery(string query)
         {
+            // Menyimpan hasil query
             DataTable dt = new DataTable();
 
+            // Membuka koneksi database
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
+                    // Membuka koneksi MySQL
                     conn.Open();
 
+                    // Membuat command SQL
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        // Adapter digunakan untuk mengambil hasil query
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
+                            // Mengisi DataTable dengan hasil query
                             adapter.Fill(dt);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    // Menampilkan pesan apabila terjadi kesalahan
                     MessageBox.Show(
                         "Gagal mengambil data : " + ex.Message,
                         "ERROR DATABASE",
@@ -65,33 +91,49 @@ namespace simade_pbo.Service
                 }
             }
 
+            // Mengembalikan hasil query
             return dt;
         }
 
+        // ==========================================================
+        // Mengecek apakah nama barang sudah ada di database
+        // ==========================================================
         public bool isExist(string nama_barang)
         {
+            // Nilai awal dianggap belum ada
             bool hasil = false;
 
+            // Query untuk menghitung jumlah barang berdasarkan nama
             Query = "SELECT COUNT(*) FROM barang WHERE nama_barang = '" +
                     nama_barang.Replace("'", "''") + "'";
 
+            // Menjalankan query
             DataTable dt = jalankanQuery(Query);
 
+            // Memastikan data berhasil diperoleh
             if (dt != null && dt.Rows.Count > 0)
             {
+                // Mengambil jumlah data yang ditemukan
                 int jumlah = Convert.ToInt32(dt.Rows[0][0]);
 
+                // Jika jumlah lebih dari nol berarti barang sudah ada
                 if (jumlah > 0)
                 {
                     hasil = true;
                 }
             }
 
+            // Mengembalikan hasil pengecekan
             return hasil;
         }
 
+        // ==========================================================
+        // Menyimpan data barang baru ke database
+        // ==========================================================
         public int simpan()
         {
+            // Barang baru otomatis memiliki kondisi bagus
+            // sesuai jumlah barang yang dimasukkan
             Query =
                 "INSERT INTO barang " +
                 "(id_kategori, nama_barang, jumlah_barang, kondisi_bagus, kondisi_rusak) " +
@@ -101,139 +143,69 @@ namespace simade_pbo.Service
                 Jumlah_barang + ", " +
                 Jumlah_barang + ", 0)";
 
+            // Menjalankan proses penyimpanan
             return jalankanNonQuery(Query);
         }
 
-        public DataTable tampilSemua()
-        {
-            Query = @"
-            SELECT
-                b.id_barang,
-                b.id_kategori,
-                b.nama_barang,
-                k.nama_kategori,
-                b.jumlah_barang AS jumlah_total,
-                b.kondisi_bagus,
-                b.kondisi_rusak,
-
-                IFNULL((
-                    SELECT SUM(dp.jumlah_pinjam)
-                    FROM detail_peminjaman dp
-                    INNER JOIN peminjaman p
-                        ON dp.id_peminjaman = p.id_peminjaman
-                    WHERE dp.id_barang = b.id_barang
-                    AND LOWER(p.status_peminjaman)
-                        IN ('dipinjam','disetujui')
-                ),0) AS jumlah_dipinjam,
-
-                (
-                    b.kondisi_bagus -
-                    IFNULL((
-                        SELECT SUM(dp.jumlah_pinjam)
-                        FROM detail_peminjaman dp
-                        INNER JOIN peminjaman p
-                            ON dp.id_peminjaman = p.id_peminjaman
-                        WHERE dp.id_barang = b.id_barang
-                        AND LOWER(p.status_peminjaman)
-                            IN ('dipinjam','disetujui')
-                    ),0)
-                ) AS jumlah_tersedia
-
-            FROM barang b
-            INNER JOIN kategori k
-                ON b.id_kategori = k.id_kategori
-
-            ORDER BY b.nama_barang ASC";
-
-            return jalankanQuery(Query);
-        }
-
-        public DataTable tampilByNama(string nama_barang)
-        {
-            Query = @"
-            SELECT
-                b.id_barang,
-                b.id_kategori,
-                b.nama_barang,
-                k.nama_kategori,
-                b.jumlah_barang AS jumlah_total,
-                b.kondisi_bagus,
-                b.kondisi_rusak,
-
-                IFNULL((
-                    SELECT SUM(dp.jumlah_pinjam)
-                    FROM detail_peminjaman dp
-                    INNER JOIN peminjaman p
-                        ON dp.id_peminjaman = p.id_peminjaman
-                    WHERE dp.id_barang = b.id_barang
-                    AND LOWER(p.status_peminjaman)
-                        IN ('dipinjam','disetujui')
-                ),0) AS jumlah_dipinjam,
-
-                (
-                    b.kondisi_bagus -
-                    IFNULL((
-                        SELECT SUM(dp.jumlah_pinjam)
-                        FROM detail_peminjaman dp
-                        INNER JOIN peminjaman p
-                            ON dp.id_peminjaman = p.id_peminjaman
-                        WHERE dp.id_barang = b.id_barang
-                        AND LOWER(p.status_peminjaman)
-                            IN ('dipinjam','disetujui')
-                    ),0)
-                ) AS jumlah_tersedia
-
-            FROM barang b
-            INNER JOIN kategori k
-                ON b.id_kategori = k.id_kategori
-
-            WHERE b.nama_barang LIKE '" + nama_barang.Replace("'", "''") + @"%'
-
-            ORDER BY b.nama_barang ASC";
-
-            return jalankanQuery(Query);
-        }
-
+        // Method untuk mengubah data barang
         public int ubah(int id)
         {
+            // Variabel untuk menyimpan kondisi barang sebelum diubah
             int kondisiBagusLama = 0;
             int kondisiRusakLama = 0;
             int jumlahTotalLama = 0;
 
+            // Query untuk mengambil data barang berdasarkan id
             string queryCek = "SELECT jumlah_barang, kondisi_bagus, kondisi_rusak " +
                               "FROM barang WHERE id_barang = " + id;
 
+            // Menjalankan query
             DataTable dtCek = jalankanQuery(queryCek);
 
+            // Jika data ditemukan
             if (dtCek != null && dtCek.Rows.Count > 0)
             {
+                // Menyimpan data lama ke variabel
                 jumlahTotalLama = Convert.ToInt32(dtCek.Rows[0]["jumlah_barang"]);
                 kondisiBagusLama = Convert.ToInt32(dtCek.Rows[0]["kondisi_bagus"]);
                 kondisiRusakLama = Convert.ToInt32(dtCek.Rows[0]["kondisi_rusak"]);
             }
 
+            // Menghitung selisih jumlah barang lama dan baru
             int selisih = this.Jumlah_barang - jumlahTotalLama;
+
+            // Menyimpan kondisi baru
             int kondisiBagusBaru = kondisiBagusLama;
             int kondisiRusakBaru = kondisiRusakLama;
 
+            // Jika jumlah barang bertambah
             if (selisih > 0)
             {
+                // Tambahkan ke kondisi bagus
                 kondisiBagusBaru += selisih;
             }
+            // Jika jumlah barang berkurang
             else if (selisih < 0)
             {
+                // Kurangi dari kondisi bagus
                 kondisiBagusBaru += selisih;
 
+                // Jika kondisi bagus menjadi negatif
                 if (kondisiBagusBaru < 0)
                 {
+                    // Kekurangannya diambil dari kondisi rusak
                     kondisiRusakBaru += kondisiBagusBaru;
+
+                    // Kondisi bagus tidak boleh kurang dari nol
                     kondisiBagusBaru = 0;
 
+                    // Kondisi rusak juga tidak boleh negatif
                     if (kondisiRusakBaru < 0)
                         kondisiRusakBaru = 0;
                 }
             }
 
+            // Query untuk mengubah data barang
             Query = @"
                 UPDATE barang SET
                     nama_barang = '" + this.Nama_barang + @"',
@@ -243,18 +215,24 @@ namespace simade_pbo.Service
                     kondisi_rusak = " + kondisiRusakBaru + @"
                 WHERE id_barang = " + id;
 
+            // Menjalankan query update
             return jalankanNonQuery(Query);
         }
 
+        // Method untuk menghapus data barang berdasarkan id
         public int hapus(int id_barang)
         {
+            // Query hapus data
             Query = "DELETE FROM barang WHERE id_barang = " + id_barang;
 
+            // Menjalankan query delete
             return jalankanNonQuery(Query);
         }
 
+        // Method untuk mengambil detail kondisi barang
         public DataTable DetailKondisi(string namaBarang)
         {
+            // Query mengambil jumlah barang bagus dan rusak
             Query = @"
                 SELECT
                     kondisi_bagus,
@@ -263,13 +241,17 @@ namespace simade_pbo.Service
                 WHERE nama_barang = '" + namaBarang.Replace("'", "''") + @"'
                 LIMIT 1";
 
+            // Mengembalikan hasil query
             return jalankanQuery(Query);
         }
 
+        // Method untuk mengubah jumlah barang bagus dan rusak
         public int ubahDetailKondisi(int id, int bagus, int rusak)
         {
+            // Menghitung total barang dari kondisi bagus dan rusak
             int totalBaru = bagus + rusak;
 
+            // Query update kondisi barang
             Query = @"
                 UPDATE barang SET
                     kondisi_bagus = " + bagus + @",
@@ -277,13 +259,17 @@ namespace simade_pbo.Service
                     jumlah_barang = " + totalBaru + @"
                 WHERE id_barang = " + id;
 
+            // Menjalankan query update
             return jalankanNonQuery(Query);
         }
 
+        // Method untuk menghitung statistik barang pada dashboard
         public string hitungStatistik(string tipe)
         {
+            // Nilai awal jika belum ada data
             string hasil = "0";
 
+            // Jika yang diminta adalah total seluruh barang
             if (tipe == "TOTAL")
             {
                 Query = @"
@@ -291,6 +277,7 @@ namespace simade_pbo.Service
                     FROM barang";
             }
 
+            // Jika yang diminta adalah total barang yang sedang dipinjam
             else if (tipe == "DIPINJAM")
             {
                 Query = @"
@@ -302,6 +289,7 @@ namespace simade_pbo.Service
                         IN ('dipinjam','disetujui')";
             }
 
+            // Jika yang diminta adalah jumlah barang yang masih tersedia
             else if (tipe == "TERSEDIA")
             {
                 Query = @"
@@ -322,18 +310,24 @@ namespace simade_pbo.Service
                     FROM barang";
             }
 
+            // Menjalankan query sesuai jenis statistik
             DataTable dt = jalankanQuery(Query);
 
+            // Jika data berhasil diperoleh
             if (dt != null && dt.Rows.Count > 0)
             {
+                // Mengambil hasil perhitungan
                 hasil = dt.Rows[0][0].ToString();
             }
 
+            // Mengembalikan hasil statistik
             return hasil;
         }
 
+        // Method untuk mengambil data grafik jumlah peminjaman setiap bulan
         public DataTable GrafikPeminjaman()
         {
+            // Query menghitung jumlah transaksi peminjaman berdasarkan bulan
             Query = @"
                 SELECT
                     MONTH(tgl_pinjam) AS bulan,
@@ -342,11 +336,14 @@ namespace simade_pbo.Service
                 GROUP BY MONTH(tgl_pinjam)
                 ORDER BY MONTH(tgl_pinjam)";
 
+            // Mengembalikan hasil query dalam bentuk DataTable
             return jalankanQuery(Query);
         }
 
+        // Method untuk mengambil data 5 barang yang paling sering dipinjam
         public DataTable GrafikBarangTerpinjam()
         {
+            // Query menghitung total peminjaman setiap barang
             Query = @"
                 SELECT
                     b.nama_barang,
@@ -362,11 +359,14 @@ namespace simade_pbo.Service
                 ORDER BY jumlah DESC
                 LIMIT 5";
 
+            // Mengembalikan hasil query untuk ditampilkan pada grafik dashboard
             return jalankanQuery(Query);
         }
 
+        // Method untuk mengambil seluruh data riwayat peminjaman
         public DataTable tampilRiwayat()
         {
+            // Query mengambil data riwayat peminjaman beserta nama barang dan peminjam
             Query = @"
                 SELECT
                     p.id_peminjaman,
@@ -384,6 +384,7 @@ namespace simade_pbo.Service
                     ON dp.id_barang = b.id_barang
                 ORDER BY p.id_peminjaman DESC";
 
+            // Mengembalikan data riwayat peminjaman
             return jalankanQuery(Query);
         }
     }

@@ -7,7 +7,8 @@ using MySql.Data.MySqlClient;
 namespace simade_pbo
 {
     public partial class FormBarangKades : Form
-    {       // Membuat objek Barang_service untuk mengambil data barang dari database
+    {       
+        // Membuat objek Barang_service untuk mengambil data barang dari database
         Barang_service barang = new Barang_service();
 
         // DataTable sebagai tempat menyimpan data barang yang diambil dari database

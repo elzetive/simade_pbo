@@ -1,55 +1,63 @@
-﻿using simade_pbo.Service;
+﻿using MySql.Data.MySqlClient;
+using simade_pbo.Service;
 using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
     public partial class FormDashboardKades : Form
     {
-        // Membuat objek Barang_service agar dapat mengakses data barang dari database
+        // Object Barang_service digunakan untuk mengambil
+        // data barang dan statistik dari database
         Barang_service barang = new Barang_service();
 
-        // Constructor Form Dashboard Kepala Desa
+        // ==========================================================
+        // CONSTRUCTOR
+        // Dijalankan ketika Form Dashboard Kepala Desa dibuka
+        // ==========================================================
         public FormDashboardKades()
         {
             // Menginisialisasi seluruh komponen Form
             InitializeComponent();
 
-            // Mengatur posisi form agar muncul di tengah layar
+            // Mengatur posisi Form agar muncul di tengah layar
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        // Event yang dijalankan saat Form pertama kali dibuka
+        // ==========================================================
+        // Event Load
+        // Dijalankan saat Dashboard pertama kali dibuka
+        // ==========================================================
         private void FormDashboardKades_Load(object sender, EventArgs e)
         {
-            // BeginInvoke digunakan agar proses perhitungan statistik dijalankan
-            // setelah seluruh komponen form selesai dibuat sehingga tampilan lebih responsif
+            // Menjalankan proses perhitungan statistik
+            // setelah seluruh komponen Form selesai dimuat
             this.BeginInvoke(new MethodInvoker(HitungStatistikRealtime));
 
-            // Memanggil method untuk menampilkan grafik barang yang paling sering dipinjam
+            // Menampilkan grafik barang yang paling sering dipinjam
             LoadChart();
         }
 
-        // Method untuk menghitung seluruh statistik Dashboard Kepala Desa secara realtime
+        // ==========================================================
+        // Menghitung statistik Dashboard secara realtime
+        // ==========================================================
         private void HitungStatistikRealtime()
         {
-            // Variabel untuk menyimpan total seluruh barang
+            // Menyimpan total seluruh barang
             int totalBarangSemua = 0;
 
-            // Variabel untuk menyimpan total barang yang sedang dipinjam
+            // Menyimpan jumlah barang yang sedang dipinjam
             int totalSedangDipinjam = 0;
 
-            // Variabel untuk menyimpan total barang yang masih tersedia
-            // Khusus Dashboard Kepala Desa hanya menghitung barang dengan kondisi bagus
+            // Menyimpan jumlah barang yang masih tersedia
+            // (hanya barang dengan kondisi bagus)
             int totalSiapTersedia = 0;
 
-            // Query mengambil seluruh data barang beserta jumlah yang sedang dipinjam
-            // Barang yang dihitung sebagai dipinjam hanya yang berstatus
-            // "dipinjam" atau "disetujui"
+            // Query untuk mengambil data barang beserta
+            // jumlah barang yang sedang dipinjam
             string query = @"
                 SELECT
                     b.id_barang,
@@ -77,7 +85,7 @@ namespace simade_pbo
                     // Menjalankan query
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
 
-                    // Membaca seluruh data hasil query
+                    // Membaca seluruh hasil query
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
@@ -85,34 +93,32 @@ namespace simade_pbo
                             // Mengambil total stok barang
                             int jumlahBarang = Convert.ToInt32(dr["jumlah_barang"]);
 
-                            // Mengambil jumlah barang yang masih dalam kondisi bagus
+                            // Mengambil jumlah barang dengan kondisi bagus
                             int kondisiBagus = Convert.ToInt32(dr["kondisi_bagus"]);
 
                             // Mengambil jumlah barang yang sedang dipinjam
                             int dipinjam = Convert.ToInt32(dr["jumlah_dipinjam"]);
 
-                            // Menjumlahkan seluruh stok barang
+                            // Menghitung total seluruh barang
                             totalBarangSemua += jumlahBarang;
 
-                            // Menjumlahkan seluruh barang yang sedang dipinjam
+                            // Menghitung total barang yang sedang dipinjam
                             totalSedangDipinjam += dipinjam;
 
-                            // Barang tersedia dihitung dari kondisi bagus
-                            // kemudian dikurangi barang yang sedang dipinjam
+                            // Menghitung stok yang masih tersedia
                             int tersedia = kondisiBagus - dipinjam;
 
-                            // Apabila hasil negatif maka diubah menjadi nol
-                            // agar tidak terjadi tampilan stok minus
+                            // Mencegah hasil stok bernilai negatif
                             if (tersedia < 0)
                                 tersedia = 0;
 
-                            // Menjumlahkan seluruh barang yang masih tersedia
+                            // Menjumlahkan stok yang tersedia
                             totalSiapTersedia += tersedia;
                         }
                     }
                 }
 
-                // Menampilkan hasil perhitungan pada Card Dashboard
+                // Menampilkan hasil perhitungan pada Dashboard
 
                 // Total seluruh barang
                 lblTotal.Text = totalBarangSemua.ToString();
@@ -120,12 +126,12 @@ namespace simade_pbo
                 // Total barang yang sedang dipinjam
                 lblPinjam.Text = totalSedangDipinjam.ToString();
 
-                // Total barang yang masih tersedia (hanya kondisi bagus)
+                // Total barang yang masih tersedia
                 lblTersedia.Text = totalSiapTersedia.ToString();
             }
             catch (Exception ex)
             {
-                // Menampilkan pesan apabila terjadi kesalahan koneksi database
+                // Menampilkan pesan jika koneksi database gagal
                 MessageBox.Show(
                     "Gagal memuat statistik Dashboard Kepala Desa : " + ex.Message,
                     "Error Database",
@@ -134,23 +140,25 @@ namespace simade_pbo
             }
         }
 
-        // Method untuk menampilkan grafik barang yang paling sering dipinjam
+        // ==========================================================
+        // Menampilkan grafik barang yang paling sering dipinjam
+        // ==========================================================
         private void LoadChart()
         {
-            // Menghapus data grafik sebelumnya agar tidak terjadi data ganda
+            // Menghapus data grafik sebelumnya
             chartPeminjaman.Series.Clear();
             chartPeminjaman.Titles.Clear();
 
             // Memberikan judul grafik
             chartPeminjaman.Titles.Add("Barang yang Paling Sering Dipinjam");
 
-            // Mengambil area chart pertama
+            // Mengambil area Chart
             ChartArea area = chartPeminjaman.ChartAreas[0];
 
-            // Mengatur tampilan garis bantu pada sumbu X
+            // Mengatur tampilan garis bantu sumbu X
             area.AxisX.MajorGrid.LineColor = Color.LightGray;
 
-            // Menonaktifkan garis bantu pada sumbu Y agar tampilan lebih rapi
+            // Menonaktifkan garis bantu sumbu Y
             area.AxisY.MajorGrid.Enabled = false;
 
             // Mengambil data grafik dari Barang_service
@@ -159,7 +167,7 @@ namespace simade_pbo
             // Membuat objek Series baru
             Series series = new Series();
 
-            // Mengatur tipe grafik menjadi Bar Horizontal
+            // Mengatur jenis grafik menjadi Bar Horizontal
             series.ChartType = SeriesChartType.Bar;
 
             // Memberikan warna batang grafik
@@ -168,7 +176,7 @@ namespace simade_pbo
             // Menampilkan nilai pada setiap batang grafik
             series.IsValueShownAsLabel = true;
 
-            // Mengatur ukuran dan jenis font label grafik
+            // Mengatur jenis dan ukuran font
             series.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
             // Menambahkan Series ke Chart
@@ -177,16 +185,16 @@ namespace simade_pbo
             // Menghilangkan Legend karena hanya menggunakan satu Series
             chartPeminjaman.Legends.Clear();
 
-            // Memastikan data hasil query tidak kosong
+            // Memastikan data tidak kosong
             if (dt != null)
             {
-                // Menampilkan seluruh data ke grafik
+                // Menampilkan seluruh data ke dalam grafik
                 foreach (DataRow row in dt.Rows)
                 {
                     // Mengambil nama barang
                     string namaBarang = row["nama_barang"].ToString();
 
-                    // Mengambil jumlah peminjaman barang
+                    // Mengambil jumlah peminjaman
                     int jumlah = Convert.ToInt32(row["jumlah"]);
 
                     // Menambahkan data ke grafik
@@ -196,33 +204,36 @@ namespace simade_pbo
         }
 
         // ==========================================================
-        // TOMBOL DASHBOARD
+        // Tombol Dashboard
+        // Tidak menjalankan proses karena pengguna
+        // sudah berada di halaman Dashboard
         // ==========================================================
         private void btnDashboard_Click(object sender, EventArgs e)
         {
-            // Tidak melakukan proses apa pun
-            // karena pengguna sudah berada di halaman Dashboard
+
         }
 
         // ==========================================================
-        // TOMBOL DATA BARANG
+        // Tombol Data Barang
+        // Berpindah ke halaman Data Barang
         // ==========================================================
         private void btnBarang_Click(object sender, EventArgs e)
         {
-            // Membuka Form Data Barang
+            // Membuka Form Barang
             FormBarangKades frm = new FormBarangKades();
             frm.Show();
 
-            // Menutup Dashboard agar tidak terjadi penumpukan Form
+            // Menutup Dashboard
             this.Close();
         }
 
         // ==========================================================
-        // TOMBOL RIWAYAT PEMINJAMAN
+        // Tombol Riwayat
+        // Berpindah ke halaman Riwayat Peminjaman
         // ==========================================================
         private void btnRiwayat_Click(object sender, EventArgs e)
         {
-            // Membuka Form Riwayat Peminjaman
+            // Membuka Form Riwayat
             FormRiwayat frm = new FormRiwayat();
             frm.Show();
 
@@ -231,7 +242,8 @@ namespace simade_pbo
         }
 
         // ==========================================================
-        // TOMBOL LOGOUT
+        // Tombol Logout
+        // Keluar dari akun dan kembali ke halaman Login
         // ==========================================================
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
@@ -239,23 +251,24 @@ namespace simade_pbo
             FormLogin login = new FormLogin();
             login.Show();
 
-            // Menutup Dashboard Kepala Desa
+            // Menutup Dashboard
             this.Close();
         }
 
         // ==========================================================
-        // TOMBOL KELUAR APLIKASI
+        // Tombol Keluar
+        // Menutup seluruh aplikasi
         // ==========================================================
         private void btnExit_Click(object sender, EventArgs e)
         {
-            // Menampilkan konfirmasi sebelum aplikasi ditutup
+            // Menampilkan konfirmasi sebelum keluar
             DialogResult konfirmasi = MessageBox.Show(
                 "Apakah Anda yakin ingin keluar?",
                 "Konfirmasi Keluar",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            // Jika pengguna memilih Ya maka aplikasi ditutup
+            // Jika memilih Ya maka aplikasi ditutup
             if (konfirmasi == DialogResult.Yes)
             {
                 Application.Exit();
@@ -263,7 +276,7 @@ namespace simade_pbo
         }
 
         // ==========================================================
-        // EVENT YANG DIBUAT OTOMATIS OLEH VISUAL STUDIO
+        // Event bawaan Visual Studio
         // Saat ini belum digunakan
         // ==========================================================
         private void label1_Click(object sender, EventArgs e) { }
