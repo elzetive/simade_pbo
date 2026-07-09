@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace simade_pbo.Model
 {
+    //class
     internal class Kategori_cls
     {
+        //atribut
+        //menggunakan string pada _id_kategori untuk kemudahan penanganan data bernilai null
         private string _id_kategori;
         private string _nama_kategori;
 
+        //constructor
         public Kategori_cls()
         {
+            //default untuk menghindari error nilai null
             _id_kategori = "";
             _nama_kategori = "";
         }
 
+        //property
+        //get untuk membaca nilai atribut tersebut agar bisa digunakan oleh komponen lain
+        //set untuk untuk menerima data baru dari luar
         public string Id_kategori
         {
             get { return _id_kategori; }

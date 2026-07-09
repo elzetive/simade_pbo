@@ -16,7 +16,6 @@ namespace simade_pbo
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
-            // Mendaftarkan event utama secara aman agar siklus UI lancar
             this.Load += new System.EventHandler(this.FormDataPinjam_Load);
             this.dgvUtama.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUtama_CellClick);
             this.dgvDetail.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dgvDetail_DataError);
@@ -29,7 +28,6 @@ namespace simade_pbo
                 this.txtCari.TextChanged += new System.EventHandler(this.txtCari_TextChanged);
             }
 
-            // Bagian Navigasi Sidebar Left
             this.btnData_Barang.Click += new System.EventHandler(this.btnData_Barang_Click);
             this.btnData_Pinjam.Click += new System.EventHandler(this.btnData_Pinjam_Click);
             this.btnData_Ambil.Click += new System.EventHandler(this.btnData_Ambil_Click);
@@ -37,9 +35,6 @@ namespace simade_pbo
             this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-
-            // Operasi Form Kontrol Bawah
-            this.btnSimpan.Click += new System.EventHandler(this.btnSimpan_Click);
             this.btnBatalDetail.Click += new System.EventHandler(this.btnBatalDetail_Click);
 
             txtNamaLengkap.ReadOnly = true;
@@ -181,10 +176,22 @@ namespace simade_pbo
                         dgvDetail.Columns[1].DataPropertyName = "nama_kategori";
                         dgvDetail.Columns[2].DataPropertyName = "jumlah_pinjam";
                         dgvDetail.Columns[3].DataPropertyName = "jumlah_tersedia_realtime";
-                        dgvDetail.Columns[4].DataPropertyName = "status";
+                        dgvDetail.Columns[4].DataPropertyName = "";
                         dgvDetail.Columns[5].DataPropertyName = "keterangan";
 
                         dgvDetail.DataSource = dtDetail;
+
+                        for (int i = 0; i < dtDetail.Rows.Count; i++)
+                        {
+                            if (dtDetail.Rows[i]["status"] != DBNull.Value)
+                            {
+                                string statusMentah = dtDetail.Rows[i]["status"].ToString().ToLower().Trim();
+
+                                if (statusMentah == "pending") dgvDetail.Rows[i].Cells[4].Value = "Pending";
+                                else if (statusMentah == "disetujui") dgvDetail.Rows[i].Cells[4].Value = "Disetujui";
+                                else if (statusMentah == "ditolak") dgvDetail.Rows[i].Cells[4].Value = "Ditolak";
+                            }
+                        }
 
                         if (statusNotaUtama == "disetujui" || statusNotaUtama == "ditolak" || statusNotaUtama == "dipinjam" || statusNotaUtama == "dikembalikan")
                         {
@@ -264,7 +271,6 @@ namespace simade_pbo
             }
         }
 
-        // PERBAIKAN 1: Fitur Pencarian Realtime Berdasarkan Kata Kunci
         private void txtCari_TextChanged(object sender, EventArgs e)
         {
             string kataKunci = txtCari.Text.Trim();
@@ -280,7 +286,6 @@ namespace simade_pbo
             }
 
             FormatDanTampilkanData(dtHasil);
-            HitungKPIPeminjaman(dtHasil);
         }
 
         private void btnSimpan_Click(object sender, EventArgs e)
@@ -292,8 +297,39 @@ namespace simade_pbo
             }
 
             dgvDetail.EndEdit();
-            bool adaYangDisetujui = false;
             int totalBaris = dgvDetail.Rows.Count;
+
+            for (int i = 0; i < totalBaris; i++)
+            {
+                var row = dgvDetail.Rows[i];
+                if (row.DataBoundItem != null)
+                {
+                    string statusCek = row.Cells[4].Value?.ToString().ToLower().Trim() ?? "pending";
+                    string keteranganValue = row.Cells[5].Value?.ToString() ?? "";
+                    string namaBarang = row.Cells[0].Value?.ToString() ?? "Barang";
+
+                    if (statusCek == "pending")
+                    {
+                        MessageBox.Show($"Anda belum memilih status untuk barang '{namaBarang}'! Silakan pilih Disetujui atau Ditolak.",
+                                        "Status Belum Dipilih", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        dgvDetail.CurrentCell = row.Cells[4];
+                        return;
+                    }
+
+                    if (statusCek == "ditolak" && string.IsNullOrWhiteSpace(keteranganValue))
+                    {
+                        MessageBox.Show($"Gagal menyimpan! Alasan/Keterangan penolakan untuk barang '{namaBarang}' wajib diisi.",
+                                        "Keterangan Kosong", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        dgvDetail.CurrentCell = row.Cells[5];
+                        dgvDetail.BeginEdit(true);
+                        return;
+                    }
+                }
+            }
+
+            bool adaYangDisetujui = false;
 
             for (int i = 0; i < totalBaris; i++)
             {
@@ -302,16 +338,14 @@ namespace simade_pbo
                 {
                     DataRowView drv = (DataRowView)row.DataBoundItem;
                     int idDetail = Convert.ToInt32(drv["id_detail_peminjaman"]);
-
                     int jumlah = Convert.ToInt32(row.Cells[2].Value);
                     int jumlahSedia = Convert.ToInt32(row.Cells[3].Value);
-                    string statusValue = row.Cells[4].Value?.ToString() ?? "pending";
+                    string statusCek = row.Cells[4].Value?.ToString().ToLower().Trim() ?? "pending";
                     string keteranganValue = row.Cells[5].Value?.ToString() ?? "";
-                    string statusCek = statusValue.ToLower().Trim();
+                    string namaBarang = row.Cells[0].Value?.ToString() ?? "Barang";
 
                     if (statusCek == "disetujui" && jumlah > jumlahSedia)
                     {
-                        string namaBarang = row.Cells[0].Value?.ToString() ?? "Barang";
                         MessageBox.Show($"Gagal menyimpan! Stok untuk '{namaBarang}' tidak mencukupi.\nDiminta: {jumlah}, Tersedia: {jumlahSedia}.", "Stok Kurang", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }

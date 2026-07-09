@@ -34,7 +34,6 @@ namespace simade_pbo
             this.btnTambah_Admin.Click += new System.EventHandler(this.btnTambah_Admin_Click);
             this.btnLogOut.Click += new System.EventHandler(this.btnLogOut_Click);
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            this.btnTambah.Click += new System.EventHandler(this.btnTambah_Click);
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             this.btnHapus.Click += new System.EventHandler(this.btnHapus_Click);
             this.btnBatal.Click += new System.EventHandler(this.btnBatal_Click);
