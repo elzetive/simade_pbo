@@ -8,8 +8,10 @@ namespace simade_pbo.Service
 {
     public class Pinjam_service
     {
+        // Method untuk mengambil daftar seluruh nota induk peminjaman dari database
         public DataTable tampilSemuaPeminjaman()
         {
+            // Menyusun kueri SQL untuk mengambil data peminjaman digabung dengan nama lengkap user (peminjam)
             string query = @"SELECT 
                         p.kode_peminjaman, 
                         u.nama_lengkap, 
@@ -18,14 +20,19 @@ namespace simade_pbo.Service
                         p.status_peminjaman 
                     FROM peminjaman p 
                     INNER JOIN user u ON p.id_user = u.id_user 
+                    /* Memfilter data agar hanya memunculkan status pending, disetujui, atau ditolak */
                     WHERE LOWER(p.status_peminjaman) IN ('pending', 'disetujui', 'ditolak')
+                    /* Mengurutkan hasil dari tanggal peminjaman paling baru (terkini) */
                     ORDER BY p.tgl_pinjam DESC";
 
+            // Mengeksekusi kueri di atas lewat fungsi pembantu internal dan mengembalikan hasilnya berupa DataTable
             return jalankanQuery(query);
         }
 
+        // Method untuk mengambil rincian barang-barang apa saja yang ada di dalam satu nomor nota peminjaman tertentu
         public DataTable tampilDetailBarang(string kodePeminjaman)
         {
+            // Menyusun kueri SQL relasi multi-tabel (detail_peminjaman, barang, kategori, peminjaman, user)
             string query = @"
         SELECT 
             b.nama_barang, 
@@ -42,27 +49,34 @@ namespace simade_pbo.Service
         JOIN kategori k ON b.id_kategori = k.id_kategori
         JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
         JOIN user u ON p.id_user = u.id_user 
+        /* Menyaring data secara spesifik berdasarkan parameter kode peminjaman */
         WHERE p.kode_peminjaman = @kodePeminjaman";
 
+            // Membuat wadah tabel kosong di memori
             DataTable dt = new DataTable();
+            // Membuka blok koneksi aman ke database MySQL
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
-                    conn.Open();
+                    conn.Open(); // Membuka jalur komunikasi database
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        // Memasukkan nilai kodePeminjaman secara aman menggunakan parameter anti SQL Injection
                         cmd.Parameters.AddWithValue("@kodePeminjaman", kodePeminjaman);
+                        // Mengisi wadah DataTable (dt) dengan hasil kueri dari database
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd)) { adapter.Fill(dt); }
                     }
                 }
                 catch (Exception ex) { MessageBox.Show("Gagal: " + ex.Message); }
             }
-            return dt;
+            return dt; // Mengembalikan tabel rincian barang
         }
 
+        // Method khusus untuk mengambil detail barang yang HANYA berstatus 'disetujui' (untuk keperluan serah terima/pengambilan)
         public DataTable tampilDetailBarangDisetujuiSah(string kodePeminjaman)
         {
+            // Menggunakan struktur kueri yang mirip dengan tampilDetailBarang
             string query = @"
         SELECT 
             b.nama_barang, 
@@ -80,6 +94,7 @@ namespace simade_pbo.Service
         JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
         JOIN user u ON p.id_user = u.id_user 
         WHERE p.kode_peminjaman = @kodePeminjaman 
+          /* Filter tambahan: Hanya menarik barang yang disetujui oleh admin, mengabaikan yang ditolak */
           AND dp.status = 'disetujui'";
 
             DataTable dt = new DataTable();
@@ -99,49 +114,57 @@ namespace simade_pbo.Service
             return dt;
         }
 
+        // Method untuk memperbarui status persetujuan individual per item barang (Contoh: Menyetujui Laptop, tapi Menolak Proyektor)
         public int ubahStatusDetailItem(int idDetail, int jumlah, string status, string keterangan)
         {
+            // Menyusun kueri string UPDATE lokal secara manual (Penggabungan string)
             string query = "UPDATE detail_peminjaman SET " + "jumlah_pinjam = " + jumlah + ", " + "status = '" + status + "', " + "keterangan = '" + keterangan + "' " + "WHERE id_detail_peminjaman = " + idDetail;
+            // Mengeksekusi kueri UPDATE ke database lewat fungsi non-query dan mengembalikan jumlah baris yang berhasil diubah
             return jalankanNonQuery(query);
         }
 
+        // Method untuk memperbarui status keseluruhan Nota Induk (Contoh: Mengubah dari 'pending' menjadi 'disetujui' atau 'ditolak')
         public int ubahStatusNotaInduk(string kodePeminjaman, string statusBaru)
         {
+            // Menyusun kueri string UPDATE manual untuk memperbarui tabel induk peminjaman
             string query = "UPDATE peminjaman SET status_peminjaman = '" + statusBaru + "' WHERE kode_peminjaman = '" + kodePeminjaman + "'";
             return jalankanNonQuery(query);
         }
 
+        // Method privat pembantu untuk mengeksekusi kueri SELECT (Mengambil data masukan)
         private DataTable jalankanQuery(string query)
         {
-            DataTable dt = new DataTable();
+            DataTable dt = new DataTable(); // Menyiapkan objek penampung tabel data
             try
             {
-                using (MySqlConnection conn = Koneksi.GetConn())
+                using (MySqlConnection conn = Koneksi.GetConn()) // Menghubungkan ke database
                 {
+                    // Menarik data langsung berdasarkan string kueri tanpa membuka koneksi secara manual (.Fill mengurusnya otomatis)
                     using (MySqlDataAdapter da = new MySqlDataAdapter(query, conn))
                     {
-                        da.Fill(dt);
+                        da.Fill(dt); // Memasukkan baris data ke DataTable
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Eror Query SQL: " + ex.Message);
+                MessageBox.Show("Eror Query SQL: " + ex.Message); // Tampilkan pesan jika terjadi kesalahan sintaks SQL
             }
-            return dt;
+            return dt; // Mengembalikan hasil data
         }
 
+        // Method privat pembantu untuk mengeksekusi kueri manipulasi data (INSERT, UPDATE, DELETE)
         private int jalankanNonQuery(string query)
         {
-            int result = 0;
+            int result = 0; // Menyiapkan variabel penanda sukses (menyimpan jumlah baris yang berubah)
             try
             {
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
-                    conn.Open();
+                    conn.Open(); // Wajib membuka koneksi secara manual sebelum melakukan manipulasi data
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
-                        result = cmd.ExecuteNonQuery();
+                        result = cmd.ExecuteNonQuery(); // Mengeksekusi perintah SQL dan menangkap status baris terpengaruh
                     }
                 }
             }
@@ -149,11 +172,13 @@ namespace simade_pbo.Service
             {
                 MessageBox.Show("Eror SQL NonQuery: " + ex.Message);
             }
-            return result;
+            return result; // Mengembalikan angka indikator (0 = gagal, 1 atau lebih = sukses)
         }
 
+        // Method untuk menyaring daftar transaksi peminjaman berdasarkan inputan kata kunci dari admin (Fitur Cari)
         public DataTable cariPeminjaman(string kataKunci)
         {
+            // Menyusun kueri SQL pencarian global lintas kolom menggunakan klausa LIKE
             string query = @"SELECT 
                         p.kode_peminjaman, 
                         u.nama_lengkap, 
@@ -163,6 +188,7 @@ namespace simade_pbo.Service
                     FROM peminjaman p 
                     INNER JOIN user u ON p.id_user = u.id_user 
                     WHERE LOWER(p.status_peminjaman) IN ('pending', 'disetujui', 'ditolak')
+                      /* Memeriksa kecocokan kata kunci pada kode nota, nama peminjaman, tanggal, atau status */
                       AND (p.kode_peminjaman LIKE @kataKunci 
                            OR u.nama_lengkap LIKE @kataKunci 
                            OR p.tgl_pinjam LIKE @kataKunci 
@@ -177,10 +203,11 @@ namespace simade_pbo.Service
                     conn.Open();
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        // Memasang parameter pencarian dengan pola '%kata_kunci%' (pencarian parsial) untuk menghindari SQL Injection
                         cmd.Parameters.AddWithValue("@kataKunci", "%" + kataKunci + "%");
                         using (MySqlDataAdapter adapter = new MySqlDataAdapter(cmd))
                         {
-                            adapter.Fill(dt);
+                            adapter.Fill(dt); // Mengisi tabel data berdasarkan kecocokan pencarian
                         }
                     }
                 }
@@ -189,26 +216,7 @@ namespace simade_pbo.Service
                     MessageBox.Show("Error Pencarian SQL: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            return dt;
-        }
-
-        public int updateStokBarangKembali(int idDetailPeminjaman, int kondisiBagus, int kondisiRusak, string dikembalikanOleh)
-        {
-            string query = $@"
-        UPDATE detail_peminjaman dp
-        INNER JOIN barang b ON dp.id_barang = b.id_barang
-        SET 
-            dp.kondisi_bagus = {kondisiBagus},
-            dp.kondisi_rusak = {kondisiRusak},
-            dp.dikembalikan_oleh = '{dikembalikanOleh}',
-            dp.jumlah_kembali = {kondisiBagus + kondisiRusak},
-            
-            b.jumlah_dipinjam = b.jumlah_dipinjam - {kondisiBagus + kondisiRusak},
-            b.kondisi_bagus = b.kondisi_bagus - {kondisiRusak},
-            b.kondisi_rusak = b.kondisi_rusak + {kondisiRusak}
-        WHERE dp.id_detail_peminjaman = {idDetailPeminjaman};";
-
-            return jalankanNonQuery(query);
+            return dt; // Mengembalikan hasil daftar pencarian
         }
     }
 }
