@@ -8,277 +8,226 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace simade_pbo
 {
+    // INHERITANCE: Mewarisi visual kontainer dasar dari class induk 'Form'.
     public partial class FormDashboardKades : Form
     {
-        // Object Barang_service digunakan untuk mengambil
-        // data barang dan statistik dari database
         Barang_service barang = new Barang_service();
 
-        // ==========================================================
-        // CONSTRUCTOR
-        // Dijalankan ketika Form Dashboard Kepala Desa dibuka
-        // ==========================================================
         public FormDashboardKades()
         {
-            // Menginisialisasi seluruh komponen Form
             InitializeComponent();
-
-            // Mengatur posisi Form agar muncul di tengah layar
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        // ==========================================================
-        // Event Load
-        // Dijalankan saat Dashboard pertama kali dibuka
-        // ==========================================================
         private void FormDashboardKades_Load(object sender, EventArgs e)
         {
-            // Menjalankan proses perhitungan statistik
-            // setelah seluruh komponen Form selesai dimuat
             this.BeginInvoke(new MethodInvoker(HitungStatistikRealtime));
 
-            // Menampilkan grafik jumlah peminjaman barang per bulan
-            LoadChart();
+            // Inisialisasi data filter sebelum grafik dimuat pertama kali
+            LoadFilterBarang();
+            LoadFilterBulan();
+
+            // Pasang event handler dinamis: grafik otomatis update tiap filter diubah kades
+            cbBarang.SelectedIndexChanged += (s, ev) => LoadChartDinamis();
+            cbBulan.SelectedIndexChanged += (s, ev) => LoadChartDinamis();
+
+            LoadChartDinamis();
         }
 
         // ==========================================================
-        // Menghitung statistik Dashboard secara realtime
+        // DATA POPULATION: Mengisi ComboBox Filter dari Database
         // ==========================================================
-        private void HitungStatistikRealtime()
+        private void LoadFilterBarang()
         {
-            // Menyimpan total seluruh barang
-            int totalBarangSemua = 0;
+            cbBarang.Items.Clear();
+            cbBarang.Items.Add("== Semua Barang ==");
 
-            // Menyimpan jumlah barang yang sedang dipinjam
-            int totalSedangDipinjam = 0;
-
-            // Menyimpan jumlah barang yang masih tersedia
-            // (hanya barang dengan kondisi bagus)
-            int totalSiapTersedia = 0;
-
-            // Query untuk mengambil data barang beserta
-            // jumlah barang yang sedang dipinjam
-            string query = @"
-                SELECT
-                    b.id_barang,
-                    b.jumlah_barang,
-                    b.kondisi_bagus,
-
-                    IFNULL((
-                        SELECT SUM(dp.jumlah_pinjam)
-                        FROM detail_peminjaman dp
-                        INNER JOIN peminjaman p
-                            ON dp.id_peminjaman = p.id_peminjaman
-                        WHERE dp.id_barang = b.id_barang
-                        AND LOWER(p.status_peminjaman) IN ('dipinjam','disetujui')
-                    ),0) AS jumlah_dipinjam
-
-                FROM barang b";
-
+            string query = "SELECT nama_barang FROM barang ORDER BY nama_barang ASC";
             try
             {
-                // Membuka koneksi ke database
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
                     conn.Open();
-
-                    // Menjalankan query
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
-
-                    // Membaca seluruh hasil query
                     using (MySqlDataReader dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            // Mengambil total stok barang
-                            int jumlahBarang = Convert.ToInt32(dr["jumlah_barang"]);
+                            cbBarang.Items.Add(dr["nama_barang"].ToString());
+                        }
+                    }
+                }
+                cbBarang.SelectedIndex = 0; // Default: Semua barang
+            }
+            catch (Exception ex) { MessageBox.Show("Gagal memuat filter barang: " + ex.Message); }
+        }
 
-                            // Mengambil jumlah barang dengan kondisi bagus
-                            int kondisiBagus = Convert.ToInt32(dr["kondisi_bagus"]);
+        private void LoadFilterBulan()
+        {
+            cbBulan.Items.Clear();
+            cbBulan.Items.Add("== Semua Bulan ==");
+            cbBulan.Items.AddRange(new string[] { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" });
+            cbBulan.SelectedIndex = 0; // Default: Semua bulan
+        }
 
-                            // Mengambil jumlah barang yang sedang dipinjam
+        // ==========================================================
+        // STATISTIK KANBAN CARD LOGIC (REALTIME)
+        // ==========================================================
+        private void HitungStatistikRealtime()
+        {
+            int totalBarangSemua = 0, totalSedangDipinjam = 0, totalSiapTersedia = 0;
+            string query = @"
+                SELECT b.jumlah_barang, b.kondisi_bagus,
+                       IFNULL((SELECT SUM(dp.jumlah_pinjam) FROM detail_peminjaman dp
+                               INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                               WHERE dp.id_barang = b.id_barang AND LOWER(p.status_peminjaman) IN ('dipinjam','disetujui')), 0) AS jumlah_dipinjam
+                FROM barang b";
+
+            try
+            {
+                using (MySqlConnection conn = Koneksi.GetConn())
+                {
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    using (MySqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            totalBarangSemua += Convert.ToInt32(dr["jumlah_barang"]);
                             int dipinjam = Convert.ToInt32(dr["jumlah_dipinjam"]);
-
-                            // Menghitung total seluruh barang
-                            totalBarangSemua += jumlahBarang;
-
-                            // Menghitung total barang yang sedang dipinjam
                             totalSedangDipinjam += dipinjam;
-
-                            // Menghitung stok yang masih tersedia
-                            int tersedia = kondisiBagus - dipinjam;
-
-                            // Mencegah hasil stok bernilai negatif
-                            if (tersedia < 0)
-                                tersedia = 0;
-
-                            // Menjumlahkan stok yang tersedia
+                            int tersedia = Convert.ToInt32(dr["kondisi_bagus"]) - dipinjam;
+                            if (tersedia < 0) tersedia = 0;
                             totalSiapTersedia += tersedia;
                         }
                     }
                 }
-
-                // Menampilkan hasil perhitungan pada Dashboard
-
-                // Total seluruh barang
                 lblTotal.Text = totalBarangSemua.ToString();
-
-                // Total barang yang sedang dipinjam
                 lblPinjam.Text = totalSedangDipinjam.ToString();
-
-                // Total barang yang masih tersedia
                 lblTersedia.Text = totalSiapTersedia.ToString();
             }
-            catch (Exception ex)
-            {
-                // Menampilkan pesan jika koneksi database gagal
-                MessageBox.Show(
-                    "Gagal memuat statistik Dashboard Kepala Desa : " + ex.Message,
-                    "Error Database",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show("Gagal memuat statistik: " + ex.Message, "Error Database", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         }
 
         // ==========================================================
-        // // Menampilkan grafik jumlah peminjaman barang per bulan
+        // DYNAMIC CHARTING MECHANISM: Filter Barang & Bulan (Timestamp)
         // ==========================================================
-        private void LoadChart()
+        private void LoadChartDinamis()
         {
             chartPeminjaman.Series.Clear();
             chartPeminjaman.Titles.Clear();
-
-            chartPeminjaman.Titles.Add("Grafik Peminjaman Barang per Bulan");
+            chartPeminjaman.Titles.Add("Grafik Distribusi Peminjaman Aset Desa");
 
             ChartArea area = chartPeminjaman.ChartAreas[0];
-
-            area.AxisX.Title = "Bulan";
-            area.AxisY.Title = "Jumlah Barang Dipinjam";
-
+            area.AxisX.Title = "Bulan / Aset";
+            area.AxisY.Title = "Total Unit Terpinjam";
             area.AxisX.MajorGrid.Enabled = false;
             area.AxisY.MajorGrid.LineColor = Color.LightGray;
 
-            Series series = new Series();
-
-            series.ChartType = SeriesChartType.Column;
-            series.Color = Color.RoyalBlue;
-            series.IsValueShownAsLabel = true;
-
+            Series series = new Series
+            {
+                ChartType = SeriesChartType.Column,
+                Color = Color.FromArgb(59, 130, 246), // Konsisten memakai warna biru modern tema
+                IsValueShownAsLabel = true
+            };
             chartPeminjaman.Series.Add(series);
 
-            DataTable dt = barang.GrafikPeminjaman();
+            // LOGIKA QUERY FILTRATION: Mengambil data riil berdasarkan timestamp record peminjaman
+            string query = @"
+                SELECT 
+                    MONTH(p.tgl_pinjam) AS bulan_angka,
+                    b.nama_barang,
+                    SUM(dp.jumlah_pinjam) AS total_jumlah
+                FROM detail_peminjaman dp
+                INNER JOIN peminjaman p ON dp.id_peminjaman = p.id_peminjaman
+                INNER JOIN barang b ON dp.id_barang = b.id_barang
+                WHERE p.status_peminjaman IN ('dipinjam', 'disetujui', 'dikembalikan') ";
 
-            foreach (DataRow row in dt.Rows)
+            // Suntik klausa WHERE tambahan secara dinamis berdasarkan input ComboBox Kades
+            if (cbBarang.SelectedIndex > 0)
+                query += " AND b.nama_barang = @namaBarang ";
+            if (cbBulan.SelectedIndex > 0)
+                query += " AND MONTH(p.tgl_pinjam) = @bulanAngka ";
+
+            query += " GROUP BY MONTH(p.tgl_pinjam), b.nama_barang ORDER BY bulan_angka ASC";
+
+            try
             {
-                int bulan = Convert.ToInt32(row["bulan"]);
-                int jumlah = Convert.ToInt32(row["jumlah"]);
-
-                string namaBulan = "";
-
-                switch (bulan)
+                using (MySqlConnection conn = Koneksi.GetConn())
                 {
-                    case 1: namaBulan = "Jan"; break;
-                    case 2: namaBulan = "Feb"; break;
-                    case 3: namaBulan = "Mar"; break;
-                    case 4: namaBulan = "Apr"; break;
-                    case 5: namaBulan = "Mei"; break;
-                    case 6: namaBulan = "Jun"; break;
-                    case 7: namaBulan = "Jul"; break;
-                    case 8: namaBulan = "Agu"; break;
-                    case 9: namaBulan = "Sep"; break;
-                    case 10: namaBulan = "Okt"; break;
-                    case 11: namaBulan = "Nov"; break;
-                    case 12: namaBulan = "Des"; break;
+                    conn.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                    {
+                        if (cbBarang.SelectedIndex > 0)
+                            cmd.Parameters.AddWithValue("@namaBarang", cbBarang.SelectedItem.ToString());
+                        if (cbBulan.SelectedIndex > 0)
+                            cmd.Parameters.AddWithValue("@bulanAngka", cbBulan.SelectedIndex);
+
+                        using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                int bln = Convert.ToInt32(row["bulan_angka"]);
+                                int total = Convert.ToInt32(row["total_jumlah"]);
+                                string barangNama = row["nama_barang"].ToString();
+
+                                string[] namaBulanArr = { "", "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des" };
+                                string labelX = namaBulanArr[bln];
+
+                                // Jika memfilter satu barang, sumbu X fokus menampilkan urutan bulan
+                                // Jika memfilter satu bulan, sumbu X fokus membandingkan nama barang
+                                if (cbBarang.SelectedIndex > 0) labelX = namaBulanArr[bln];
+                                else if (cbBulan.SelectedIndex > 0) labelX = barangNama;
+                                else labelX = $"{barangNama} ({namaBulanArr[bln]})";
+
+                                series.Points.AddXY(labelX, total);
+                            }
+                        }
+                    }
                 }
-
-                series.Points.AddXY(namaBulan, jumlah);
             }
+            catch (Exception ex) { MessageBox.Show("Gagal memperbarui grafik: " + ex.Message); }
         }
 
         // ==========================================================
-        // Tombol Dashboard
-        // Tidak menjalankan proses karena pengguna
-        // sudah berada di halaman Dashboard
+        // NAVIGATION CONTROL SYSTEM
         // ==========================================================
-        private void btnDashboard_Click(object sender, EventArgs e)
-        {
+        private void btnDashboard_Click(object sender, EventArgs e) { HitungStatistikRealtime(); LoadChartDinamis(); }
 
-        }
-
-        // ==========================================================
-        // Tombol Data Barang
-        // Berpindah ke halaman Data Barang
-        // ==========================================================
         private void btnBarang_Click(object sender, EventArgs e)
         {
-            // Membuka Form Barang
             FormBarangKades frm = new FormBarangKades();
             frm.Show();
-
-            // Menutup Dashboard
             this.Close();
         }
 
-        // ==========================================================
-        // Tombol Riwayat
-        // Berpindah ke halaman Riwayat Peminjaman
-        // ==========================================================
         private void btnRiwayat_Click(object sender, EventArgs e)
         {
-            // Membuka Form Riwayat
             FormRiwayat frm = new FormRiwayat();
             frm.Show();
-
-            // Menutup Dashboard
             this.Close();
         }
 
-        // ==========================================================
-        // Tombol Logout
-        // Keluar dari akun dan kembali ke halaman Login
-        // ==========================================================
         private void btnLogout_Click_1(object sender, EventArgs e)
         {
-            // Membuka Form Login
             FormLogin login = new FormLogin();
             login.Show();
-
-            // Menutup Dashboard
             this.Close();
         }
 
-        // ==========================================================
-        // Tombol Keluar
-        // Menutup seluruh aplikasi
-        // ==========================================================
         private void btnExit_Click(object sender, EventArgs e)
         {
-            // Menampilkan konfirmasi sebelum keluar
-            DialogResult konfirmasi = MessageBox.Show(
-                "Apakah Anda yakin ingin keluar?",
-                "Konfirmasi Keluar",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            // Jika memilih Ya maka aplikasi ditutup
-            if (konfirmasi == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin keluar?", "Konfirmasi Keluar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (konfirmasi == DialogResult.Yes) Application.Exit();
         }
 
-        // ==========================================================
-        // Event bawaan Visual Studio
-        // Saat ini belum digunakan
-        // ==========================================================
         private void label1_Click(object sender, EventArgs e) { }
-
         private void lblTotal_Click(object sender, EventArgs e) { }
-
         private void lblTersedia_Click(object sender, EventArgs e) { }
-
         private void chart1_Click(object sender, EventArgs e) { }
-
         private void lblPinjam_Click(object sender, EventArgs e) { }
     }
 }

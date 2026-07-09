@@ -54,6 +54,11 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.chartPeminjaman = new System.Windows.Forms.DataVisualization.Charting.Chart();
+
+            // SUNTIKAN DESIGNER UTK COMBOBOX FILTER BARU
+            this.cbBarang = new System.Windows.Forms.ComboBox();
+            this.cbBulan = new System.Windows.Forms.ComboBox();
+
             this.panelSidebar.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -327,22 +332,42 @@
             this.label1.TabIndex = 2;
             this.label1.Text = " GRAFIK PEMINJAMAN PER BULAN";
             // 
+            // cbBarang
+            // 
+            this.cbBarang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBarang.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBarang.FormattingEnabled = true;
+            this.cbBarang.Location = new System.Drawing.Point(540, 312);
+            this.cbBarang.Name = "cbBarang";
+            this.cbBarang.Size = new System.Drawing.Size(200, 25);
+            this.cbBarang.TabIndex = 12;
+            // 
+            // cbBulan
+            // 
+            this.cbBulan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBulan.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbBulan.FormattingEnabled = true;
+            this.cbBulan.Location = new System.Drawing.Point(755, 312);
+            this.cbBulan.Name = "cbBulan";
+            this.cbBulan.Size = new System.Drawing.Size(160, 25);
+            this.cbBulan.TabIndex = 13;
+            // 
             // chartPeminjaman
             // 
             chartArea1.Name = "ChartArea1";
             this.chartPeminjaman.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chartPeminjaman.Legends.Add(legend1);
-            this.chartPeminjaman.Location = new System.Drawing.Point(229, 326);
+            this.chartPeminjaman.Location = new System.Drawing.Point(229, 345);
             this.chartPeminjaman.Name = "chartPeminjaman";
             series1.ChartArea = "ChartArea1";
             series1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             series1.Legend = "Legend1";
             series1.Name = "Jumlah Peminjaman";
             this.chartPeminjaman.Series.Add(series1);
-            this.chartPeminjaman.Size = new System.Drawing.Size(779, 242);
+            this.chartPeminjaman.Size = new System.Drawing.Size(779, 223);
             this.chartPeminjaman.TabIndex = 11;
-            this.chartPeminjaman.Text = "Top Branag";
+            this.chartPeminjaman.Text = "Top Barang";
             this.chartPeminjaman.Click += new System.EventHandler(this.chart1_Click);
             // 
             // FormDashboardKades
@@ -351,6 +376,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(245)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1046, 589);
+            this.Controls.Add(this.cbBulan);
+            this.Controls.Add(this.cbBarang);
             this.Controls.Add(this.chartPeminjaman);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panelHeader);
@@ -407,5 +434,7 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartPeminjaman;
+        private System.Windows.Forms.ComboBox cbBarang;
+        private System.Windows.Forms.ComboBox cbBulan;
     }
 }
