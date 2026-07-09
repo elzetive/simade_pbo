@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
+    //inheritence : mewarisi class Form dari .net framework agar bisa menampilkan form login                                                                
     public partial class FormLogin : Form
     {
         public FormLogin()
@@ -18,6 +19,7 @@ namespace simade_pbo
             InitializeComponent();
         }
 
+        //polymorphism: override method CreateParams untuk menambahkan gaya jendela khusus (WS_EX_COMPOSITED) agar mengurangi layar kedip hitam saat form di-render.
         protected override CreateParams CreateParams
         {
             get
@@ -28,6 +30,7 @@ namespace simade_pbo
             }
         }
 
+        //read : mencari data di tabel user berdasarkan username/email dan password yang diinputkan, lalu memvalidasi hasilnya untuk login.
         private void btnLogin_Click(object sender, EventArgs e)
         {
             MySqlConnection conn = Koneksi.GetConn();
@@ -35,14 +38,18 @@ namespace simade_pbo
             {
                 conn.Open();
 
+                //logika agar bisa login dengan username atau email, menggunakan parameterized query untuk mencegah SQL Injection.
                 string query = "SELECT id_user, id_role, nama_lengkap FROM user WHERE (email=@userAtauEmail OR username=@userAtauEmail) AND password=@pass";
                 MySqlCommand cmd = new MySqlCommand(query, conn);
+
+                //memblokir celah SQL Injection dengan parameterized query, sehingga input user tidak langsung dieksekusi sebagai perintah SQL.
                 cmd.Parameters.AddWithValue("@userAtauEmail", txtUsername.Text);
                 cmd.Parameters.AddWithValue("@pass", txtPassword.Text);
 
                 MySqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
+                    //menangkap data session aktif dari database untuk dioper ke form dashboard.
                     int idRole = Convert.ToInt32(reader["id_role"]);
                     int idUser = Convert.ToInt32(reader["id_user"]);
                     string namaLengkap = reader["nama_lengkap"].ToString();
@@ -51,6 +58,7 @@ namespace simade_pbo
 
                     this.Hide();
 
+                    //logika if-else untuk memisahkan hak akses menu berdasarkan id_role.
                     if (idRole == 1)
                     {
                         FormDashboardAdmin admin = new FormDashboardAdmin();
@@ -64,7 +72,7 @@ namespace simade_pbo
                     else if (idRole == 3)
                     {
                         FormDashboardWarga warga = new FormDashboardWarga();
-                        // Mengirim data session ke property public milik FormDashboardWarga
+                        //melempar data session (ID & Nama) ke properti public target form.
                         warga.IdUserLogin = idUser.ToString();
                         warga.NamaUserLogin = namaLengkap;
                         warga.Show();
@@ -81,12 +89,14 @@ namespace simade_pbo
             }
             finally
             {
+                //memastikan gerbang koneksi database ditutup kembali agar server tidak overload.
                 conn.Close();
             }
         }
 
         private void FormLogin_Load(object sender, EventArgs e)
         {
+            //abstraksi : menerapkan tema yang sudah di definisikan
             TemaSistem.TerapkanTema(this, overlay, btnLogin, button1);
             lblKeRegister.Font = new Font(lblKeRegister.Font, FontStyle.Underline);
             lblKeRegister.Cursor = Cursors.Hand;
@@ -94,7 +104,7 @@ namespace simade_pbo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Application.Exit(); // Membunuh seluruh thread proses aplikasi dari sistem operasi Windows.
         }
 
         private void lblKeRegister_Click(object sender, EventArgs e)
@@ -103,11 +113,5 @@ namespace simade_pbo
             register.Show();
             this.Hide();
         }
-
-        // Kosongan event handler agar tidak error desainer
-        private void label4_Click(object sender, EventArgs e) { }
-        private void txtUsername_TextChanged(object sender, EventArgs e) { }
-        private void txtPassword_TextChanged(object sender, EventArgs e) { }
-        private void judul_Click(object sender, EventArgs e) { }
     }
 }

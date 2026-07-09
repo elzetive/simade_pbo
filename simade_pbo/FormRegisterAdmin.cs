@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
+    //inheritance : mewarisi class form dari .net framework
     public partial class FormRegisterAdmin : Form
     {
         public FormRegisterAdmin()
@@ -19,8 +20,10 @@ namespace simade_pbo
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
+        //create event handler untuk button register
         private void btnRegister_Click(object sender, EventArgs e)
         {
+            //menolak input kosong pada form register admin
             if (string.IsNullOrWhiteSpace(txtEmail.Text) ||
                 string.IsNullOrWhiteSpace(txtPassword.Text) ||
                 string.IsNullOrWhiteSpace(txtNama.Text) ||
@@ -36,7 +39,7 @@ namespace simade_pbo
             {
                 conn.Open();
 
-                // 1. Cek duplikasi email disinkronkan ke tabel 'user'
+                //mencegah duplikasi email admin yang sudah terdaftar di database
                 string cekQuery = "SELECT COUNT(*) FROM user WHERE email=@email";
                 MySqlCommand cekCmd = new MySqlCommand(cekQuery, conn);
                 cekCmd.Parameters.AddWithValue("@email", txtEmail.Text);
@@ -49,14 +52,16 @@ namespace simade_pbo
                 }
 
                 string email = txtEmail.Text;
+                //membuat username dari email 
                 string usernameStatis = email.Contains("@") ? email.Split('@')[0] : email;
 
-                // 2. Query dikembalikan ke tabel 'user' asli sesuai database kalian
                 string query = "INSERT INTO user (id_role, username, email, password, nama_lengkap, alamat, no_hp) " +
                                "VALUES (@id_role, @username, @email, @pass, @nama, @alamat, @nohp)";
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@id_role", 1); // <--- TETAP KUNCI 1 (Artinya didaftarkan sebagai ADMIN)
+
+                // mencegah SQL Injection dengan menggunakan parameterized query
+                cmd.Parameters.AddWithValue("@id_role", 1); //otomatis memberikan id_role 1 untuk admin
                 cmd.Parameters.AddWithValue("@username", usernameStatis);
                 cmd.Parameters.AddWithValue("@email", email);
                 cmd.Parameters.AddWithValue("@pass", txtPassword.Text);
@@ -69,7 +74,7 @@ namespace simade_pbo
                 {
                     MessageBox.Show("Registrasi Admin Baru berhasil disimpan ke database!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Form ditutup untuk kembali ke Dashboard Admin yang membukanya
+                    // menutup form register
                     this.Close();
                 }
             }
@@ -79,6 +84,7 @@ namespace simade_pbo
             }
             finally
             {
+                // menutup koneksi database untuk mencegah memory leak
                 conn.Close();
             }
         }

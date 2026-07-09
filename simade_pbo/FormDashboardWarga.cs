@@ -5,23 +5,27 @@ using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
+    //inheritence : mewarisi semua bawaan visual dari class induk Form
     public partial class FormDashboardWarga : Form
     {
+        //collection data sementara untuk menampung list barang yang akan diajukan peminjaman
         DataTable dtAntrean = new DataTable();
 
         int idBarangTerpilih = 0;
         int stokTersediaTerpilih = 0;
 
+        //enkapsulasi : property public untuk menampung token session user login agar bisa diteruskan ke form lain
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
-        int idUserLoginAngka = 4;
+        int idUserLoginAngka = 4; // Variabel fallback default
 
         public FormDashboardWarga()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            // EVENT-DRIVEN: Mengaitkan aksi komponen visual ke method handler internal.
             this.Load += new System.EventHandler(this.FormDashboardWarga_Load);
             this.dgvBarang.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBarang_CellClick);
             this.btnTambahKeList.Click += new System.EventHandler(this.btnTambahKeList_Click);
@@ -54,12 +58,12 @@ namespace simade_pbo
             inisialisasiTabelAntrean();
         }
 
+        //read : mengambil data dari database dan menampilkannya ke datagridview
         void tampilDaftarAset()
         {
             dgvBarang.AutoGenerateColumns = false;
 
-            // QUERY REVISI: Menggunakan Subquery terisolasi agar hitungan SUM tidak menggandakan baris
-            // Menyaring semua status peminjaman yang menahan/membawa fisik barang
+            //abstraksi query SQL untuk menampilkan daftar aset desa yang tersedia, termasuk stok siap pakai setelah memperhitungkan peminjaman aktif
             string queryKatalog = @"
             SELECT 
                 b.id_barang, 
@@ -80,6 +84,7 @@ namespace simade_pbo
 
             try
             {
+                //abstraksi koneksi database menggunakan class Koneksi untuk menghindari duplikasi string koneksi di banyak tempat
                 using (MySqlConnection conn = Koneksi.GetConn())
                 {
                     conn.Open();
@@ -157,6 +162,7 @@ namespace simade_pbo
             }
         }
 
+        //validasi inputan jumlah pinjam agar tidak melebihi stok tersedia dan menambahkan ke list antrean peminjaman
         private void btnTambahKeList_Click(object sender, EventArgs e)
         {
             if (idBarangTerpilih == 0 || string.IsNullOrEmpty(txtNamaBarang.Text))
@@ -165,7 +171,6 @@ namespace simade_pbo
                 return;
             }
 
-            // PERBAIKAN: Teks 'txtCircle:' telah dihapus agar sintaks int.TryParse kembali normal
             if (!int.TryParse(txtJumlahPinjam.Text, out int jumlahInput) || jumlahInput <= 0)
             {
                 MessageBox.Show("Masukkan jumlah pinjam yang valid (angka harus di atas 0)!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -193,6 +198,7 @@ namespace simade_pbo
             bersihkanInputanBarang();
         }
 
+        //create : mengirim data peminjaman ke database, termasuk master-detail table dengan transaksi aman
         private void btnKirimPengajuan_Click(object sender, EventArgs e)
         {
             if (dtAntrean.Rows.Count == 0)
@@ -201,13 +207,9 @@ namespace simade_pbo
                 return;
             }
 
-            // Ambil nilai tanggal dari masing-masing DateTimePicker secara independen
             string tglPinjam = dtpTanggalPinjam.Value.ToString("yyyy-MM-dd");
-
-            // PERBAIKAN: Mengambil nilai asli dari DateTimePicker Tanggal Kembali (misal: dtpTanggalKembali)
             string tglKembali = dtpTanggalKembali.Value.ToString("yyyy-MM-dd");
 
-            // Validasi logis: Mencegah warga memilih tanggal kembali yang lebih lampau daripada tanggal pinjam
             if (dtpTanggalKembali.Value.Date < dtpTanggalPinjam.Value.Date)
             {
                 MessageBox.Show("Tanggal kembali tidak boleh lebih awal dari tanggal pinjam!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -219,25 +221,30 @@ namespace simade_pbo
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 conn.Open();
+
+                // Menjamin keamanan data. Jika satu detail gagal diinput, seluruh transaksi otomatis batal (Rollback).
                 using (MySqlTransaction tr = conn.BeginTransaction())
                 {
                     try
                     {
+                        //Menginput data induk nota ke tabel peminjaman.
                         string queryMaster = @"INSERT INTO peminjaman (kode_peminjaman, id_user, tgl_pinjam, tgl_kembali, status_peminjaman)
                                        VALUES (@kode, @uid, @tglP, @tglK, 'pending')";
 
                         long idPeminjamanTerbuat = 0;
                         using (MySqlCommand cmdMaster = new MySqlCommand(queryMaster, conn, tr))
                         {
+                            //Menyaring input text untuk menangkal serangan peretasan SQL Injection.
                             cmdMaster.Parameters.AddWithValue("@kode", kodePeminjamanOtomatis);
                             cmdMaster.Parameters.AddWithValue("@uid", idUserLoginAngka);
                             cmdMaster.Parameters.AddWithValue("@tglP", tglPinjam);
-                            cmdMaster.Parameters.AddWithValue("@tglK", tglKembali); // Sekarang membawa tanggal yang tepat (misal tanggal 9)
+                            cmdMaster.Parameters.AddWithValue("@tglK", tglKembali);
                             cmdMaster.ExecuteNonQuery();
 
                             idPeminjamanTerbuat = cmdMaster.LastInsertedId;
                         }
 
+                        //Memecah baris data antrean masuk ke tabel detail_peminjaman.
                         int suksesDetailCount = 0;
                         foreach (DataRow barisAntrean in dtAntrean.Rows)
                         {
@@ -258,7 +265,7 @@ namespace simade_pbo
 
                         if (suksesDetailCount == dtAntrean.Rows.Count)
                         {
-                            tr.Commit();
+                            tr.Commit(); //Data berhasil dikunci permanen ke harddisk database.
                             MessageBox.Show($"Pengajuan peminjaman berhasil dikirim ke Admin!\nKode Nota Anda: {kodePeminjamanOtomatis}",
                                             "Sukses Pengajuan", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -274,7 +281,7 @@ namespace simade_pbo
                     }
                     catch (Exception ex)
                     {
-                        tr.Rollback();
+                        tr.Rollback(); //Menggagalkan input otomatis jika jaringan Wi-Fi/Server terputus di tengah jalan.
                         MessageBox.Show("Terjadi kendala sirkulasi database: " + ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -283,13 +290,14 @@ namespace simade_pbo
 
         private void btnMenuDashboard_Click(object sender, EventArgs e) { tampilDaftarAset(); }
 
+        //Membuka halaman baru menggunakan .Close() untuk menghancurkan form lama dari RAM laptop.
         private void btnMenuStatus_Click(object sender, EventArgs e)
         {
             FormStatusPengajuan status = new FormStatusPengajuan();
             status.IdUserLogin = this.IdUserLogin;
             status.NamaUserLogin = this.NamaUserLogin;
             status.Show();
-            this.Close();
+            this.Close(); //Menghancurkan form dashboard agar hemat resource RAM saat demo.
         }
 
         private void btnMenuRiwayat_Click(object sender, EventArgs e)

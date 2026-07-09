@@ -5,19 +5,20 @@ using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
+    //inheritance : mewarisi class form dari .net framework
     public partial class FormRiwayatWarga : Form
     {
+        //enkapsulasi data agar tidak bisa diakses langsung dari luar class
         public string IdUserLogin { get; set; }
         public string NamaUserLogin { get; set; }
 
-        // Variabel angka internal jika konversi properti string mengalami null
-        private int idUserWargaFix = 4;
+        private int idUserWargaFix = 4; //atribut private pelindung enkapsulasi data internal.
 
         public FormRiwayatWarga()
         {
             InitializeComponent();
 
-            // Mengaitkan Event Runtime secara terpadu
+            //mendaftarkan event handler untuk event load form dan klik tombol menu
             this.Load += new System.EventHandler(this.FormRiwayatWarga_Load);
             this.btnMenuDashboard.Click += new System.EventHandler(this.btnMenuDashboard_Click);
             this.btnMenuStatus.Click += new System.EventHandler(this.btnMenuStatus_Click);
@@ -41,18 +42,18 @@ namespace simade_pbo
                 lblNamaWarga.Text = "Halo, " + NamaUserLogin + "!";
             }
 
+            //mengunci tabel DataGridView agar tidak bisa diedit langsung oleh pengguna.
             dgvRiwayat.ReadOnly = true;
             dgvDetailBarang.ReadOnly = true;
 
-            // Pemetaan Data Transaksi Bundel Nota (Tabel Kiri)
+            //memastikan kolom DataGridView tidak dibuat otomatis, melainkan diatur secara manual.
             dgvRiwayat.AutoGenerateColumns = false;
             colNo.DataPropertyName = "no_urut";
             colHistId.DataPropertyName = "kode_peminjaman";
             colHistTglPinjam.DataPropertyName = "tgl_pinjam";
             colHistTglKembali.DataPropertyName = "tgl_kembali";
 
-            // Pemetaan Data Rincian Multi-Barang (Tabel Kanan)
-            // PERBAIKAN: Menghapus referensi mapping colDetailMerk dan colDetailIdentitas yang sudah tidak ada di file desainer baru
+            //memastikan kolom DataGridView detail barang tidak dibuat otomatis, melainkan diatur secara manual.
             dgvDetailBarang.AutoGenerateColumns = false;
             colDetailNama.DataPropertyName = "nama_aset";
             colDetailJumlah.DataPropertyName = "jumlah";
@@ -60,14 +61,17 @@ namespace simade_pbo
             tampilDataSelesai();
         }
 
+        //read : menampilkan data peminjaman yang sudah selesai (dikembalikan) ke dalam DataGridView dgvRiwayat.
         private void tampilDataSelesai()
         {
+            // abstraksi koneksi database MySQL menggunakan kelas Koneksi untuk mendapatkan objek MySqlConnection.
             using (MySqlConnection conn = Koneksi.GetConn())
             {
                 try
                 {
                     conn.Open();
-                    // SINKRONISASI DATABASE BARU: Menarik nota induk warga yang berstatus 'dikembalikan'
+
+                    //hanya menampilkan tanggal pinjam dan tanggal kembali dalam format dd/MM/yyyy, serta mengurutkan data berdasarkan tanggal kembali terbaru.
                     string query = @"SELECT kode_peminjaman, 
                                             DATE_FORMAT(tgl_pinjam, '%d/%m/%Y') AS tgl_pinjam, 
                                             DATE_FORMAT(updated_at, '%d/%m/%Y') AS tgl_kembali
@@ -77,12 +81,14 @@ namespace simade_pbo
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
+                        //mencegah SQL Injection dengan menggunakan parameterized query untuk idUser.
                         cmd.Parameters.AddWithValue("@idUser", idUserWargaFix);
                         using (MySqlDataAdapter da = new MySqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
                             da.Fill(dt);
 
+                            // logika menambahkan nomor urut
                             dt.Columns.Add("no_urut", typeof(int));
                             for (int i = 0; i < dt.Rows.Count; i++)
                             {
@@ -100,6 +106,7 @@ namespace simade_pbo
             }
         }
 
+        //menampilkan rincian barang yang dipinjam berdasarkan baris yang diklik di DataGridView dgvRiwayat.
         private void dgvRiwayat_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -112,7 +119,7 @@ namespace simade_pbo
                     using (MySqlConnection conn = Koneksi.GetConn())
                     {
                         conn.Open();
-                        // SINKRONISASI SKEMA HEADER-DETAIL BARU: Membedah item barang via detail_peminjaman tanpa kolom fisik lama yang tidak ada
+                        // mengambil nama barang dan jumlah pinjam dari tabel detail_peminjaman yang terkait dengan kode peminjaman yang dipilih.
                         string queryDetail = @"SELECT b.nama_barang AS nama_aset, 
                                                       dp.jumlah_pinjam AS jumlah
                                                FROM peminjaman p
@@ -127,7 +134,7 @@ namespace simade_pbo
                             {
                                 DataTable dtDetail = new DataTable();
                                 da.Fill(dtDetail);
-                                dgvDetailBarang.DataSource = dtDetail;
+                                dgvDetailBarang.DataSource = dtDetail; // menampilkan rincian barang di DataGridView dgvDetailBarang
                             }
                         }
                     }
@@ -139,6 +146,7 @@ namespace simade_pbo
             }
         }
 
+        //menavigasi ke form dashboard warga
         private void btnMenuDashboard_Click(object sender, EventArgs e)
         {
             FormDashboardWarga frm = new FormDashboardWarga();
@@ -148,6 +156,7 @@ namespace simade_pbo
             this.Close();
         }
 
+        //menavigasi ke form status pengajuan warga
         private void btnMenuStatus_Click(object sender, EventArgs e)
         {
             FormStatusPengajuan frm = new FormStatusPengajuan();
@@ -157,16 +166,22 @@ namespace simade_pbo
             this.Close();
         }
 
+        //menavigasi ke form riwayat warga
         private void btnMenuRiwayat_Click(object sender, EventArgs e)
         {
             tampilDataSelesai();
         }
 
+        //menampilkan konfirmasi log out dan menutup form saat pengguna memilih "Yes"
         private void btnLogOut_Click(object sender, EventArgs e)
         {
-            FormLogin login = new FormLogin();
-            login.Show();
-            this.Close();
+            DialogResult konfirmasi = MessageBox.Show("Apakah Anda yakin ingin Log Out?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (konfirmasi == DialogResult.Yes)
+            {
+                FormLogin login = new FormLogin();
+                login.Show();
+                this.Close();
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)

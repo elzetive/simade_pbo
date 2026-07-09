@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 
 namespace simade_pbo
 {
+    //inheritance : mewarisi class form dari .net framework
     public partial class FormRegister : Form
     {
         public FormRegister()
@@ -18,8 +19,10 @@ namespace simade_pbo
             InitializeComponent();
         }
 
+        //create event handler untuk button register
         private void btnRegister_Click(object sender, EventArgs e)
         {
+            //menolak input kosong
             if (string.IsNullOrWhiteSpace(txtEmail.Text) ||
                 string.IsNullOrWhiteSpace(txtPassword.Text) ||
                 string.IsNullOrWhiteSpace(txtNama.Text) ||
@@ -35,6 +38,7 @@ namespace simade_pbo
             {
                 conn.Open();
 
+                //mencegah duplikasi email di database
                 string cekQuery = "SELECT COUNT(*) FROM user WHERE email=@email";
                 MySqlCommand cekCmd = new MySqlCommand(cekQuery, conn);
                 cekCmd.Parameters.AddWithValue("@email", txtEmail.Text);
@@ -47,13 +51,16 @@ namespace simade_pbo
                 }
 
                 string email = txtEmail.Text;
+                //membuat username statis dari email
                 string usernameStatis = email.Contains("@") ? email.Split('@')[0] : email;
 
                 string query = "INSERT INTO user (id_role, username, email, password, nama_lengkap, alamat, no_hp) " +
                                "VALUES (@id_role, @username, @email, @pass, @nama, @alamat, @nohp)";
 
                 MySqlCommand cmd = new MySqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@id_role", 3); // Otomatis mendaftar sebagai Warga (Role ID = 3)
+
+                //mencegah SQL Injection dengan parameterized query
+                cmd.Parameters.AddWithValue("@id_role", 3); //otomatis set id_role sebagai 3 (Warga)
                 cmd.Parameters.AddWithValue("@username", usernameStatis);
                 cmd.Parameters.AddWithValue("@email", email);
                 cmd.Parameters.AddWithValue("@pass", txtPassword.Text);
@@ -77,6 +84,7 @@ namespace simade_pbo
             }
             finally
             {
+                //menutup koneksi database untuk menghindari memory leak
                 conn.Close();
             }
         }
@@ -90,12 +98,7 @@ namespace simade_pbo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Application.Exit();
-        }
-
-        private void txtEmail_TextChanged(object sender, EventArgs e)
-        {
-
+            Application.Exit(); // Menghentikan seluruh runtunan eksekusi proses aplikasi.
         }
     }
 }
